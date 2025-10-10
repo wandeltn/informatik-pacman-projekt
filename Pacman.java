@@ -5,7 +5,7 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class Spielfigur extends Figur
+class Pacman extends Figur
 {
     /** Länge der Bewegung */
     int delta;
@@ -15,7 +15,7 @@ class Spielfigur extends Figur
     /**
      * Legt das Aussehen der Spielfigur fest
      */
-    Spielfigur()
+    Pacman()
     {
         super();
         FigurteilFestlegenEllipse(0, 0, 100, 100, "rot");
@@ -37,6 +37,7 @@ class Spielfigur extends Figur
      */
     @Override void SonderTasteGedrückt(int taste)
     {
+        //Hoch
         if(taste == 38)
         {
             if(YPositionGeben()>0)
@@ -44,6 +45,7 @@ class Spielfigur extends Figur
                 PositionSetzen(XPositionGeben(),YPositionGeben()-delta);
             }
         }
+        // Runter
         if(taste == 40)
         {
             if(YPositionGeben()<500)
@@ -51,6 +53,7 @@ class Spielfigur extends Figur
                 PositionSetzen(XPositionGeben(),YPositionGeben()+delta);
             }
         }
+        // Links
         if(taste == 37)
         {
             if(XPositionGeben()>0)
@@ -58,6 +61,7 @@ class Spielfigur extends Figur
                 PositionSetzen(XPositionGeben()-delta,YPositionGeben());
             }
         }
+        // Rechts
         if(taste == 39)
         {
             if(XPositionGeben()<740)
@@ -65,7 +69,6 @@ class Spielfigur extends Figur
                 PositionSetzen(XPositionGeben()+delta,YPositionGeben());
             }
         }
-
     }
 
     /**
