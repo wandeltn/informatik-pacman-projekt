@@ -25,7 +25,7 @@ class Quadrat extends Hindernis
      */
     @Override void Bewegen()
     {
-        Gehen(30);
+        Gehen(69);
         EntfernenWennAußerhalb();
         if (Berührt())
         {
