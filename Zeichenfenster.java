@@ -1451,10 +1451,6 @@ class Zeichenfenster
             {
                 s = ((Kreis) object).symbol;
             }
-            else if (object instanceof Turtle)
-            {
-                s = ((Turtle) object).symbol;
-            }
             else if (object instanceof Figur)
             {
                 s = ((Figur) object).symbol;
@@ -1750,10 +1746,6 @@ class Zeichenfenster
             else if (object instanceof Kreis)
             {
                 s = ((Kreis) object).symbol;
-            }
-            else if (object instanceof Turtle)
-            {
-                s = ((Turtle) object).symbol;
             }
             else if (object instanceof Figur)
             {

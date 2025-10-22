@@ -102,37 +102,6 @@ class Spiel extends Ereignisbehandlung
      */
     void HindernisErzeugen(int x, int y, char richtung)
     {
-        //Für eine neue Art von Hindernis musst du Obergrenze der Zufallszahl um eins erhöhen.
-        //Füge dann einen neuen Fall für deine Klasse hinzu.
-        int zufall = zzgenerator.nextInt(6);
-        if (zufall == 0)
-        {
-            new Zickezacke(x, y, richtung);
-        }
-        else
-        {
-            if (zufall == 1)
-            {
-                new BaseGhost(x, y, new ColorRGB(255, 184, 81));
-            }
-            else
-            {
-                if (zufall == 2)
-                {
-                    new Schlagbaum(x, y, richtung);
-                }
-                else
-                {
-                    if (zufall == 3)
-                    {
-                        new Rotor(x, y, richtung);
-                    }
-                    else
-                    {
-                        new Baum(x, y, richtung);
-                    }
-                }
-            }
-        }
+        new BaseGhost(x, y, new ColorRGB(255, 184, 81));
     }
 }
