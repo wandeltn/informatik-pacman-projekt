@@ -113,7 +113,7 @@ class Spiel extends Ereignisbehandlung
         {
             if (zufall == 1)
             {
-                new Quadrat(x, y, richtung);
+                new BaseGhost(x, y, new ColorRGB(255, 184, 81));
             }
             else
             {

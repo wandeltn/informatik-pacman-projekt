@@ -5,7 +5,7 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class Quadrat extends Hindernis
+class BaseGhost extends Hindernis
 {
 
     /**
@@ -14,9 +14,15 @@ class Quadrat extends Hindernis
      * @param y y-Koordinate des Hindernisses
      * @param richtungNeu Blickrichtung des Hindernisses
      */
-    Quadrat(int x, int y, char richtungNeu)
+    ColorRGB color = new ColorRGB(255, 255, 255);
+    
+    BaseGhost(int x, int y, ColorRGB color)
     {
-        super(x,y,richtungNeu);
+        super(x, y, 'O', color.toColor());
+        this.color = color;
+        System.out.println(color);
+        System.out.println(this.color);
+        
         Zeichnen();
     }
 
@@ -25,7 +31,7 @@ class Quadrat extends Hindernis
      */
     @Override void Bewegen()
     {
-        Gehen(69);
+        Gehen(1);
         EntfernenWennAußerhalb();
         if (Berührt())
         {
@@ -40,10 +46,7 @@ class Quadrat extends Hindernis
     {
         super.EigeneFigurLöschen();
 
-        FigurteilFestlegenRechteck(-50,-50,100,100,"magenta");
-        FigurteilFestlegenRechteck(-40,-40,80,80,"hellgrün");
-        FigurteilFestlegenRechteck(-30,-30,60,60,"gelb");
-        FigurteilFestlegenRechteck(-20,-20,40,40,"blau");
-        FigurteilFestlegenRechteck(-10,-10,20,20,"orange");
+        FigurteilFestlegenEllipse(0, 0, 140, 140, this.color.toColor());
+        FigurteilFestlegenRechteck(0, 70, 140, 70, this.color.toColor());
     }
 }

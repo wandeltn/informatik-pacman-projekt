@@ -547,7 +547,7 @@ class Zeichenfenster
          * Setzt die Farbe des Objekts.
          * @param c (neue) Farbe des Objekts
          */
-        void FarbeSetzen (Color c)
+        public void FarbeSetzen (Color c)
         {
             this.c = c;
             zeichenfläche.malfläche.repaint();
@@ -1780,6 +1780,16 @@ class Zeichenfenster
             FormErzeugen();
             zeichenfläche.malfläche.repaint();
         }
+        
+        void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color)
+        {
+            synchronized (eigeneFigur)
+            {
+                eigeneFigur.add(new FigurenElementRechteck(x, y, breite, höhe, color));
+            }
+            FormErzeugen();
+            zeichenfläche.malfläche.repaint();
+        }
 
         /**
          * Erzeugt ein neues, elliptisches Element einer eigenen Darstellung der Figur.
@@ -1795,6 +1805,16 @@ class Zeichenfenster
             synchronized (eigeneFigur)
             {
                 eigeneFigur.add(new FigurenElementEllipse(x, y, breite, höhe, FarbeCodieren(farbe)));
+            }
+            FormErzeugen();
+            zeichenfläche.malfläche.repaint();
+        }
+        
+        void FigurteilFestlegenEllipse (int x, int y, int breite, int höhe, Color farbe)
+        {
+            synchronized (eigeneFigur)
+            {
+                eigeneFigur.add(new FigurenElementEllipse(x, y, breite, höhe, farbe));
             }
             FormErzeugen();
             zeichenfläche.malfläche.repaint();
