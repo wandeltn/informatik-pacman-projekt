@@ -18,7 +18,7 @@ class Pacman extends Figur
     Pacman()
     {
         super();
-        FigurteilFestlegenEllipse(0, 0, 100, 100, "Gelb");
+        FigurteilFestlegenEllipse(0, 0, 140, 140, "Gelb");
         delta = 4;
         t = null;
     }
