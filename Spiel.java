@@ -19,6 +19,7 @@ class Spiel extends Ereignisbehandlung
     Spiel()
     {
         super();
+        new Playingfield();
         new Pacman();
         zähler = 8;
         zzgenerator = new Random();
