@@ -1,3 +1,4 @@
+import java.awt.Color;
 
 /**
  * Wrapperklasse für die Turtle auf der Zeichenfläche.
@@ -299,6 +300,11 @@ public class Figur
     {
         symbol.FigurteilFestlegenRechteck(x, y, breite, höhe, farbe);
     }
+    
+    void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color)
+    {
+        symbol.FigurteilFestlegenRechteck(x, y, breite, höhe, color);
+    }
 
     /**
      * Erzeugt ein neues, elliptisches Element einer eigenen Darstellung der Figur.
@@ -310,6 +316,11 @@ public class Figur
      * @param farbe (Füll-)Farbe der Ellipse
      */
     void FigurteilFestlegenEllipse (int x, int y, int breite, int höhe, String farbe)
+    {
+        symbol.FigurteilFestlegenEllipse(x, y, breite, höhe, farbe);
+    }
+    
+    void FigurteilFestlegenEllipse (int x, int y, int breite, int höhe, Color farbe)
     {
         symbol.FigurteilFestlegenEllipse(x, y, breite, höhe, farbe);
     }

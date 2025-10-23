@@ -41,6 +41,22 @@ class Kreis
         symbol.WinkelSetzen(winkel);
     }
     
+    Kreis (int x, int y, int radius, String farbe) 
+    {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.farbe = farbe;
+        this.winkel = 0;
+        this.sichtbar = true;
+        winkel = 0;
+        symbol = Zeichenfenster.SymbolErzeugen(Zeichenfenster.SymbolArt.kreis);
+        symbol.GrößeSetzen(radius * 2, radius * 2);
+        symbol.FarbeSetzen(this.farbe);
+        symbol.SichtbarkeitSetzen(this.sichtbar);
+        symbol.WinkelSetzen(this.winkel);
+    }
+    
     /**
      * Setzt die Position (des Mittelpunkts) des Kreises.
      * @param x x-Position des Mittelpunkts

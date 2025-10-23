@@ -1,3 +1,4 @@
+import java.awt.Color;
 
 /**
  * Klasse Hindernis
@@ -18,6 +19,13 @@ class Hindernis extends Figur
     {
         super();
         Zeichnen();
+        PositionSetzen(x,y);
+        RichtungSetzen(richtung);
+    }
+    
+    Hindernis(int x, int y, char richtung, Color color)
+    {
+        super();
         PositionSetzen(x,y);
         RichtungSetzen(richtung);
     }

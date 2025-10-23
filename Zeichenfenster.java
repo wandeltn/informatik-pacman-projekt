@@ -60,14 +60,18 @@ class Zeichenfenster
         aktionsEmpfänger = new ArrayList<AktionsEmpfaenger>();
         fenster = new JFrame("Zeichenfenster");
         fenster.setLocation(50, 50);
-        fenster.setSize(800, 600);
+        fenster.setSize(1920, 1017);
         fenster.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //Close-Button kann nicht versteckt oder abgestellt werden.
+        
+        fenster.setUndecorated(true);
+        fenster.setVisible(true);
+        fenster.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         malfläche = new JComponent()
         {
             public void paint (Graphics g)
             {
-                g.setColor(new Color (230, 230, 230));
+                g.setColor(new Color (0, 0, 0));
                 g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
                 synchronized (malfläche)
                 {
@@ -543,7 +547,7 @@ class Zeichenfenster
          * Setzt die Farbe des Objekts.
          * @param c (neue) Farbe des Objekts
          */
-        void FarbeSetzen (Color c)
+        public void FarbeSetzen (Color c)
         {
             this.c = c;
             zeichenfläche.malfläche.repaint();
@@ -1447,10 +1451,6 @@ class Zeichenfenster
             {
                 s = ((Kreis) object).symbol;
             }
-            else if (object instanceof Turtle)
-            {
-                s = ((Turtle) object).symbol;
-            }
             else if (object instanceof Figur)
             {
                 s = ((Figur) object).symbol;
@@ -1747,10 +1747,6 @@ class Zeichenfenster
             {
                 s = ((Kreis) object).symbol;
             }
-            else if (object instanceof Turtle)
-            {
-                s = ((Turtle) object).symbol;
-            }
             else if (object instanceof Figur)
             {
                 s = ((Figur) object).symbol;
@@ -1776,6 +1772,16 @@ class Zeichenfenster
             FormErzeugen();
             zeichenfläche.malfläche.repaint();
         }
+        
+        void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color)
+        {
+            synchronized (eigeneFigur)
+            {
+                eigeneFigur.add(new FigurenElementRechteck(x, y, breite, höhe, color));
+            }
+            FormErzeugen();
+            zeichenfläche.malfläche.repaint();
+        }
 
         /**
          * Erzeugt ein neues, elliptisches Element einer eigenen Darstellung der Figur.
@@ -1791,6 +1797,16 @@ class Zeichenfenster
             synchronized (eigeneFigur)
             {
                 eigeneFigur.add(new FigurenElementEllipse(x, y, breite, höhe, FarbeCodieren(farbe)));
+            }
+            FormErzeugen();
+            zeichenfläche.malfläche.repaint();
+        }
+        
+        void FigurteilFestlegenEllipse (int x, int y, int breite, int höhe, Color farbe)
+        {
+            synchronized (eigeneFigur)
+            {
+                eigeneFigur.add(new FigurenElementEllipse(x, y, breite, höhe, farbe));
             }
             FormErzeugen();
             zeichenfläche.malfläche.repaint();
