@@ -17,7 +17,7 @@ public class Playingfield extends Figur
     public Playingfield()
     {
         PositionSetzen(0,0);
-        symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "schwarz");
+        
         
         int[][] walls = new int[56][66];
         
