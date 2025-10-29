@@ -19,8 +19,8 @@ class Spiel extends Ereignisbehandlung
     Spiel()
     {
         super();
-        new Playingfield();
         new Pacman();
+        new Playingfield();
         zähler = 8;
         zzgenerator = new Random();
         TaktdauerSetzen(400);

@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Scanner;
 /**
  * Beschreiben Sie hier die Klasse ReadAndWriteFile.
  * 
@@ -10,7 +11,6 @@ public class ReadAndWriteFile
     public static void main(String[] args)
     {
         String[] myNames = new String[10];
-        
         try{
             BufferedReader br = new BufferedReader(new FileReader("D:/Schule/Informatik/PacMan/names.txt.txt"));
             String txt = br.readLine();
@@ -44,4 +44,21 @@ public class ReadAndWriteFile
             System.out.println("Something went wrong");
         }
     }
+    
+    public void ReadFile() {
+       File myObj = new File("Level 1.txt");
+       try (Scanner myReader = new Scanner(myObj)) {
+           while (myReader.hasNextLine()) {
+               String data = myReader.nextLine();
+               System.out.println(data);
+           }
+       } catch (FileNotFoundException e) {
+           System.out.println("An error occurred.");
+           e.printStackTrace();
+       }
+    }
+    
+    
+    
+    
 }
