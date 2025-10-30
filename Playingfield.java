@@ -22,11 +22,12 @@ public class Playingfield extends Figur
         PositionSetzen(0,0);
         int[][] walls = new int[224][264];
         
-        File myObj = new File("D:\\Schule\\Informatik\\PacMan\\Level 1.txt");
+        File myObj = new File("./Level 1.txt");
         try (Scanner myReader = new Scanner(myObj)) {
             int ycord = 0;
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
+                System.out.println("Data.length" + data.length());
                 for(int Spalte = 0; Spalte < data.length(); Spalte++) {
                     int Zahl = 0;
                     if (ycord == 0) {
@@ -38,7 +39,7 @@ public class Playingfield extends Figur
                     } else {
                         char a = data.charAt(Spalte);
                         Zahl = a - '0';
-                        walls[Spalte][ycord + 5] = Zahl;
+                        walls[Spalte][ycord - 2] = Zahl;
                     }
                 }
                 ycord++;
@@ -46,15 +47,18 @@ public class Playingfield extends Figur
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBounds");
+            e.printStackTrace();
         }
         
         //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
         
         
-        for (int counterY = 7; counterY < 264; counterY++){
+        for (int counterY = 0; counterY < 264; counterY++){
             for (int counterX = 0; counterX < 224; counterX++){
                 x = counterX * 10 + 1000;
-                y = counterY * 10;
+                y = counterY * 10 + 70;
                 switch (walls[counterX][counterY]){
                     case 0:
                         break;
