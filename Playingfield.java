@@ -38,7 +38,7 @@ public class Playingfield extends Figur
                     } else {
                         char a = data.charAt(Spalte);
                         Zahl = a - '0';
-                        walls[Spalte][ycord + 5] = Zahl;
+                        walls[Spalte][ycord - 2] = Zahl;
                     }
                 }
                 ycord++;
@@ -51,10 +51,10 @@ public class Playingfield extends Figur
         //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
         
         
-        for (int counterY = 7; counterY < 264; counterY++){
+        for (int counterY = 0; counterY < 264; counterY++){
             for (int counterX = 0; counterX < 224; counterX++){
                 x = counterX * 10 + 1000;
-                y = counterY * 10;
+                y = counterY * 10 +70;
                 switch (walls[counterX][counterY]){
                     case 0:
                         break;

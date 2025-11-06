@@ -60,7 +60,7 @@ class Zeichenfenster
         aktionsEmpfänger = new ArrayList<AktionsEmpfaenger>();
         fenster = new JFrame("Zeichenfenster");
         fenster.setLocation(50, 50);
-        fenster.setSize(1920, 1017);
+        fenster.setSize(1017, 1017);
         fenster.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //Close-Button kann nicht versteckt oder abgestellt werden.
         
         fenster.setUndecorated(true);
