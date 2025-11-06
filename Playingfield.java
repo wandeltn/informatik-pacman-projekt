@@ -12,7 +12,7 @@ public class Playingfield extends Figur
     private int x;
     private int y;
     String data;
-    String WandFarbe;
+    ColorRGB WandFarbe;
     String HintergrundFarbe;
     /**
      * Konstruktor für Objekte der Klasse Playingfield
@@ -31,7 +31,7 @@ public class Playingfield extends Figur
                 for(int Spalte = 0; Spalte < data.length(); Spalte++) {
                     int Zahl = 0;
                     if (ycord == 0) {
-                        WandFarbe = data.toLowerCase();
+                        WandFarbe = new ColorRGB(data.toLowerCase());
                         Spalte = data.length() - 1;
                     } else if (ycord == 1) {
                         HintergrundFarbe = data.toLowerCase();
@@ -75,7 +75,7 @@ public class Playingfield extends Figur
     }
     
     void Pixel(int x, int y){
-        symbol.FigurteilFestlegenRechteck(x,y, 10, 10, WandFarbe);
+        symbol.FigurteilFestlegenRechteck(x,y, 10, 10, WandFarbe.toColor(), false);
     }
     void spawntür(int x, int y){
         symbol.FigurteilFestlegenRechteck(x,y, 10, 10, "rot");

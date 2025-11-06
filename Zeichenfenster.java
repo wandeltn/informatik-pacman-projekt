@@ -1755,6 +1755,20 @@ class Zeichenfenster
             zeichenfläche.malfläche.repaint();
         }
         
+        void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color, boolean repaint)
+        {
+            synchronized (eigeneFigur)
+            {
+                eigeneFigur.add(new FigurenElementRechteck(x, y, breite, höhe, color));
+            }
+            FormErzeugen();
+            
+            if (repaint)
+            {
+                zeichenfläche.malfläche.repaint();
+            }
+        }
+        
         void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color)
         {
             synchronized (eigeneFigur)

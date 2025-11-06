@@ -301,6 +301,11 @@ public class Figur
         symbol.FigurteilFestlegenRechteck(x, y, breite, höhe, farbe);
     }
     
+    void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color, boolean repaint)
+    {
+        symbol.FigurteilFestlegenRechteck(x, y, breite, höhe, color, repaint);
+    }
+    
     void FigurteilFestlegenRechteck (int x, int y, int breite, int höhe, Color color)
     {
         symbol.FigurteilFestlegenRechteck(x, y, breite, höhe, color);
