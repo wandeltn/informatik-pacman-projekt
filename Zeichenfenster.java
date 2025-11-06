@@ -61,7 +61,7 @@ class Zeichenfenster
         fenster = new JFrame("Zeichenfenster");
         fenster.setLocation(50, 50);
         fenster.setSize(1017, 1017);
-        fenster.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //Close-Button kann nicht versteckt oder abgestellt werden.
+        fenster.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // Close-Button kann nicht versteckt oder abgestellt werden.
         
         fenster.setUndecorated(true);
         fenster.setVisible(true);
@@ -199,25 +199,6 @@ class Zeichenfenster
         );
         panel2.add(stop);
         panel.add(panel2);
-        slider = new JSlider(0, 1000, 100);
-        slider.setLocation(190, 10);
-        slider.setSize(160, 40);
-        slider.setMinimumSize(new Dimension(160, 40));
-        slider.setPreferredSize(new Dimension(160, 40));
-        slider.setMajorTickSpacing(100);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        slider.setValue(1000);
-        slider.addChangeListener(new ChangeListener()
-        {
-            public void stateChanged​(ChangeEvent e)
-            {
-                timer.setDelay(slider.getValue());
-                malfläche.requestFocus();
-            }
-        }
-        );
-        panel.add(slider);
         
         fenster.add(panel, BorderLayout.SOUTH);
         fenster.setVisible(true);
@@ -240,6 +221,7 @@ class Zeichenfenster
             }
         }
         );
+        timer.setDelay(16);
     }
     
     /**
