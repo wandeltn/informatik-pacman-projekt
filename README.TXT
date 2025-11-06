@@ -11,5 +11,5 @@ Version:
 1.0
 
 Autoren:
-Aiden, Alex, Niklas, Adrian
+Aidan, Alex, Niklas, Adrian
 
