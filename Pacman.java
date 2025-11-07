@@ -8,10 +8,8 @@
 class Pacman extends Figur
 {
     /** Länge der Bewegung */
-    int delta;
-    /** Anzeigetext */
-    Text t;
-
+    int BewegungsLänge;
+    int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
 
     /**
      * Legt das Aussehen der Spielfigur fest
@@ -20,8 +18,7 @@ class Pacman extends Figur
     {
         super();
         FigurteilFestlegenEllipse(0, 0, 120, 120, "Gelb");
-        delta = 4;
-        t = null;
+        BewegungsLänge = 4;
     }
     
     /**
@@ -41,34 +38,22 @@ class Pacman extends Figur
         //Hoch
         if(taste == 38)
         {
-            if(YPositionGeben()>0)
-            {
-                PositionSetzen(XPositionGeben(),YPositionGeben()-delta);
-            }
+            Richtung = 0;
         }
         // Runter
         if(taste == 40)
         {
-            if(YPositionGeben()<500)
-            {
-                PositionSetzen(XPositionGeben(),YPositionGeben()+delta);
-            }
+            Richtung = 2;
         }
         // Links
         if(taste == 37)
         {
-            if(XPositionGeben()>0)
-            {
-                PositionSetzen(XPositionGeben()-delta,YPositionGeben());
-            }
+            Richtung = 3;
         }
         // Rechts
         if(taste == 39)
         {
-            if(XPositionGeben()<740)
-            {
-                PositionSetzen(XPositionGeben()+delta,YPositionGeben());
-            }
+            Richtung = 1;
         }
     }
 
@@ -78,20 +63,37 @@ class Pacman extends Figur
     @Override void AktionAusführen()
     {
 
-        if(Berührt())
+        //Hoch
+        if(Richtung == 0)
         {
-            if(t!=null) 
+            if(YPositionGeben()>0)
             {
-                t.Entfernen();
+                PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLänge);
             }
-            t=new Text();
-            t.TextSetzen("Don't touch");
-
         }
-        if(t!=null)
+        // Runter
+        if(Richtung == 2)
         {
-            t.TextVergrößern();
-            t.Verschieben(5,5);
+            if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
+            {
+                PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLänge);
+            }
+        }
+        // Links
+        if(Richtung == 3)
+        {
+            if(XPositionGeben()>0)
+            {
+                PositionSetzen(XPositionGeben()-BewegungsLänge,YPositionGeben());
+            }
+        }
+        // Rechts
+        if(Richtung == 1)
+        {
+            if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
+            {
+                PositionSetzen(XPositionGeben()+BewegungsLänge,YPositionGeben());
+            }
         }
     }
 
