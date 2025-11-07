@@ -11,18 +11,20 @@ public class Playingfield extends Figur
     // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen
     private int x;
     private int y;
+    int Zahl;
+    int ycord;
     String data;
     ColorRGB WandFarbe;
     String HintergrundFarbe;
     /**
      * Konstruktor für Objekte der Klasse Playingfield
      */
-    public Playingfield()
+    public void playingfield()
     {
         PositionSetzen(0,0);
         int[][] walls = new int[224][264];
         
-        File myObj = new File("./Level 1.txt");
+        /*File myObj = new File("./Level 1.txt");
         try (Scanner myReader = new Scanner(myObj)) {
             int ycord = 0;
             while (myReader.hasNextLine()) {
@@ -51,8 +53,16 @@ public class Playingfield extends Figur
             System.out.println("IndexOutOfBounds");
             e.printStackTrace();
         }
-        
+        */
         //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
+        FileReader myReader = new FileReader();
+        data = myReader.ReadFile("./Level1", 4);
+        for(int Spalte = 0; Spalte < data.length(); Spalte++) {
+            char a = data.charAt(Spalte);
+            Zahl = a - '0';
+            walls[Spalte][ycord - 2] = Zahl;
+        }
+        
         
         
         for (int counterY = 0; counterY < 264; counterY++){
