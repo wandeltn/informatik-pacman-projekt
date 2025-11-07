@@ -75,7 +75,13 @@ public class Playingfield extends Figur
     }
     
     void Pixel(int x, int y){
+        long start = System.currentTimeMillis();
         symbol.FigurteilFestlegenRechteck(x,y, 10, 10, WandFarbe.toColor(), false);
+        long end = System.currentTimeMillis();
+        
+        long timeElapsed = end - start;
+        
+        System.out.println("Added Pixel in " + timeElapsed + "ms");
     }
     void spawntür(int x, int y){
         symbol.FigurteilFestlegenRechteck(x,y, 10, 10, "rot");

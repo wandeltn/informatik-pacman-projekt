@@ -66,16 +66,6 @@ public class Ereignisbehandlung
     }
     
     /**
-     * Ablaufgeschwindigkeit des Zeitgebers einstellen.
-     * 
-     * @param dauer: Angabe in Millisekunden
-     */
-    void TaktdauerSetzen (int dauer)
-    {
-        Zeichenfenster.TaktdauerSetzen(dauer);
-    }
-    
-    /**
      * Die eigentliche Aktionsmethode für gedrückte Tasten.
      * <br>Muss bei Bedarf von einer Unterklasse überschrieben werden. 
      * @param taste die gedrückte Taste

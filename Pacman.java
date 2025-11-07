@@ -12,6 +12,7 @@ class Pacman extends Figur
     /** Anzeigetext */
     Text t;
 
+
     /**
      * Legt das Aussehen der Spielfigur fest
      */
