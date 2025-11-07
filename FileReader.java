@@ -42,8 +42,9 @@ public class FileReader
      */
     public String ReadFile(String FilePath, int ycord)
     {
+        String File = FilePath;
         String data = "";
-        try (Stream<String> lines = Files.lines(Paths.get(FilePath))) {
+        try (Stream<String> lines = Files.lines(Paths.get(File))) {
             data = lines.skip(ycord).findFirst().get();
         } catch (IOException e) {
             System.out.println(e);
@@ -52,8 +53,9 @@ public class FileReader
     }
     public boolean HasNextLine(String FilePath, int ycord)
     {
+        String File = FilePath;
         boolean stop = false;
-        try (Stream<String> lines = Files.lines(Paths.get(FilePath))) {
+        try (Stream<String> lines = Files.lines(Paths.get(File))) {
             if (lines.skip(ycord).findFirst().get() != "") {
                 stop = false;
             } else {
