@@ -144,7 +144,7 @@ class Zeichenfenster
             /**
              * Setzt die Hintegrundbilder aller Turtle auf die neue Größe.
              */
-            public void componentResized​(ComponentEvent e)
+            public void componentResized(ComponentEvent e)
             {
                 for (GrafikSymbol s: alleSymbole)
                 {
@@ -313,20 +313,6 @@ class Zeichenfenster
             zeichenfläche = new Zeichenfenster();
         }
         zeichenfläche.TaktgeberStoppenIntern();
-    }
-    
-    /**
-     * Ablaufgeschwindigkeit des Zeitgebers einstellen.
-     * 
-     * @param dauer: Angabe in Millisekunden
-     */
-    static void TaktdauerSetzen (int dauer)
-    {
-        if (zeichenfläche == null)
-        {
-            zeichenfläche = new Zeichenfenster();
-        }
-        zeichenfläche.slider.setValue(dauer < 0 ? 0 : (dauer > 1000 ? 1000: dauer));
     }
     
     /**
