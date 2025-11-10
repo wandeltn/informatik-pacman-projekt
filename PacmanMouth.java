@@ -5,21 +5,24 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class Pacman extends Figur
+class PacmanMouth extends Figur
 {
     /** Länge der Bewegung */
     int BewegungsLaenge;
     int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
+    boolean Mundoeffnen = true;
+    int Mundwinkel = 0;
     
+    int testwertfuerdieanimation = 0;
     /**
      * Legt das Aussehen der Spielfigur fest
      */
-    Pacman()
+    PacmanMouth()
     {
         super();
-        FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
+        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-60, 40+80-60, 60-60-60, "Schwarz");
         BewegungsLaenge = 4;
-        new PacmanMouth();  
+        SichtbarkeitSetzen(false);
     }
     
     /**
@@ -63,12 +66,13 @@ class Pacman extends Figur
      */
     @Override void AktionAusführen()
     {
-
         //Hoch
         if(Richtung == 0)
         {
             if(YPositionGeben()>0)
             {
+                Animieren();
+                WinkelSetzen(90);
                 PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
             }
         }
@@ -77,6 +81,8 @@ class Pacman extends Figur
         {
             if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
             {
+                Animieren();
+                WinkelSetzen(270);
                 PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
             }
         }
@@ -85,6 +91,8 @@ class Pacman extends Figur
         {
             if(XPositionGeben()>0)
             {
+                Animieren();
+                WinkelSetzen(180);
                 PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
             }
         }
@@ -93,8 +101,27 @@ class Pacman extends Figur
         {
             if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
             {
+                Animieren();
+                WinkelSetzen(0);
                 PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
             }
         }
+    }
+    
+    void Animieren() 
+    {
+        if (testwertfuerdieanimation > 10 * BewegungsLaenge)
+        {
+            testwertfuerdieanimation = 0;
+            if (Mundoeffnen) {
+                SichtbarkeitSetzen(true);
+                Mundoeffnen = false;
+            }
+            else {
+                SichtbarkeitSetzen(false);
+                Mundoeffnen = true;
+            }
+        }
+        testwertfuerdieanimation += BewegungsLaenge;
     }
 }
