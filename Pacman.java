@@ -1,10 +1,4 @@
 
-/**
- * Verwaltet die Spielfigur
- * 
- * @author Klaus Reinold 
- * @version 1.0
- */
 class Pacman extends Figur
 {
     /** Länge der Bewegung */
