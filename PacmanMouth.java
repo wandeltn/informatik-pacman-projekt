@@ -5,22 +5,22 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class PacmanMouth extends Figur
+public class PacmanMouth extends Figur
 {
     /** Länge der Bewegung */
-    int BewegungsLaenge;
-    int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
-    boolean Mundoeffnen = true;
-    int Mundwinkel = 0;
+    private int BewegungsLaenge;
+    private int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
+    private boolean Mundoeffnen = true;
+    private int Mundwinkel = 0;
     
-    int testwertfuerdieanimation = 0;
+    private int testwertfuerdieanimation = 0;
     /**
      * Legt das Aussehen der Spielfigur fest
      */
-    PacmanMouth()
+    public PacmanMouth()
     {
         super();
-        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-60, 40+80-60, 60-60-60, "Schwarz");
+        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
         BewegungsLaenge = 4;
         SichtbarkeitSetzen(false);
     }
@@ -42,73 +42,76 @@ class PacmanMouth extends Figur
         //Hoch
         if(taste == 38)
         {
+            WinkelSetzen(90);
             Richtung = 0;
         }
         // Runter
         if(taste == 40)
         {
+            WinkelSetzen(270);
             Richtung = 2;
         }
         // Links
         if(taste == 37)
         {
+            WinkelSetzen(180);
             Richtung = 3;
         }
         // Rechts
         if(taste == 39)
         {
+            WinkelSetzen(0);
             Richtung = 1;
         }
     }
-
+    
     /**
      * Bewegt die Figur.
      */
     @Override void AktionAusführen()
     {
         //Hoch
-        if(Richtung == 0)
-        {
-            if(YPositionGeben()>0)
+        if (!PacManAnWand())
             {
-                Animieren();
-                WinkelSetzen(90);
-                PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
+            if(Richtung == 0)
+            {
+                if(YPositionGeben()>0)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
+                }
             }
-        }
-        // Runter
-        if(Richtung == 2)
-        {
-            if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
+            // Runter
+            if(Richtung == 2)
             {
-                Animieren();
-                WinkelSetzen(270);
-                PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
+                if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
+                }
             }
-        }
-        // Links
-        if(Richtung == 3)
-        {
-            if(XPositionGeben()>0)
+            // Links
+            if(Richtung == 3)
             {
-                Animieren();
-                WinkelSetzen(180);
-                PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
+                if(XPositionGeben()>0)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
+                }
             }
-        }
-        // Rechts
-        if(Richtung == 1)
-        {
-            if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
+            // Rechts
+            if(Richtung == 1)
             {
-                Animieren();
-                WinkelSetzen(0);
-                PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
+                if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
+                }
             }
         }
     }
     
-    void Animieren() 
+    private void Animieren() 
     {
         if (testwertfuerdieanimation > 10 * BewegungsLaenge)
         {
@@ -123,5 +126,10 @@ class PacmanMouth extends Figur
             }
         }
         testwertfuerdieanimation += BewegungsLaenge;
+    }
+    
+    public boolean PacManAnWand()
+    {
+        return Berührt("rot");
     }
 }

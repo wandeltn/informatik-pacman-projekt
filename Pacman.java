@@ -11,6 +11,7 @@ class Pacman extends Figur
     int BewegungsLaenge;
     int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
     
+    PacmanMouth Mouth = new PacmanMouth();
     /**
      * Legt das Aussehen der Spielfigur fest
      */
@@ -19,7 +20,7 @@ class Pacman extends Figur
         super();
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
         BewegungsLaenge = 4;
-        new PacmanMouth();  
+        new Rechteck();
     }
     
     /**
@@ -63,37 +64,39 @@ class Pacman extends Figur
      */
     @Override void AktionAusführen()
     {
-
-        //Hoch
-        if(Richtung == 0)
+        if (!Mouth.PacManAnWand()) 
         {
-            if(YPositionGeben()>0)
+            //Hoch
+            if(Richtung == 0)
             {
-                PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
+                if(YPositionGeben()>0)
+                {
+                    PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
+                }
             }
-        }
-        // Runter
-        if(Richtung == 2)
-        {
-            if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
+            // Runter
+            if(Richtung == 2)
             {
-                PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
+                if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
+                {
+                    PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
+                }
             }
-        }
-        // Links
-        if(Richtung == 3)
-        {
-            if(XPositionGeben()>0)
+            // Links
+            if(Richtung == 3)
             {
-                PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
+                if(XPositionGeben()>0)
+                {
+                    PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
+                }
             }
-        }
-        // Rechts
-        if(Richtung == 1)
-        {
-            if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
+            // Rechts
+            if(Richtung == 1)
             {
-                PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
+                if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
+                {
+                    PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
+                }
             }
         }
     }
