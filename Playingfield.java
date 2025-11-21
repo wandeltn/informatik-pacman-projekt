@@ -1,11 +1,5 @@
 import java.io.*;
 import java.util.Scanner;
-/**
- * Beschreiben Sie hier die Klasse Playingfield.
- * 
- * @author (Ihr Name) 
- * @version (eine Versionsnummer oder ein Datum)
- */
 public class Playingfield extends Figur
 {
     // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen
@@ -53,19 +47,7 @@ public class Playingfield extends Figur
             System.out.println("IndexOutOfBounds");
             e.printStackTrace();
         }
-        
-        //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
-        
-        /*FileReader myReader = new FileReader();
-        String  File = "C:\\Users\\schadea\\Desktop\\K2_04_A00_Vorl_Java_BlueJ_DontTouch-copy\\Level 1.txt";
-        data = myReader.ReadFile(File, 4);
-        for(int Spalte = 0; Spalte < data.length(); Spalte++) {
-            char a = data.charAt(Spalte);
-            Zahl = a - '0';
-            walls[Spalte][ycord - 2] = Zahl;
-        }*/
-        
-        
+
         for (int counterY = 0; counterY < 264; counterY++){
             for (int counterX = 0; counterX < 224; counterX++){
                 x = counterX * 10 + 1000;
@@ -97,14 +79,6 @@ public class Playingfield extends Figur
     void spawntür(int x, int y){
         symbol.FigurteilFestlegenRechteck(x,y, 10, 10, "rot");
     }
-    
-    
-    /**
-     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
-     * 
-     * @param  y    ein Beispielparameter für eine Methode
-     * @return        die Summe aus x und y
-     */
     public int beispielMethode(int y)
     {
         // tragen Sie hier den Code ein

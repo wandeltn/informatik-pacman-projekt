@@ -6,16 +6,14 @@ class Pellet extends Figur
        super();
        FigurteilFestlegenEllipse(-10, -10, 20, 20, "Gelb");
    }
+  
    @Override void AktionAusführen()
    {
-       if (!eingesammelt)
-       {
-          
+                 
            if (Berührt())
            {
-              
-               Figur[] figuren = AlleFigurenFinden();
-               for (Figur f : figuren)
+               Figur[] Pellet = AlleFigurenFinden();
+               for (Figur f: Pellet)
                {
                    if (f instanceof Pacman)
                    {
@@ -27,7 +25,9 @@ class Pellet extends Figur
                }
            }
        }
-   }
+   
+  
+   
    private Figur[] AlleFigurenFinden()
    {
     
