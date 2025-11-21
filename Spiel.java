@@ -1,4 +1,4 @@
-
+import java.io.*;
 import java.util.Random;
 /**
  * Legt das Spielszenario fest
@@ -19,8 +19,8 @@ class Spiel extends Ereignisbehandlung
     Spiel()
     {
         super();
-        new Pacman();
         new Playingfield();
+        new Pacman();
         zähler = 8;
         zzgenerator = new Random();
     }

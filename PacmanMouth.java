@@ -12,8 +12,9 @@ public class PacmanMouth extends Figur
     private int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
     private boolean Mundoeffnen = true;
     private int Mundwinkel = 0;
+    private boolean tot = false;
     
-    private int testwertfuerdieanimation = 0;
+    private int testwertfuerdieanimationen = 0;
     /**
      * Legt das Aussehen der Spielfigur fest
      */
@@ -39,29 +40,32 @@ public class PacmanMouth extends Figur
      */
     @Override void SonderTasteGedrückt(int taste)
     {
-        //Hoch
-        if(taste == 38)
+        if (!tot) 
         {
-            WinkelSetzen(90);
-            Richtung = 0;
-        }
-        // Runter
-        if(taste == 40)
-        {
-            WinkelSetzen(270);
-            Richtung = 2;
-        }
-        // Links
-        if(taste == 37)
-        {
-            WinkelSetzen(180);
-            Richtung = 3;
-        }
-        // Rechts
-        if(taste == 39)
-        {
-            WinkelSetzen(0);
-            Richtung = 1;
+            //Hoch
+            if(taste == 38)
+            {
+                WinkelSetzen(90);
+                Richtung = 0;
+            }
+            // Runter
+            if(taste == 40)
+            {
+                WinkelSetzen(270);
+                Richtung = 2;
+            }
+            // Links
+            if(taste == 37)
+            {
+                WinkelSetzen(180);
+                Richtung = 3;
+            }
+            // Rechts
+            if(taste == 39)
+            {
+                WinkelSetzen(0);
+                Richtung = 1;
+            }
         }
     }
     
@@ -70,9 +74,9 @@ public class PacmanMouth extends Figur
      */
     @Override void AktionAusführen()
     {
-        //Hoch
-        if (!PacManAnWand())
+        if (!PacManAnWand() && !tot)
             {
+            //Hoch
             if(Richtung == 0)
             {
                 if(YPositionGeben()>0)
@@ -109,13 +113,18 @@ public class PacmanMouth extends Figur
                 }
             }
         }
+        
+        else if (tot) 
+        {
+            totAnimieren();
+        }
     }
     
     private void Animieren() 
     {
-        if (testwertfuerdieanimation > 10 * BewegungsLaenge)
+        if (testwertfuerdieanimationen > 10 * BewegungsLaenge)
         {
-            testwertfuerdieanimation = 0;
+            testwertfuerdieanimationen = 0;
             if (Mundoeffnen) {
                 SichtbarkeitSetzen(true);
                 Mundoeffnen = false;
@@ -125,11 +134,46 @@ public class PacmanMouth extends Figur
                 Mundoeffnen = true;
             }
         }
-        testwertfuerdieanimation += BewegungsLaenge;
+        testwertfuerdieanimationen += BewegungsLaenge;
+    }
+    
+    private void totAnimieren()
+    {
+        if (testwertfuerdieanimationen == 0)
+        {
+            SichtbarkeitSetzen(false);
+        }
+        else if (testwertfuerdieanimationen == 10)
+        {
+            SichtbarkeitSetzen(true);
+        }
+        // else if (testwertfuerdieanimationen == 20)
+        // {
+            // FigurteilFestlegenRechteck(_x_, _y_, _breite_, _höhe_, _color_);
+        // }
+        else if (testwertfuerdieanimationen == 30)
+        {
+            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+        }
+        // else if (testwertfuerdieanimationen == 40)
+        // {
+            // FigurteilFestlegenRechteck(_x_, _y_, _breite_, _höhe_, _color_);
+        // }
+        
+        
+        
+        testwertfuerdieanimationen++;
+    }
+    
+    public void setTot(boolean wert)
+    {
+        if (tot != wert) {testwertfuerdieanimationen = 0;}
+        tot = wert;
     }
     
     public boolean PacManAnWand()
     {
-        return Berührt("rot");
+        return Berührt("blau");
     }
 }

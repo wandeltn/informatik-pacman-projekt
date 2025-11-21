@@ -22,29 +22,48 @@ public class Playingfield extends Figur
     Playingfield()
     {
         PositionSetzen(0,0);
-        int[][] walls = new int[224][264];
         
         File myObj = new File("./Level 1.txt");
         try (Scanner myReader = new Scanner(myObj)) {
-            int ycord = 0;
+            y = 0;
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
                 System.out.println("Data.length" + data.length());
                 for(int Spalte = 0; Spalte < data.length(); Spalte++) {
-                    int Zahl = 0;
-                    if (ycord == 0) {
+                    if (y == 0) {
                         WandFarbe = new ColorRGB(data.toLowerCase());
                         Spalte = data.length() - 1;
-                    } else if (ycord == 1) {
+                    } else if (y == 1) {
                         HintergrundFarbe = data.toLowerCase();
                         Spalte = data.length() -1 ;
                     } else {
-                        char a = data.charAt(Spalte);
-                        Zahl = a - '0';
-                        walls[Spalte][ycord - 2] = Zahl;
+                        char currentChar = data.charAt(Spalte);
+                        int nextCharcord = Spalte + 1;
+                        char nextChar = data.charAt(nextCharcord);
+                        int länge = 1;
+                        x = Spalte * 10 + 1000;
+                        Zahl = currentChar - '0';
+                        while (nextChar == currentChar ) {
+                            länge++;
+                            Spalte++;
+                            currentChar = data.charAt(Spalte);
+                            nextCharcord = Spalte + 1;
+                            nextChar = data.charAt(nextCharcord);
+                        }
+                        länge = länge * 10;
+                        switch (Zahl){
+                            case 0:
+                                break;
+                            case 1:
+                                Pixel(x,y * 10 + 70,länge);
+                                break;
+                            case 2:
+                                spawntür(x,y * 10 + 70,länge);
+                                break;
+                        }
                     }
                 }
-                ycord++;
+                y++;
             }
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
@@ -54,18 +73,8 @@ public class Playingfield extends Figur
             e.printStackTrace();
         }
         
-        //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
         
-        /*FileReader myReader = new FileReader();
-        String  File = "C:\\Users\\schadea\\Desktop\\K2_04_A00_Vorl_Java_BlueJ_DontTouch-copy\\Level 1.txt";
-        data = myReader.ReadFile(File, 4);
-        for(int Spalte = 0; Spalte < data.length(); Spalte++) {
-            char a = data.charAt(Spalte);
-            Zahl = a - '0';
-            walls[Spalte][ycord - 2] = Zahl;
-        }*/
-        
-        
+        /*
         for (int counterY = 0; counterY < 264; counterY++){
             for (int counterX = 0; counterX < 224; counterX++){
                 x = counterX * 10 + 1000;
@@ -82,32 +91,22 @@ public class Playingfield extends Figur
                         break;
                     }
             }
-        }
+        }*/
     }
     
-    void Pixel(int x, int y){
+   
+   
+   
+    void Pixel(int x, int y, int länge){
         long start = System.currentTimeMillis();
-        symbol.FigurteilFestlegenRechteck(x,y, 10, 10, WandFarbe.toColor(), false);
+        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, WandFarbe.toColor(), false);
         long end = System.currentTimeMillis();
         
         long timeElapsed = end - start;
         
         System.out.println("Added Pixel in " + timeElapsed + "ms");
     }
-    void spawntür(int x, int y){
-        symbol.FigurteilFestlegenRechteck(x,y, 10, 10, "rot");
-    }
-    
-    
-    /**
-     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
-     * 
-     * @param  y    ein Beispielparameter für eine Methode
-     * @return        die Summe aus x und y
-     */
-    public int beispielMethode(int y)
-    {
-        // tragen Sie hier den Code ein
-        return x + y;
+    void spawntür(int x, int y, int länge){
+        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, "rot");
     }
 }
