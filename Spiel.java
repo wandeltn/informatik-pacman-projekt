@@ -13,14 +13,18 @@ class Spiel extends Ereignisbehandlung
     /** Taktzähler */
     int zähler;
     
+    static Pacman pacman;
+    static Playingfield playingfield;
+    
     /**
      * Legt die Spielfigur und den Zufallsgenertor an 
      */
     Spiel()
     {
         super();
-        new Playingfield();
-        new Pacman();
+        playingfield = new Playingfield();
+        pacman = new Pacman();
+        
         zähler = 8;
         zzgenerator = new Random();
     }
@@ -104,4 +108,20 @@ class Spiel extends Ereignisbehandlung
     {
         new BaseGhost(x, y, new ColorRGB(255, 184, 81));
     }
+    
+    int getPacmanPosX()
+    {
+        return pacman.getXPosition();
+    }
+    
+    int getPacmanPosY()
+    {
+        return pacman.getYPosition();
+    }
+    
+    int getPacmanDirection()
+    {
+        return pacman.getRichtung();
+    }
+
 }
