@@ -30,7 +30,7 @@ public class FileReader
         } catch (FileNotFoundException e) {
           System.out.println("An error occurred.");
           e.printStackTrace();
-        } */
+        }*/
     }
     
 
@@ -40,21 +40,23 @@ public class FileReader
      * @param  y    ein Beispielparameter für eine Methode
      * @return        die Summe aus x und y
      */
-    public int ReadFile(String FilePath, int ycord)
+    public String ReadFile(String FilePath, int ycord)
     {
-        String data;
-        try (Stream<String> lines = Files.lines(Paths.get(FilePath))) {
+        String File = FilePath;
+        String data = "";
+        try (Stream<String> lines = Files.lines(Paths.get(File))) {
             data = lines.skip(ycord).findFirst().get();
         } catch (IOException e) {
             System.out.println(e);
         }
-        return x;
+        return data;
     }
     public boolean HasNextLine(String FilePath, int ycord)
     {
+        String File = FilePath;
         boolean stop = false;
-        try (Stream<String> lines = Files.lines(Paths.get(FilePath))) {
-            if (lines.skip(ycord).findFirst().get() != null) {
+        try (Stream<String> lines = Files.lines(Paths.get(File))) {
+            if (lines.skip(ycord).findFirst().get() != "") {
                 stop = false;
             } else {
                 stop = true;

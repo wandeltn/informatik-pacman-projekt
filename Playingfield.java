@@ -11,13 +11,15 @@ public class Playingfield extends Figur
     // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen
     private int x;
     private int y;
+    int Zahl;
+    int ycord;
     String data;
     ColorRGB WandFarbe;
     String HintergrundFarbe;
     /**
      * Konstruktor für Objekte der Klasse Playingfield
      */
-    public Playingfield()
+    public void Playingfield()
     {
         PositionSetzen(0,0);
         int[][] walls = new int[224][264];
@@ -54,6 +56,15 @@ public class Playingfield extends Figur
         
         //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
         
+        /*FileReader myReader = new FileReader();
+        String  File = "C:\\Users\\schadea\\Desktop\\K2_04_A00_Vorl_Java_BlueJ_DontTouch-copy\\Level 1.txt";
+        data = myReader.ReadFile(File, 4);
+        for(int Spalte = 0; Spalte < data.length(); Spalte++) {
+            char a = data.charAt(Spalte);
+            Zahl = a - '0';
+            walls[Spalte][ycord - 2] = Zahl;
+        }*/
+        
         
         for (int counterY = 0; counterY < 264; counterY++){
             for (int counterX = 0; counterX < 224; counterX++){
@@ -75,7 +86,13 @@ public class Playingfield extends Figur
     }
     
     void Pixel(int x, int y){
+        long start = System.currentTimeMillis();
         symbol.FigurteilFestlegenRechteck(x,y, 10, 10, WandFarbe.toColor(), false);
+        long end = System.currentTimeMillis();
+        
+        long timeElapsed = end - start;
+        
+        System.out.println("Added Pixel in " + timeElapsed + "ms");
     }
     void spawntür(int x, int y){
         symbol.FigurteilFestlegenRechteck(x,y, 10, 10, "rot");
