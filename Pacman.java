@@ -5,13 +5,15 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class Pacman extends Figur
+public class Pacman extends Figur
 {
     /** Länge der Bewegung */
     int BewegungsLaenge;
     int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
+    boolean tot = false;
     
     PacmanMouth Mouth = new PacmanMouth();
+    Rechteck rechteck = new Rechteck();
     /**
      * Legt das Aussehen der Spielfigur fest
      */
@@ -20,7 +22,7 @@ class Pacman extends Figur
         super();
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
         BewegungsLaenge = 4;
-        new Rechteck();
+        rechteck.FarbeSetzen("rot");
     }
     
     /**
@@ -64,7 +66,7 @@ class Pacman extends Figur
      */
     @Override void AktionAusführen()
     {
-        if (!Mouth.PacManAnWand()) 
+        if (!Mouth.PacManAnWand() && !tot) 
         {
             //Hoch
             if(Richtung == 0)
@@ -99,5 +101,36 @@ class Pacman extends Figur
                 }
             }
         }
+        
+        if (Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot")) 
+        {
+            tot();
+        }
+    }
+    
+    private void tot() 
+    {
+        tot = true;
+        Mouth.setTot(true);
+    }
+    
+    public int getRichtung() 
+    {
+        return Richtung;
+    }
+    
+    public int getXPosition()
+    {
+        return XPositionGeben();
+    }
+    
+    public int getYPosition()
+    {
+        return YPositionGeben();
+    }
+    
+    public int getBewegungsLaenge()
+    {
+        return BewegungsLaenge;
     }
 }

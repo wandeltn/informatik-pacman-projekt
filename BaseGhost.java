@@ -42,7 +42,7 @@ class BaseGhost extends Hindernis
     /**
      * Legt Form und Größe des Hindernisses fest
      */
-    @Override void Zeichnen()
+ void Zeichnen()
     {
         super.EigeneFigurLöschen();
 
