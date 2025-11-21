@@ -19,7 +19,7 @@ public class Playingfield extends Figur
     /**
      * Konstruktor für Objekte der Klasse Playingfield
      */
-    public void Playingfield()
+    Playingfield()
     {
         PositionSetzen(0,0);
         int[][] walls = new int[224][264];
