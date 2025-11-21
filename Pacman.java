@@ -5,7 +5,7 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class Pacman extends Figur
+public class Pacman extends Figur
 {
     /** Länge der Bewegung */
     int BewegungsLaenge;
@@ -99,5 +99,25 @@ class Pacman extends Figur
                 }
             }
         }
+    }
+    
+    public int getRichtung() 
+    {
+        return Richtung;
+    }
+    
+    public int getXPosition()
+    {
+        return XPositionGeben();
+    }
+    
+    public int getYPosition()
+    {
+        return YPositionGeben();
+    }
+    
+    public int getBewegungsLaenge()
+    {
+        return BewegungsLaenge;
     }
 }
