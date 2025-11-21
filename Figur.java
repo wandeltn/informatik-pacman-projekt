@@ -310,6 +310,7 @@ public class Figur
     {
         symbol.FigurteilFestlegenRechteck(x, y, breite, höhe, color);
     }
+   
 
     /**
      * Erzeugt ein neues, elliptisches Element einer eigenen Darstellung der Figur.
