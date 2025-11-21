@@ -19,12 +19,12 @@ public class Playingfield extends Figur
     /**
      * Konstruktor für Objekte der Klasse Playingfield
      */
-    public void playingfield()
+    public void Playingfield()
     {
         PositionSetzen(0,0);
         int[][] walls = new int[224][264];
         
-        /*File myObj = new File("./Level 1.txt");
+        File myObj = new File("./Level 1.txt");
         try (Scanner myReader = new Scanner(myObj)) {
             int ycord = 0;
             while (myReader.hasNextLine()) {
@@ -53,16 +53,17 @@ public class Playingfield extends Figur
             System.out.println("IndexOutOfBounds");
             e.printStackTrace();
         }
-        */
+        
         //symbol.FigurteilFestlegenRechteck(0,0, 7000, 4000, "blau");
-        FileReader myReader = new FileReader();
-        data = myReader.ReadFile("./Level1", 4);
+        
+        /*FileReader myReader = new FileReader();
+        String  File = "C:\\Users\\schadea\\Desktop\\K2_04_A00_Vorl_Java_BlueJ_DontTouch-copy\\Level 1.txt";
+        data = myReader.ReadFile(File, 4);
         for(int Spalte = 0; Spalte < data.length(); Spalte++) {
             char a = data.charAt(Spalte);
             Zahl = a - '0';
             walls[Spalte][ycord - 2] = Zahl;
-        }
-        
+        }*/
         
         
         for (int counterY = 0; counterY < 264; counterY++){

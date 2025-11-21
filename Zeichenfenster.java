@@ -1745,7 +1745,10 @@ class Zeichenfenster
         {
             synchronized (eigeneFigur)
             {
+                long start = System.currentTimeMillis();
                 eigeneFigur.add(new FigurenElementRechteck(x, y, breite, höhe, color));
+                long end = System.currentTimeMillis();
+                System.out.println("Added Figur in: " + (end - start) + " ms");
             }
             FormErzeugen();
             
