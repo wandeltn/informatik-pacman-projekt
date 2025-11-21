@@ -113,7 +113,7 @@ public class PacmanMouth extends Figur
     
     private void Animieren() 
     {
-        if (testwertfuerdieanimation > 10 * BewegungsLaenge)
+         if (testwertfuerdieanimation > 10)// * BewegungsLaenge)
         {
             testwertfuerdieanimation = 0;
             if (Mundoeffnen) {
