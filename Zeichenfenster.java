@@ -1398,6 +1398,66 @@ class Zeichenfenster
             }
             return ok;
         }
+
+
+        boolean Berührt (ColorRGB farbe)
+        {
+            Color c2 = farbe.toColor();
+            boolean ok = false;
+            for (GrafikSymbol g: zeichenfläche.alleSymbole)
+            {
+                if ((g != this) && g.IstInnerhalb(x, y) && g.sichtbar)
+                {
+                    if (g instanceof TurtleIntern)
+                    {
+                        TurtleIntern t = (TurtleIntern) g;
+                        if (t.symbolSichtbar)
+                        {
+                            for (FigurenElement e: t.standardFigur)
+                            {
+                                Path2D.Double p = new Path2D.Double();
+                                double größe = t.h > t.b ? t.b : t.h;
+                                e.ElementZuForm(p, größe, t.x, t.y);  
+                                AffineTransform a = new AffineTransform();
+                                a.rotate(DrehwinkelGeben (t.winkel), t.x, t.y);
+                                p = new Path2D.Double (p, a);
+                                if (p.contains(x, y))
+                                {
+                                    ok = c2.equals(e.c);
+                                }
+                            }
+                        }
+                    }
+                    else if (g instanceof FigurIntern)
+                    {
+                        FigurIntern t = (FigurIntern) g;
+                        LinkedList<FigurenElement> figur = ((t.eigeneFigur == null) || (t.eigeneFigur.size() == 0)) ? t.standardFigur : t.eigeneFigur;
+                        for (FigurenElement e: figur)
+                        {
+                            Path2D.Double p = new Path2D.Double();
+                            double größe = t.h > t.b ? t.b : t.h;
+                            e.ElementZuForm(p, größe, t.x, t.y);  
+                            AffineTransform a = new AffineTransform();
+                            a.rotate(DrehwinkelGeben (t.winkel), t.x, t.y);
+                            p = new Path2D.Double (p, a);
+                            if (p.contains(x, y))
+                            {
+                                ok = c2.equals(e.c);
+                            }
+                        }
+                    }
+                    else if (g instanceof TextIntern)
+                    {
+                        // Texte haben keine Fläche
+                    }
+                    else
+                    {
+                        ok = ok || c2.equals(g.c);
+                    }
+                }
+            }
+            return ok;
+        }
         
         /**
          * Testet, ob die Turtle die (sichtbare, ) angegebene Figur berührt.
@@ -1750,11 +1810,18 @@ class Zeichenfenster
                 long end = System.currentTimeMillis();
                 System.out.println("Added Figur in: " + (end - start) + " ms");
             }
+            
+            long startform = System.currentTimeMillis();
             FormErzeugen();
+            long endform = System.currentTimeMillis();
+            System.out.println("Created Form in: " + (endform - startform) + " ms");
             
             if (repaint)
             {
+                long start = System.currentTimeMillis();
                 zeichenfläche.malfläche.repaint();
+                long end = System.currentTimeMillis();
+                System.out.println("Repaint took: " + (end - start) + " ms");
             }
         }
         
