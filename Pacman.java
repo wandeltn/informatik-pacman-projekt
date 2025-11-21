@@ -62,7 +62,6 @@ class Pacman extends Figur
      */
     @Override void AktionAusführen()
     {
-
         //Hoch
         if(Richtung == 0)
         {
