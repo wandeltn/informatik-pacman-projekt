@@ -18,7 +18,7 @@ class Hindernis extends Figur
     Hindernis(int x, int y, char richtung)
     {
         super();
-        Zeichnen();
+        
         PositionSetzen(x,y);
         RichtungSetzen(richtung);
     }
@@ -65,12 +65,7 @@ class Hindernis extends Figur
     /**
      * Legt Form und Größe des Hindernisses fest
      */
-    void Zeichnen()
-    {
-         FigurteilFestlegenRechteck(0, 0, 100, 500, "grün");
-         GrößeSetzen(50);
-         PositionSetzen(700,200);
-    }
+    
     
     /**
      * Setzt die Blickrichtuing des Hindernisses

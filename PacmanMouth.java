@@ -5,22 +5,23 @@
  * @author Klaus Reinold 
  * @version 1.0
  */
-class PacmanMouth extends Figur
+public class PacmanMouth extends Figur
 {
     /** Länge der Bewegung */
-    int BewegungsLaenge;
-    int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
-    boolean Mundoeffnen = true;
-    int Mundwinkel = 0;
+    private int BewegungsLaenge;
+    private int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
+    private boolean Mundoeffnen = true;
+    private int Mundwinkel = 0;
+    private boolean tot = false;
     
-    int testwertfuerdieanimation = 0;
+    private int testwertfuerdieanimationen = 0;
     /**
      * Legt das Aussehen der Spielfigur fest
      */
-    PacmanMouth()
+    public PacmanMouth()
     {
         super();
-        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-60, 40+80-60, 60-60-60, "Schwarz");
+        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
         BewegungsLaenge = 4;
         SichtbarkeitSetzen(false);
     }
@@ -39,80 +40,91 @@ class PacmanMouth extends Figur
      */
     @Override void SonderTasteGedrückt(int taste)
     {
-        //Hoch
-        if(taste == 38)
+        if (!tot) 
         {
-            Richtung = 0;
-        }
-        // Runter
-        if(taste == 40)
-        {
-            Richtung = 2;
-        }
-        // Links
-        if(taste == 37)
-        {
-            Richtung = 3;
-        }
-        // Rechts
-        if(taste == 39)
-        {
-            Richtung = 1;
+            //Hoch
+            if(taste == 38)
+            {
+                WinkelSetzen(90);
+                Richtung = 0;
+            }
+            // Runter
+            if(taste == 40)
+            {
+                WinkelSetzen(270);
+                Richtung = 2;
+            }
+            // Links
+            if(taste == 37)
+            {
+                WinkelSetzen(180);
+                Richtung = 3;
+            }
+            // Rechts
+            if(taste == 39)
+            {
+                WinkelSetzen(0);
+                Richtung = 1;
+            }
         }
     }
-
+    
     /**
      * Bewegt die Figur.
      */
     @Override void AktionAusführen()
     {
-        //Hoch
-        if(Richtung == 0)
-        {
-            if(YPositionGeben()>0)
+        if (!PacManAnWand() && !tot)
             {
-                Animieren();
-                WinkelSetzen(90);
-                PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
+            //Hoch
+            if(Richtung == 0)
+            {
+                if(YPositionGeben()>0)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
+                }
+            }
+            // Runter
+            if(Richtung == 2)
+            {
+                if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
+                }
+            }
+            // Links
+            if(Richtung == 3)
+            {
+                if(XPositionGeben()>0)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
+                }
+            }
+            // Rechts
+            if(Richtung == 1)
+            {
+                if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
+                {
+                    Animieren();
+                    PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
+                }
             }
         }
-        // Runter
-        if(Richtung == 2)
+        
+        else if (tot) 
         {
-            if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
-            {
-                Animieren();
-                WinkelSetzen(270);
-                PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
-            }
-        }
-        // Links
-        if(Richtung == 3)
-        {
-            if(XPositionGeben()>0)
-            {
-                Animieren();
-                WinkelSetzen(180);
-                PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
-            }
-        }
-        // Rechts
-        if(Richtung == 1)
-        {
-            if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
-            {
-                Animieren();
-                WinkelSetzen(0);
-                PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
-            }
+            totAnimieren();
         }
     }
     
-    void Animieren() 
+    private void Animieren() 
     {
-        if (testwertfuerdieanimation > 10 * BewegungsLaenge)
+         if (testwertfuerdieanimationen > 10)// * BewegungsLaenge)
         {
-            testwertfuerdieanimation = 0;
+            testwertfuerdieanimationen = 0;
             if (Mundoeffnen) {
                 SichtbarkeitSetzen(true);
                 Mundoeffnen = false;
@@ -122,6 +134,46 @@ class PacmanMouth extends Figur
                 Mundoeffnen = true;
             }
         }
-        testwertfuerdieanimation += BewegungsLaenge;
+        testwertfuerdieanimationen += BewegungsLaenge;
+    }
+    
+    private void totAnimieren()
+    {
+        if (testwertfuerdieanimationen == 0)
+        {
+            SichtbarkeitSetzen(false);
+        }
+        else if (testwertfuerdieanimationen == 10)
+        {
+            SichtbarkeitSetzen(true);
+        }
+        // else if (testwertfuerdieanimationen == 20)
+        // {
+            // FigurteilFestlegenRechteck(_x_, _y_, _breite_, _höhe_, _color_);
+        // }
+        else if (testwertfuerdieanimationen == 30)
+        {
+            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+        }
+        // else if (testwertfuerdieanimationen == 40)
+        // {
+            // FigurteilFestlegenRechteck(_x_, _y_, _breite_, _höhe_, _color_);
+        // }
+        
+        
+        
+        testwertfuerdieanimationen++;
+    }
+    
+    public void setTot(boolean wert)
+    {
+        if (tot != wert) {testwertfuerdieanimationen = 0;}
+        tot = wert;
+    }
+    
+    public boolean PacManAnWand()
+    {
+        return Berührt("blau");
     }
 }

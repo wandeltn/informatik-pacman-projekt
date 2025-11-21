@@ -1,34 +1,19 @@
-class Pellet extends Figur
+public class Pellet extends Figur
 {
-    private boolean eingesammelt = false;
-
-    Pellet()
+    public Pellet()
     {
         super();
-
-        
-        FigurteilFestlegenEllipse(-5, -5, 10, 10, "Gelb");
+        // etwas kleineres Pellet
+        FigurteilFestlegenEllipse(-4, -4, 8, 8, "Gelb");
     }
 
-    @Override void AktionAusführen()
+    @Override
+    void AktionAusführen()
     {
-        if (!eingesammelt)
+        // Wenn dieses Pellet mit einer gelben Figur (also PacMan) überlappt, verschwinden
+        if (Berührt("Gelb"))
         {
-            
-            if (Berührt(new PacmanDummy()))
-            {
-                eingesammelt = true;
-
-                
-                SichtbarkeitSetzen(false);
-                Entfernen();
-            }
+            Entfernen();
         }
     }
-
-    /**
-     * Trick-Klasse, weil Berührt(Object) ein OBJEKT verlangt.
-     * Wir können Pacman nicht direkt nutzen, daher verwenden wir eine Dummy-Klasse.
-     */
-    private class PacmanDummy extends Pacman { }
 }

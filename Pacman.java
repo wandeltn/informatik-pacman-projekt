@@ -1,94 +1,56 @@
-
-class Pacman extends Figur
+public class Pacman extends Figur
 {
-    /** Länge der Bewegung */
     int BewegungsLaenge;
-    int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
-    
-    /**
-     * Legt das Aussehen der Spielfigur fest
-     */
+    int Richtung = 1;
+    boolean tot = false;
+
+    PacmanMouth Mouth = new PacmanMouth();
+    Rechteck rechteck = new Rechteck();
+
     Pacman()
     {
         super();
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
         BewegungsLaenge = 4;
-        new PacmanMouth();  
-    }
-    
-    /**
-     * Tasten werden ignoriert
-     * @param taste die gedrückte Taste
-     */
-    @Override void TasteGedrückt (char taste)
-    {
+        rechteck.FarbeSetzen("rot");
     }
 
-    /**
-     * Sondertasten werden ausgewertet
-     * @param taste die gedrückte Sondertaste
-     */
+    @Override void TasteGedrückt(char taste) {}
+
     @Override void SonderTasteGedrückt(int taste)
     {
-        //Hoch
-        if(taste == 38)
+        if(taste == 38) Richtung = 0;  // Hoch
+        if(taste == 40) Richtung = 2;  // Runter
+        if(taste == 37) Richtung = 3;  // Links
+        if(taste == 39) Richtung = 1;  // Rechts
+    }
+
+    @Override void AktionAusführen()
+    {
+        if (!Mouth.PacManAnWand() && !tot)
         {
-            Richtung = 0;
+            if(Richtung == 0 && YPositionGeben()>0)
+                PositionSetzen(XPositionGeben(), YPositionGeben() - BewegungsLaenge);
+
+            if(Richtung == 2 && YPositionGeben() < Zeichenfenster.MalflächenHöheGeben()-50)
+                PositionSetzen(XPositionGeben(), YPositionGeben() + BewegungsLaenge);
+
+            if(Richtung == 3 && XPositionGeben()>0)
+                PositionSetzen(XPositionGeben() - BewegungsLaenge, YPositionGeben());
+
+            if(Richtung == 1 && XPositionGeben() < Zeichenfenster.MalflächenBreiteGeben()-50)
+                PositionSetzen(XPositionGeben() + BewegungsLaenge, YPositionGeben());
         }
-        // Runter
-        if(taste == 40)
+
+        if (Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot"))
         {
-            Richtung = 2;
-        }
-        // Links
-        if(taste == 37)
-        {
-            Richtung = 3;
-        }
-        // Rechts
-        if(taste == 39)
-        {
-            Richtung = 1;
+            tot();
         }
     }
 
-    /**
-     * Bewegt die Figur.
-     */
-    @Override void AktionAusführen()
+    private void tot()
     {
-
-        //Hoch
-        if(Richtung == 0)
-        {
-            if(YPositionGeben()>0)
-            {
-                PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
-            }
-        }
-        // Runter
-        if(Richtung == 2)
-        {
-            if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
-            {
-                PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
-            }
-        }
-        // Links
-        if(Richtung == 3)
-        {
-            if(XPositionGeben()>0)
-            {
-                PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
-            }
-        }
-        // Rechts
-        if(Richtung == 1)
-        {
-            if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
-            {
-                PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
-            }
-        }
+        tot = true;
+        Mouth.setTot(true);
     }
 }
