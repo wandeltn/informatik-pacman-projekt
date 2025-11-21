@@ -123,7 +123,11 @@ public class PacmanMouth extends Figur
     private void Animieren() 
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
          if (testwertfuerdieanimation > 10)// * BewegungsLaenge)
+=======
+        if (testwertfuerdieanimationen > 10 * BewegungsLaenge)
+>>>>>>> 00051935f0774ea3c8182804350f1672d1a6b95a
 =======
         if (testwertfuerdieanimationen > 10 * BewegungsLaenge)
 >>>>>>> 00051935f0774ea3c8182804350f1672d1a6b95a
