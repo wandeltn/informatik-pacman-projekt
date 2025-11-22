@@ -29,9 +29,13 @@ public class Playingfield extends Figur
         
         
         y = 0;
-        while (y <= field.size()) {
+        while (y <= field.size() - 1) {
             data = field.get(y);
             System.out.println("Data.length" + data.size());
+            if (data.size() <= 0)
+            {
+                Logger.log("Skipping Row, no values to process: " + y, LogLevel.DEBUG);
+            }
             for(int Spalte = 0; Spalte <= data.size() - 1; Spalte++) {
                 Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
                 char currentChar = data.get(Spalte);
@@ -74,6 +78,7 @@ public class Playingfield extends Figur
         }
         
         NachVornBringen();
+        spawntür(0, 0, 1);
         
         /*
         for (int counterY = 0; counterY < 264; counterY++){
@@ -115,10 +120,12 @@ public class Playingfield extends Figur
                     if (data.toLowerCase().contains("color")) {
                         WandFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
                         Logger.log("Set Wandfarbe to:" + WandFarbe.toString(), LogLevel.INFO);
+                        skip = true;
                         break;
                     } else if (data.toLowerCase().contains("background")) {
                         HintergrundFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
                         Logger.log("Set Hintergrundfarbe to:" + HintergrundFarbe.toString(), LogLevel.INFO);
+                        skip = true;
                         break;
                     } else {
                         Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
@@ -153,7 +160,7 @@ public class Playingfield extends Figur
    
     void Pixel(int x, int y, int länge){
         long start = System.currentTimeMillis();
-        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, WandFarbe.toColor(), true);
+        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, WandFarbe.toColor(), false);
         long end = System.currentTimeMillis();
         
         long timeElapsed = end - start;

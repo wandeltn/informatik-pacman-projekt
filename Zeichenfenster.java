@@ -1811,13 +1811,14 @@ class Zeichenfenster
                 System.out.println("Added Figur in: " + (end - start) + " ms");
             }
             
-            long startform = System.currentTimeMillis();
-            FormErzeugen();
-            long endform = System.currentTimeMillis();
-            System.out.println("Created Form in: " + (endform - startform) + " ms");
             
             if (repaint)
-            {
+                {
+                long startform = System.currentTimeMillis();
+                FormErzeugen();
+                long endform = System.currentTimeMillis();
+                System.out.println("Created Form in: " + (endform - startform) + " ms");
+                
                 long start = System.currentTimeMillis();
                 zeichenfläche.malfläche.repaint();
                 long end = System.currentTimeMillis();
