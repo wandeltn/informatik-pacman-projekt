@@ -15,7 +15,7 @@ public class Playingfield extends Figur
     int ycord;
     String data;
     ColorRGB WandFarbe;
-    String HintergrundFarbe;
+    ColorRGB HintergrundFarbe;
     /**
      * Konstruktor für Objekte der Klasse Playingfield
      */
@@ -29,26 +29,39 @@ public class Playingfield extends Figur
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
                 System.out.println("Data.length" + data.length());
-                for(int Spalte = 0; Spalte < data.length(); Spalte++) {
-                    if (y == 0) {
-                        WandFarbe = new ColorRGB(data.toLowerCase());
-                        Spalte = data.length() - 1;
-                    } else if (y == 1) {
-                        HintergrundFarbe = data.toLowerCase();
-                        Spalte = data.length() -1 ;
+                for(int Spalte = 0; Spalte <= data.length() - 1; Spalte++) {
+                    if (data.toLowerCase().contains("color")) {
+                        WandFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
+                        Logger.log("Set Wandfarbe to:" + WandFarbe.toString(), LogLevel.INFO);
+                        break;
+                    } else if (data.toLowerCase().contains("background")) {
+                        HintergrundFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
+                        Logger.log("Set Hintergrundfarbe to:" + HintergrundFarbe.toString(), LogLevel.INFO);
+                        break;
                     } else {
+                        Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
                         char currentChar = data.charAt(Spalte);
+                        Logger.log("Current character: " + currentChar, LogLevel.DEBUG);
                         int nextCharcord = Spalte + 1;
+                        Logger.log("Next character index: " + nextCharcord, LogLevel.DEBUG);
+                        if (nextCharcord >= data.length()){
+                            Logger.log("Skipping read because index out of range", LogLevel.DEBUG);
+                            continue;
+                        }
                         char nextChar = data.charAt(nextCharcord);
                         int länge = 1;
                         x = Spalte * 10 + 1000;
                         Zahl = currentChar - '0';
-                        while (nextChar == currentChar ) {
+                        while (nextChar == currentChar && Spalte < data.length()) {
                             länge++;
                             Spalte++;
+                            Logger.log("Checking field data forward to index: " + (Spalte + 2), LogLevel.TRACE);
                             currentChar = data.charAt(Spalte);
                             nextCharcord = Spalte + 1;
-                            nextChar = data.charAt(nextCharcord);
+                            if (nextCharcord >= data.length()){
+                                break;
+                            }                            
+                            nextChar = data.charAt(nextCharcord); 
                         }
                         länge = länge * 10;
                         switch (Zahl){
@@ -73,6 +86,7 @@ public class Playingfield extends Figur
             e.printStackTrace();
         }
         
+        NachVornBringen();
         
         /*
         for (int counterY = 0; counterY < 264; counterY++){
@@ -99,7 +113,7 @@ public class Playingfield extends Figur
    
     void Pixel(int x, int y, int länge){
         long start = System.currentTimeMillis();
-        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, WandFarbe.toColor(), false);
+        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, WandFarbe.toColor(), true);
         long end = System.currentTimeMillis();
         
         long timeElapsed = end - start;
