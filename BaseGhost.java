@@ -117,6 +117,7 @@ class BaseGhost extends Hindernis
     void initPathfinding()
     {
         ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
+        Logger.log("Fetched field for pathfinding with length: "+ field.size(), LogLevel.DEBUG);
         this.graphTraversal = new GraphTraversal(field);
         GraphTraversal.precomputeWallDistances();
         GraphTraversal.traverse(this.XPositionGeben() / 10, this.YPositionGeben() / 10);

@@ -8,7 +8,7 @@
 public class Logger
 {
     
-    static LogLevel logLevel = LogLevel.SUCCESS;
+    static LogLevel logLevel = LogLevel.INFO;
     
     public static void setLogLevel(LogLevel level) {
         logLevel = level;
@@ -16,12 +16,21 @@ public class Logger
 
     public static void log(String message, LogLevel level) {
         if (level.ordinal() >= logLevel.ordinal()) {
-            System.out.println("[" + level + "] " + message);
+            System.out.println("[" + level + "] " + "(" + getCallerMethodName() + ")"  + message);
         }
+    }
+    
+    private static String getCallerMethodName()
+    {
+       return StackWalker.
+          getInstance().
+          walk(stream -> stream.skip(2).findFirst().get()).
+          getMethodName();
     }
     
     public Logger()
     {
         
     }
+    
 }

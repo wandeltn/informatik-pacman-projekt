@@ -81,7 +81,7 @@ public class GraphTraversal
     // Two-pass Manhattan distance transform from walls (value 1)
     public static void precomputeWallDistances() {
         if (field == null || field.isEmpty()) return;
-        int rows = field.size();
+        int rows = field.size() - 1; // Last row has len 0
         int cols = field.get(0).size();
         long t0 = System.nanoTime();
         LoggerWrapper.log("Precomputing wall distances (" + rows + "x" + cols + ")", "INFO");
@@ -90,6 +90,7 @@ public class GraphTraversal
         // init
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
+                LoggerWrapper.log("Getting tile at pos: x=" + x + " y=" + y, "TRACE");
                 wallDistance[y][x] = (field.get(y).get(x) == 1) ? 0 : INF;
             }
         }

@@ -210,10 +210,11 @@ public class Playingfield extends Figur
         try (Scanner myReader = new Scanner(myObj)) {
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
-                System.out.println("Data.length" + data.length());
+                Logger.log("Data.length: " + data.length(), LogLevel.TRACE);
                 int firstZeroIndex = 0;
                 int currentZeroIndex = 0;
-                for(int Spalte = 0; Spalte <= data.length() - 1; Spalte++) {
+                int Spalte = 0;
+                for(; Spalte <= data.length() - 1; Spalte++) {
                     if (data.toLowerCase().contains("color")) {
                         WandFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
                         Logger.log("Set Wandfarbe to: " + WandFarbe.toString(), LogLevel.INFO);
@@ -239,7 +240,7 @@ public class Playingfield extends Figur
                                 firstZeroIndex = Spalte;
                             }
                         }
-                        else
+                        else if (currentZeroIndex < 0)
                         {
                             field.get(Zeile).set(firstZeroIndex, currentZeroIndex);
                             
@@ -248,7 +249,7 @@ public class Playingfield extends Figur
                         }
                     }
                 }
-                if (!skip)
+                if (!skip || Spalte >= data.length() - 1)
                 {
                     ++Zeile;
                     field.add(new ArrayList<Integer>());  
@@ -266,6 +267,18 @@ public class Playingfield extends Figur
             e.printStackTrace();
         }
         System.out.println("Field loaded with " + field.size() + " rows.");
+        
+        // Fill incomplete rows for consitent lenth
+        for (int i = 0; i < field.size(); i++)
+        {
+            ArrayList<Integer> row = field.get(i);
+            while (row.size() < field.get(i).size())
+            {
+                row.add(0);
+            }
+        }
+        
+        
         return field;
     }
     
