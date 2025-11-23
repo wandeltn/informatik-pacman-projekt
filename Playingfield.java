@@ -15,6 +15,8 @@ public class Playingfield extends Figur
     int Zahl;
     int ycord;
     
+    ArrayList<ArrayList<Integer>> playingfield;
+    
     ColorRGB WandFarbe;
     ColorRGB HintergrundFarbe;
     /**
@@ -22,15 +24,15 @@ public class Playingfield extends Figur
      */
     Playingfield()
     {
-        ArrayList<Character> data;
+        ArrayList<Integer> data;
         
         PositionSetzen(0,0);
-        ArrayList<ArrayList<Character>> field = LoadPlayingFieldFromFile();
+        playingfield = LoadPlayingFieldFromFile();
         
         
         y = 0;
-        while (y <= field.size() - 1) {
-            data = field.get(y);
+        while (y <= playingfield.size() - 1) {
+            data = playingfield.get(y);
             System.out.println("Data.length" + data.size());
             if (data.size() <= 0)
             {
@@ -38,38 +40,69 @@ public class Playingfield extends Figur
             }
             for(int Spalte = 0; Spalte <= data.size() - 1; Spalte++) {
                 Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
-                char currentChar = data.get(Spalte);
-                Logger.log("Current character: " + currentChar, LogLevel.DEBUG);
+                int currentChar = data.get(Spalte);
+                Logger.log("Current character: " + (int)currentChar, LogLevel.DEBUG);
                 int nextCharcord = Spalte + 1;
                 Logger.log("Next character index: " + nextCharcord, LogLevel.DEBUG);
                 if (nextCharcord >= data.size()){
                     Logger.log("Skipping read because index out of range", LogLevel.DEBUG);
                     continue;
                 }
-                char nextChar = data.get(nextCharcord);
+                int nextChar = data.get(nextCharcord);
                 int länge = 1;
                 x = Spalte * 10 + 1000;
-                Zahl = currentChar - '0';
-                while (nextChar == currentChar && Spalte < data.size()) {
+                Zahl = currentChar;
+                
+                
+                if (Zahl == 0)
+                {
+                    Logger.log("Skipping tile checks, no valid tile found", LogLevel.DEBUG);
+                    continue;
+                }
+                
+                
+                // Check rows below for same value
+                int numRowsBelow = getVerticalWallHeight(Spalte, y);
+                Logger.log("Possible to draw vertical Pixel with hight: " + numRowsBelow, LogLevel.DEBUG);
+                
+                if (numRowsBelow > 1)
+                {
+                    Logger.log("Taking opportunity for vertical optimize", LogLevel.SUCCESS);
+                    switch (Zahl){
+                    case 0:
+                        break;
+                    case 1:
+                        Pixel(x,y * 10 + 70,10, numRowsBelow * 10);
+                        break;
+                    case 2:
+                        spawntür(x,y * 10 + 70,10, numRowsBelow * 10);
+                        break;
+                }
+                }
+                
+                
+                while (nextChar == Zahl && Spalte < data.size()) {
                     länge++;
                     Spalte++;
-                    Logger.log("Checking field data forward to index: " + (Spalte + 2), LogLevel.TRACE);
-                    currentChar = data.get(Spalte);
+                    Logger.log("Checking field data forward to index: " + (Spalte + 1), LogLevel.TRACE);
+                    // currentChar = data.get(Spalte);
                     nextCharcord = Spalte + 1;
                     if (nextCharcord >= data.size()){
                         break;
                     }                            
                     nextChar = data.get(nextCharcord); 
+                    Logger.log("About to check equality of inital: " + Zahl + " against: " + nextChar, LogLevel.DEBUG);
                 }
-                länge = länge * 10;
+                länge = (länge) * 10;
                 switch (Zahl){
                     case 0:
+                        Logger.log("Invalid Tile found during render switch", LogLevel.WARN);
                         break;
                     case 1:
-                        Pixel(x,y * 10 + 70,länge);
+                        Pixel(x,y * 10 + 70,länge, 10);
                         break;
                     case 2:
-                        spawntür(x,y * 10 + 70,länge);
+                        spawntür(x,y * 10 + 70,länge, 10);
                         break;
                 }
                 // }
@@ -78,7 +111,7 @@ public class Playingfield extends Figur
         }
         
         NachVornBringen();
-        spawntür(0, 0, 1);
+        spawntür(0, 0, 1, 10);
         
         /*
         for (int counterY = 0; counterY < 264; counterY++){
@@ -100,13 +133,62 @@ public class Playingfield extends Figur
         }*/
     }
     
+    int getVerticalWallHeight(int x, int y)
+    {
+        Logger.log("getVerticalWallHeight(int, int) called with x: " + x + " y: " + y, LogLevel.TRACE);
+        
+        int checkValue = playingfield.get(y).get(x);
+        int nextValue;
+        int currentIndex = 1;
+        
+        Logger.log("Initial Value to check against during vertical optimizer: " + checkValue, LogLevel.DEBUG);
+        
+        // Skip checking of 0 tiles, no tile will be places anyway
+        if (checkValue == 0)
+        {
+            Logger.log("Skipping, no valid tile found", LogLevel.DEBUG);
+            return 1;
+        }
+        
+        // also set first value to 0
+        playingfield.get(y).set(x, 0);
+        
+        if (y + currentIndex <= playingfield.size() - 1 && x <= playingfield.get(y + currentIndex).size() - 1)
+        {
+            nextValue = playingfield.get(y + currentIndex++).get(x);
+        } else
+        {
+            Logger.log("Skipping vertical optimizer, no match with tile immediatly below", LogLevel.DEBUG);
+            return 1;
+        }
     
-    ArrayList<ArrayList<Character>> LoadPlayingFieldFromFile()
+        while (
+            y + currentIndex <= playingfield.size() - 1 && 
+            nextValue == checkValue && 
+            x <= playingfield.get(y + currentIndex).size() - 1)
+        {
+            Logger.log("Checking forward vertical for y: " + (y + currentIndex), LogLevel.DEBUG);
+            Logger.log("Length of data at vertical check: " + playingfield.get(y + currentIndex).size(), LogLevel.TRACE);
+            Logger.log("Field Row to be checked: " + playingfield.get(y + currentIndex), LogLevel.TRACE);
+            // prevent double drawing by deleting values in checked places
+            
+            nextValue = playingfield.get(y + currentIndex).get(x);
+            playingfield.get(y + currentIndex++).set(x, 0);
+            
+            Logger.log("About to check equality of inital: " + checkValue + " against: " + nextValue, LogLevel.DEBUG);
+        }
+        
+        Logger.log("Returning vertical optimization of n tiles: " + (currentIndex -1), LogLevel.TRACE);        
+        return currentIndex - 1;
+    }
+    
+    
+    ArrayList<ArrayList<Integer>> LoadPlayingFieldFromFile()
     {
         String data;
         
-        ArrayList<ArrayList<Character>> field = new ArrayList<ArrayList<Character>>();
-        field.add(new ArrayList<Character>());          
+        ArrayList<ArrayList<Integer>> field = new ArrayList<ArrayList<Integer>>();
+        field.add(new ArrayList<Integer>());          
         
         File myObj = new File("./Level 1.txt");
         int Zeile = 0;
@@ -130,14 +212,14 @@ public class Playingfield extends Figur
                     } else {
                         Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
                         char currentChar = data.charAt(Spalte);
-                        field.get(Zeile).add(currentChar);
+                        field.get(Zeile).add(currentChar - '0');
                         Logger.log("Current character: " + currentChar, LogLevel.DEBUG);
                     }
                 }
                 if (!skip)
                 {
                     ++Zeile;
-                    field.add(new ArrayList<Character>());  
+                    field.add(new ArrayList<Integer>());  
                 } else 
                 {
                     skip = false;
@@ -158,16 +240,16 @@ public class Playingfield extends Figur
    
    
    
-    void Pixel(int x, int y, int länge){
+    void Pixel(int x, int y, int länge, int höhe){
         long start = System.currentTimeMillis();
-        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, WandFarbe.toColor(), false);
+        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.toColor(), true);
         long end = System.currentTimeMillis();
         
         long timeElapsed = end - start;
         
         System.out.println("Added Pixel in " + timeElapsed + "ms");
     }
-    void spawntür(int x, int y, int länge){
-        symbol.FigurteilFestlegenRechteck(x,y,länge, 10, "rot");
+    void spawntür(int x, int y, int länge, int höhe){
+        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, "rot");
     }
 }
