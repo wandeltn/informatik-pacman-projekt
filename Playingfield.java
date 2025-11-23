@@ -15,7 +15,7 @@ public class Playingfield extends Figur
     int Zahl;
     int ycord;
     
-    ArrayList<ArrayList<Integer>> playingfield;
+    static ArrayList<ArrayList<Integer>> playingfield;
     
     ColorRGB WandFarbe;
     ColorRGB HintergrundFarbe;
@@ -283,5 +283,10 @@ public class Playingfield extends Figur
     }
     void spawntür(int x, int y, int länge, int höhe){
         symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, "rot");
+    }
+    
+    static ArrayList<ArrayList<Integer>> getPlayingField()
+    {
+        return playingfield;
     }
 }
