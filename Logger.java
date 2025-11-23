@@ -8,7 +8,7 @@
 public class Logger
 {
     
-    static LogLevel logLevel = LogLevel.TRACE;
+    static LogLevel logLevel = LogLevel.SUCCESS;
     
     public static void setLogLevel(LogLevel level) {
         logLevel = level;

@@ -24,6 +24,8 @@ public class Playingfield extends Figur
      */
     Playingfield()
     {
+        long start = System.currentTimeMillis();
+
         ArrayList<Integer> data;
         
         PositionSetzen(0,0);
@@ -57,6 +59,11 @@ public class Playingfield extends Figur
                 if (Zahl == 0)
                 {
                     Logger.log("Skipping tile checks, no valid tile found", LogLevel.DEBUG);
+                    continue;
+                } else if (Zahl < 0)
+                {
+                    Logger.log("Using move-ahead tip for n tiles: " + ((Zahl + 1) * -1), LogLevel.DEBUG);
+                    Spalte = Spalte + (Zahl +1) * -1;
                     continue;
                 }
                 
@@ -112,6 +119,12 @@ public class Playingfield extends Figur
         
         NachVornBringen();
         spawntür(0, 0, 1, 10);
+        
+        long end = System.currentTimeMillis();
+        
+        long timeElapsed = end - start;
+        
+        Logger.log("Added Rendered whole Playingfield in " + timeElapsed + "ms", LogLevel.SUCCESS);
         
         /*
         for (int counterY = 0; counterY < 264; counterY++){
@@ -198,10 +211,12 @@ public class Playingfield extends Figur
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
                 System.out.println("Data.length" + data.length());
+                int firstZeroIndex = 0;
+                int currentZeroIndex = 0;
                 for(int Spalte = 0; Spalte <= data.length() - 1; Spalte++) {
                     if (data.toLowerCase().contains("color")) {
                         WandFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
-                        Logger.log("Set Wandfarbe to:" + WandFarbe.toString(), LogLevel.INFO);
+                        Logger.log("Set Wandfarbe to: " + WandFarbe.toString(), LogLevel.INFO);
                         skip = true;
                         break;
                     } else if (data.toLowerCase().contains("background")) {
@@ -212,8 +227,25 @@ public class Playingfield extends Figur
                     } else {
                         Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
                         char currentChar = data.charAt(Spalte);
-                        field.get(Zeile).add(currentChar - '0');
+                        int currentNumber = currentChar - '0';
+                        field.get(Zeile).add(currentNumber);
                         Logger.log("Current character: " + currentChar, LogLevel.DEBUG);
+                        
+                        if (currentNumber == 0)
+                        {
+                            currentZeroIndex--;
+                            if (firstZeroIndex == 0)
+                            {
+                                firstZeroIndex = Spalte;
+                            }
+                        }
+                        else
+                        {
+                            field.get(Zeile).set(firstZeroIndex, currentZeroIndex);
+                            
+                            currentZeroIndex = 0;
+                            firstZeroIndex = 0;
+                        }
                     }
                 }
                 if (!skip)
@@ -242,7 +274,7 @@ public class Playingfield extends Figur
    
     void Pixel(int x, int y, int länge, int höhe){
         long start = System.currentTimeMillis();
-        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.toColor(), true);
+        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.toColor(), false);
         long end = System.currentTimeMillis();
         
         long timeElapsed = end - start;

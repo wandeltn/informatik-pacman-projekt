@@ -1578,6 +1578,7 @@ class Zeichenfenster
          */
         @Override void FormErzeugen()
         {
+            int numFigures = 0;
             Area area = new Area();
             AffineTransform a = new AffineTransform();
             a.rotate(DrehwinkelGeben (winkel), this.x, this.y);
@@ -1589,6 +1590,7 @@ class Zeichenfenster
                 {
                     for (FigurenElement e: figur)
                     {
+                        numFigures++;
                         Path2D.Double p = new Path2D.Double();
                         e.ElementZuForm(p, größe, x, y);
                         area.add(new Area(new Path2D.Double (p, a)));
@@ -1596,6 +1598,7 @@ class Zeichenfenster
                 }
                
             }
+            Logger.log("FormErzeugen added shapes: " + numFigures, LogLevel.DEBUG);
             form = area;
         }
         
