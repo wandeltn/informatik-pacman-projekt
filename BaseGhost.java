@@ -3,6 +3,7 @@ import GraphTraversal.GraphTraversal;
 import GraphTraversal.Node;
 import java.util.ArrayList;
 import java.util.List;
+import Logger.*;
 
 /**
  * Klasse Quadrat

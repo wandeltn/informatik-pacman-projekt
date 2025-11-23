@@ -1,5 +1,6 @@
 package GraphTraversal;
 import java.util.ArrayList;
+import Logger.*;
 
 
 /**
@@ -27,7 +28,7 @@ public class GraphTraversal
         if (field == null || field.isEmpty()) return;
         if (!isValid(x, y)) return; // starting point invalid
         long t0 = System.nanoTime();
-        LoggerWrapper.log("Traverse start at (" + x + "," + y + ")", "INFO");
+        Logger.log("Traverse start at (" + x + "," + y + ")", LogLevel.INFO);
 
         java.util.ArrayDeque<int[]> queue = new java.util.ArrayDeque<>();
         java.util.HashSet<String> visited = new java.util.HashSet<>();
@@ -40,7 +41,7 @@ public class GraphTraversal
             int cy = current[1];
 
             Node currentNode = getOrCreateNode(cx, cy);
-            LoggerWrapper.log("Visiting node (" + cx + "," + cy + ")", "TRACE");
+            Logger.log("Visiting node (" + cx + "," + cy + ")", LogLevel.TRACE);
 
             // 4-directional movement (can extend to 8 if desired)
             int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
@@ -55,13 +56,13 @@ public class GraphTraversal
                     if (!visited.contains(k)) {
                         visited.add(k);
                         queue.add(new int[]{nx, ny});
-                        LoggerWrapper.log("Queued neighbor (" + nx + "," + ny + ")", "TRACE");
+                        Logger.log("Queued neighbor (" + nx + "," + ny + ")", LogLevel.TRACE);
                     }
                 }
             }
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("Traverse completed. Nodes: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", "SUCCESS");
+        Logger.log("Traverse completed. Nodes: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
     static boolean isValid(int x, int y) {
@@ -84,13 +85,13 @@ public class GraphTraversal
         int rows = field.size() - 1; // Last row has len 0
         int cols = field.get(0).size();
         long t0 = System.nanoTime();
-        LoggerWrapper.log("Precomputing wall distances (" + rows + "x" + cols + ")", "INFO");
+        Logger.log("Precomputing wall distances (" + rows + "x" + cols + ")", LogLevel.INFO);
         wallDistance = new int[rows][cols];
         int INF = rows + cols + 5; // upper bound
         // init
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                LoggerWrapper.log("Getting tile at pos: x=" + x + " y=" + y, "TRACE");
+                Logger.log("Getting tile at pos: x=" + x + " y=" + y, LogLevel.TRACE);
                 wallDistance[y][x] = (field.get(y).get(x) == 1) ? 0 : INF;
             }
         }
@@ -113,7 +114,7 @@ public class GraphTraversal
             }
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("Wall distance precompute finished in " + ((t1 - t0)/1_000_000.0) + "ms", "SUCCESS");
+        Logger.log("Wall distance precompute finished in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
     private static boolean inBounds(int x, int y) {
@@ -144,14 +145,16 @@ public class GraphTraversal
     public static void buildFullGraph() {
         if (field == null || field.isEmpty()) return;
         ensureWallDistance();
-        int rows = field.size();
+        int rows = field.size() - 1; // Last Row has len 0 (FIX needed);
         int cols = field.get(0).size();
         long t0 = System.nanoTime();
-        LoggerWrapper.log("Building full graph", "INFO");
+        Logger.log("Building full graph", LogLevel.INFO);
         // First pass: create nodes for valid cells
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
+                Logger.log("Checking validity of cell: x=" + x + " y=" + y, LogLevel.DEBUG);
                 if (isValid(x, y)) {
+                    Logger.log("Cell was valid", LogLevel.DEBUG);
                     getOrCreateNode(x, y);
                 }
             }
@@ -171,7 +174,7 @@ public class GraphTraversal
             }
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("Graph build complete. Node count: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", "SUCCESS");
+        Logger.log("Graph build complete. Node count: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
 }

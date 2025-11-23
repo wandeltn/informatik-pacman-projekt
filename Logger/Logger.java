@@ -1,3 +1,5 @@
+package Logger;
+
 
 /**
  * Write a description of class Logger here.
@@ -8,7 +10,7 @@
 public class Logger
 {
     
-    static LogLevel logLevel = LogLevel.INFO;
+    static LogLevel logLevel = LogLevel.DEBUG;
     
     public static void setLogLevel(LogLevel level) {
         logLevel = level;

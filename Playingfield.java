@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import Logger.*;
 /**
  * Beschreiben Sie hier die Klasse Playingfield.
  * 
@@ -226,11 +227,11 @@ public class Playingfield extends Figur
                         skip = true;
                         break;
                     } else {
-                        Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
+                        Logger.log("Processing field data at index: " + Spalte, LogLevel.TRACE);
                         char currentChar = data.charAt(Spalte);
                         int currentNumber = currentChar - '0';
                         field.get(Zeile).add(currentNumber);
-                        Logger.log("Current character: " + currentChar, LogLevel.DEBUG);
+                        Logger.log("Current character: " + currentChar, LogLevel.TRACE);
                         
                         if (currentNumber == 0)
                         {

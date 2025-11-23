@@ -22,7 +22,7 @@ class Spiel extends Ereignisbehandlung
         super();
         playingfield = new Playingfield();
         pacman = new Pacman();
-        blinky = new GhostBlinky(100, 100);
+        blinky = new GhostBlinky(150, 150);
         
         blinky.setPacmanTarget(pacman);
         

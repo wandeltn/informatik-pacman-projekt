@@ -1,3 +1,5 @@
+package Logger;
+
 
 /**
  * Enumeration class LogLevel - write a description of the enum class here

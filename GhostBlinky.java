@@ -1,4 +1,4 @@
-
+import Logger.*;
 /**
  * Write a description of class GhostInky here.
  *
@@ -26,7 +26,8 @@ public class GhostBlinky extends BaseGhost {
     @Override
     void Bewegen() {
         // Regular figure housekeeping
-        if (Berührt()) {
+        if (Berührt("blau")) {
+            Logger.log("Touching something, removing self", LogLevel.DEBUG);
             EigeneFigurLöschen();
             return;
         }

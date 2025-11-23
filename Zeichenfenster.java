@@ -6,6 +6,7 @@ import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import Logger.*;
 /**
  * Die Klasse stellt ein Fenster mit einer Malfläche zur Verfügung,
  * auf der Objekte der Klassen Rechteck, Kreis und Dreieck sowie Turtle dargestellt
