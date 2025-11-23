@@ -23,4 +23,9 @@ public class Node {
             neighbors.add(n);
         }
     }
+    
+    public String toString()
+    {
+        return "Node: [x=" + x + ", y=" + y + "]";
+    }
 }

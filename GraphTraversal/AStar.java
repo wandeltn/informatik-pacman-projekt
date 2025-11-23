@@ -19,7 +19,12 @@ public class AStar {
 
         if (start == null || goal == null) {
             Logger.log("A* abort: start or goal invalid", LogLevel.WARN);
-            return Collections.emptyList();
+            Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
+            Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
+            Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
+            List<Node> onlyDestination = new ArrayList<>();
+            onlyDestination.add(nearestEnd);
+            return onlyDestination;
         }
 
         // A* data structures

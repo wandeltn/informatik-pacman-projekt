@@ -27,9 +27,9 @@ public class GhostBlinky extends BaseGhost {
     void Bewegen() {
         // Regular figure housekeeping
         if (Berührt("blau")) {
-            Logger.log("Touching something, removing self", LogLevel.DEBUG);
-            EigeneFigurLöschen();
-            return;
+            Logger.log("Touching something, removing self, temporarily disabled", LogLevel.DEBUG);
+            // EigeneFigurLöschen();
+            //return;
         }
 
         if (pacmanRef != null) {

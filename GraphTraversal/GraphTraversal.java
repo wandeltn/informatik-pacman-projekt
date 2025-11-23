@@ -1,6 +1,6 @@
 package GraphTraversal;
-import java.util.ArrayList;
 import Logger.*;
+import java.util.ArrayList;
 
 
 /**
@@ -72,6 +72,43 @@ public class GraphTraversal
         return wallDistance[y][x] >= CLEARANCE;
     }
 
+    // Public wrapper for external (default-package) classes
+    public static boolean isCoordinateValid(int x, int y) {
+        return isValid(x, y);
+    }
+
+    // Find nearest valid coordinate using BFS (guarantees minimal Manhattan distance).
+    // Returns int[]{x,y} or null if none found.
+    public static int[] findNearestValid(int startX, int startY) {
+        if (field == null || field.isEmpty()) return null;
+        ensureWallDistance();
+        java.util.ArrayDeque<int[]> q = new java.util.ArrayDeque<>();
+        java.util.HashSet<String> visited = new java.util.HashSet<>();
+        q.add(new int[]{startX, startY});
+        visited.add(key(startX, startY));
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int x = cur[0];
+            int y = cur[1];
+            if (isValid(x, y)) {
+                return cur;
+            }
+            int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+            for (int[] d : dirs) {
+                int nx = x + d[0];
+                int ny = y + d[1];
+                if (inBounds(nx, ny)) {
+                    String k = key(nx, ny);
+                    if (!visited.contains(k)) {
+                        visited.add(k);
+                        q.add(new int[]{nx, ny});
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     // Ensure distance map computed
     private static void ensureWallDistance() {
         if (wallDistance == null) {
@@ -140,6 +177,26 @@ public class GraphTraversal
         return nodeMap.get(key(x, y));
     }
 
+    // Return the nearest existing Node to the given tile coordinate (x,y).
+    // If there are no nodes yet (graph not built), returns null.
+    // Distance metric: squared Euclidean to avoid sqrt cost.
+    public static Node getNearestNode(int x, int y) {
+        if (nodes == null || nodes.isEmpty()) return null;
+        Node best = null;
+        int bestDist = Integer.MAX_VALUE;
+        for (Node n : nodes) {
+            int dx = n.getX() - x;
+            int dy = n.getY() - y;
+            int dist = dx*dx + dy*dy;
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = n;
+            }
+        }
+        Logger.log("Nearest node search from (" + x + "," + y + ") -> " + (best==null?"none":"("+best.getX()+","+best.getY()+") distSquared="+bestDist), LogLevel.DEBUG);
+        return best;
+    }
+
     // Build the full graph of all valid nodes (clearance satisfied) across the entire field.
     // Safe to call multiple times; existing nodes will be reused.
     public static void buildFullGraph() {
@@ -152,9 +209,9 @@ public class GraphTraversal
         // First pass: create nodes for valid cells
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                Logger.log("Checking validity of cell: x=" + x + " y=" + y, LogLevel.DEBUG);
+                Logger.log("Checking validity of cell: x=" + x + " y=" + y, LogLevel.TRACE);
                 if (isValid(x, y)) {
-                    Logger.log("Cell was valid", LogLevel.DEBUG);
+                    Logger.log("Cell was valid", LogLevel.TRACE);
                     getOrCreateNode(x, y);
                 }
             }

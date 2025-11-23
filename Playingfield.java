@@ -17,6 +17,9 @@ public class Playingfield extends Figur
     int ycord;
     
     static ArrayList<ArrayList<Integer>> playingfield;
+    // Rendering offset applied when drawing each tile (x = col*10 + 1000, y = row*10 + 70)
+    private static final int OFFSET_X = 1000;
+    private static final int OFFSET_Y = 70;
     
     ColorRGB WandFarbe;
     ColorRGB HintergrundFarbe;
@@ -53,7 +56,7 @@ public class Playingfield extends Figur
                 }
                 int nextChar = data.get(nextCharcord);
                 int länge = 1;
-                x = Spalte * 10 + 1000;
+                x = Spalte * 10 + OFFSET_X;
                 Zahl = currentChar;
                 
                 
@@ -80,10 +83,10 @@ public class Playingfield extends Figur
                     case 0:
                         break;
                     case 1:
-                        Pixel(x,y * 10 + 70,10, numRowsBelow * 10);
+                        Pixel(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
                         break;
                     case 2:
-                        spawntür(x,y * 10 + 70,10, numRowsBelow * 10);
+                        spawntür(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
                         break;
                 }
                 }
@@ -107,10 +110,10 @@ public class Playingfield extends Figur
                         Logger.log("Invalid Tile found during render switch", LogLevel.WARN);
                         break;
                     case 1:
-                        Pixel(x,y * 10 + 70,länge, 10);
+                        Pixel(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
                     case 2:
-                        spawntür(x,y * 10 + 70,länge, 10);
+                        spawntür(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
                 }
                 // }
@@ -303,4 +306,7 @@ public class Playingfield extends Figur
     {
         return playingfield;
     }
+
+    public static int getOffsetX() { return OFFSET_X; }
+    public static int getOffsetY() { return OFFSET_Y; }
 }
