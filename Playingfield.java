@@ -19,7 +19,7 @@ public class Playingfield extends Figur
     static ArrayList<ArrayList<Integer>> playingfield;
     // Rendering offset applied when drawing each tile (x = col*10 + 1000, y = row*10 + 70)
     private static final int OFFSET_X = 1000;
-    private static final int OFFSET_Y = 70;
+    private static final int OFFSET_Y = 0;
     
     ColorRGB WandFarbe;
     ColorRGB HintergrundFarbe;
@@ -129,25 +129,6 @@ public class Playingfield extends Figur
         long timeElapsed = end - start;
         
         Logger.log("Added Rendered whole Playingfield in " + timeElapsed + "ms", LogLevel.SUCCESS);
-        
-        /*
-        for (int counterY = 0; counterY < 264; counterY++){
-            for (int counterX = 0; counterX < 224; counterX++){
-                x = counterX * 10 + 1000;
-                y = counterY * 10 +70;
-                y = counterY * 10 + 70;
-                switch (walls[counterX][counterY]){
-                    case 0:
-                        break;
-                    case 1:
-                        Pixel(x,y);
-                        break;
-                    case 2:
-                        spawntür(x,y);
-                        break;
-                    }
-            }
-        }*/
     }
     
     int getVerticalWallHeight(int x, int y)
@@ -163,7 +144,7 @@ public class Playingfield extends Figur
         // Skip checking of 0 tiles, no tile will be places anyway
         if (checkValue == 0)
         {
-            Logger.log("Skipping, no valid tile found", LogLevel.DEBUG);
+            Logger.log("Skipping, no valid tile found", LogLevel.WARN);
             return 1;
         }
         
@@ -299,7 +280,7 @@ public class Playingfield extends Figur
         System.out.println("Added Pixel in " + timeElapsed + "ms");
     }
     void spawntür(int x, int y, int länge, int höhe){
-        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, "rot");
+        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.getGegenfarbe().toColor());
     }
     
     static ArrayList<ArrayList<Integer>> getPlayingField()
