@@ -6,6 +6,7 @@ import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import Logger.*;
 /**
  * Die Klasse stellt ein Fenster mit einer Malfläche zur Verfügung,
  * auf der Objekte der Klassen Rechteck, Kreis und Dreieck sowie Turtle dargestellt
@@ -1569,8 +1570,7 @@ class Zeichenfenster
         {            
             int[] x = new int [] {-50, 50, -50};
             int[] y = new int [] {-50, 0, 50};
-            standardFigur.add (new FigurenElementPolygon (x, y, Color.yellow));
-            standardFigur.add(new FigurenElementEllipse(-10, -10, 20, 20, Color.blue));
+            standardFigur.add (new FigurenElementPolygon (x, y, new ColorRGB(246, 1, 206).toColor()));
         }
                 
         /**
@@ -1578,6 +1578,7 @@ class Zeichenfenster
          */
         @Override void FormErzeugen()
         {
+            int numFigures = 0;
             Area area = new Area();
             AffineTransform a = new AffineTransform();
             a.rotate(DrehwinkelGeben (winkel), this.x, this.y);
@@ -1589,6 +1590,7 @@ class Zeichenfenster
                 {
                     for (FigurenElement e: figur)
                     {
+                        numFigures++;
                         Path2D.Double p = new Path2D.Double();
                         e.ElementZuForm(p, größe, x, y);
                         area.add(new Area(new Path2D.Double (p, a)));
@@ -1596,6 +1598,7 @@ class Zeichenfenster
                 }
                
             }
+            Logger.log("FormErzeugen added shapes: " + numFigures, LogLevel.DEBUG);
             form = area;
         }
         
@@ -1811,13 +1814,14 @@ class Zeichenfenster
                 System.out.println("Added Figur in: " + (end - start) + " ms");
             }
             
-            long startform = System.currentTimeMillis();
-            FormErzeugen();
-            long endform = System.currentTimeMillis();
-            System.out.println("Created Form in: " + (endform - startform) + " ms");
             
             if (repaint)
-            {
+                {
+                long startform = System.currentTimeMillis();
+                FormErzeugen();
+                long endform = System.currentTimeMillis();
+                System.out.println("Created Form in: " + (endform - startform) + " ms");
+                
                 long start = System.currentTimeMillis();
                 zeichenfläche.malfläche.repaint();
                 long end = System.currentTimeMillis();

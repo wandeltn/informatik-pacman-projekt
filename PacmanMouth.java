@@ -139,31 +139,38 @@ public class PacmanMouth extends Figur
     
     private void totAnimieren()
     {
-        if (testwertfuerdieanimationen == 0)
+        if (testwertfuerdieanimationen == 1)
         {
-            SichtbarkeitSetzen(false);
+            FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
+            SichtbarkeitSetzen(true);
         }
         else if (testwertfuerdieanimationen == 10)
         {
-            SichtbarkeitSetzen(true);
+            FigurteilFestlegenDreieck(0, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+            FigurteilFestlegenDreieck(0, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
         }
-        // else if (testwertfuerdieanimationen == 20)
-        // {
-            // FigurteilFestlegenRechteck(_x_, _y_, _breite_, _höhe_, _color_);
-        // }
+        else if (testwertfuerdieanimationen == 20)
+        {
+            FigurteilFestlegenRechteck(0, -60, 60, 120, "Schwarz");
+        }
         else if (testwertfuerdieanimationen == 30)
         {
-            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
-            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+            FigurteilFestlegenDreieck(0, 0, 0, 60, -60, 60, "Schwarz");
+            FigurteilFestlegenDreieck(0, 0, 0, -60, -60, -60, "Schwarz");
         }
-        // else if (testwertfuerdieanimationen == 40)
-        // {
-            // FigurteilFestlegenRechteck(_x_, _y_, _breite_, _höhe_, _color_);
-        // }
+        else if (testwertfuerdieanimationen == 40)
+        {
+            FigurteilFestlegenRechteck(-60, -60, 120, 120, "Schwarz");
+        }
         
         
-        
-        testwertfuerdieanimationen++;
+        if (testwertfuerdieanimationen < 40)
+        {
+            testwertfuerdieanimationen++;
+        } else 
+        {
+            Entfernen();
+        }
     }
     
     public void setTot(boolean wert)
