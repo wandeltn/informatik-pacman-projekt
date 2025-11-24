@@ -55,6 +55,11 @@ public record ColorRGB(int r, int g, int b)
             default -> 176;
         };
     }
+    
+    public ColorRGB getGegenfarbe()
+    {
+        return new ColorRGB(255-this.r, 255-this.g, 255-this.b);
+    }
 
     public int getValueRed()
     {

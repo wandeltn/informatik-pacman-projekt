@@ -6,6 +6,7 @@ import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import Logger.*;
 /**
  * Die Klasse stellt ein Fenster mit einer Malfläche zur Verfügung,
  * auf der Objekte der Klassen Rechteck, Kreis und Dreieck sowie Turtle dargestellt
@@ -1569,8 +1570,7 @@ class Zeichenfenster
         {            
             int[] x = new int [] {-50, 50, -50};
             int[] y = new int [] {-50, 0, 50};
-            standardFigur.add (new FigurenElementPolygon (x, y, Color.yellow));
-            standardFigur.add(new FigurenElementEllipse(-10, -10, 20, 20, Color.blue));
+            standardFigur.add (new FigurenElementPolygon (x, y, new ColorRGB(246, 1, 206).toColor()));
         }
                 
         /**

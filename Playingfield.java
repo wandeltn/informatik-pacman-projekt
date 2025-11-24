@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import Logger.*;
 /**
  * Beschreiben Sie hier die Klasse Playingfield.
  * 
@@ -16,6 +17,9 @@ public class Playingfield extends Figur
     int ycord;
     
     static ArrayList<ArrayList<Integer>> playingfield;
+    // Rendering offset applied when drawing each tile (x = col*10 + 1000, y = row*10 + 70)
+    private static final int OFFSET_X = 1000;
+    private static final int OFFSET_Y = 0;
     
     ColorRGB WandFarbe;
     ColorRGB HintergrundFarbe;
@@ -52,7 +56,7 @@ public class Playingfield extends Figur
                 }
                 int nextChar = data.get(nextCharcord);
                 int länge = 1;
-                x = Spalte * 10 + 1000;
+                x = Spalte * 10 + OFFSET_X;
                 Zahl = currentChar;
                 
                 
@@ -79,10 +83,10 @@ public class Playingfield extends Figur
                     case 0:
                         break;
                     case 1:
-                        Pixel(x,y * 10 + 70,10, numRowsBelow * 10);
+                        Pixel(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
                         break;
                     case 2:
-                        spawntür(x,y * 10 + 70,10, numRowsBelow * 10);
+                        spawntür(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
                         break;
                 }
                 }
@@ -106,10 +110,10 @@ public class Playingfield extends Figur
                         Logger.log("Invalid Tile found during render switch", LogLevel.WARN);
                         break;
                     case 1:
-                        Pixel(x,y * 10 + 70,länge, 10);
+                        Pixel(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
                     case 2:
-                        spawntür(x,y * 10 + 70,länge, 10);
+                        spawntür(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
                 }
                 // }
@@ -125,25 +129,6 @@ public class Playingfield extends Figur
         long timeElapsed = end - start;
         
         Logger.log("Added Rendered whole Playingfield in " + timeElapsed + "ms", LogLevel.SUCCESS);
-        
-        /*
-        for (int counterY = 0; counterY < 264; counterY++){
-            for (int counterX = 0; counterX < 224; counterX++){
-                x = counterX * 10 + 1000;
-                y = counterY * 10 +70;
-                y = counterY * 10 + 70;
-                switch (walls[counterX][counterY]){
-                    case 0:
-                        break;
-                    case 1:
-                        Pixel(x,y);
-                        break;
-                    case 2:
-                        spawntür(x,y);
-                        break;
-                    }
-            }
-        }*/
     }
     
     int getVerticalWallHeight(int x, int y)
@@ -159,7 +144,7 @@ public class Playingfield extends Figur
         // Skip checking of 0 tiles, no tile will be places anyway
         if (checkValue == 0)
         {
-            Logger.log("Skipping, no valid tile found", LogLevel.DEBUG);
+            Logger.log("Skipping, no valid tile found", LogLevel.WARN);
             return 1;
         }
         
@@ -210,10 +195,11 @@ public class Playingfield extends Figur
         try (Scanner myReader = new Scanner(myObj)) {
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
-                System.out.println("Data.length" + data.length());
+                Logger.log("Data.length: " + data.length(), LogLevel.TRACE);
                 int firstZeroIndex = 0;
                 int currentZeroIndex = 0;
-                for(int Spalte = 0; Spalte <= data.length() - 1; Spalte++) {
+                int Spalte = 0;
+                for(; Spalte <= data.length() - 1; Spalte++) {
                     if (data.toLowerCase().contains("color")) {
                         WandFarbe = new ColorRGB(data.toLowerCase().split(":")[1]);
                         Logger.log("Set Wandfarbe to: " + WandFarbe.toString(), LogLevel.INFO);
@@ -225,11 +211,11 @@ public class Playingfield extends Figur
                         skip = true;
                         break;
                     } else {
-                        Logger.log("Processing field data at index: " + Spalte, LogLevel.DEBUG);
+                        Logger.log("Processing field data at index: " + Spalte, LogLevel.TRACE);
                         char currentChar = data.charAt(Spalte);
                         int currentNumber = currentChar - '0';
                         field.get(Zeile).add(currentNumber);
-                        Logger.log("Current character: " + currentChar, LogLevel.DEBUG);
+                        Logger.log("Current character: " + currentChar, LogLevel.TRACE);
                         
                         if (currentNumber == 0)
                         {
@@ -239,7 +225,7 @@ public class Playingfield extends Figur
                                 firstZeroIndex = Spalte;
                             }
                         }
-                        else
+                        else if (currentZeroIndex < 0)
                         {
                             field.get(Zeile).set(firstZeroIndex, currentZeroIndex);
                             
@@ -248,7 +234,7 @@ public class Playingfield extends Figur
                         }
                     }
                 }
-                if (!skip)
+                if (!skip || Spalte >= data.length() - 1)
                 {
                     ++Zeile;
                     field.add(new ArrayList<Integer>());  
@@ -266,6 +252,18 @@ public class Playingfield extends Figur
             e.printStackTrace();
         }
         System.out.println("Field loaded with " + field.size() + " rows.");
+        
+        // Fill incomplete rows for consitent lenth
+        for (int i = 0; i < field.size(); i++)
+        {
+            ArrayList<Integer> row = field.get(i);
+            while (row.size() < field.get(i).size())
+            {
+                row.add(0);
+            }
+        }
+        
+        
         return field;
     }
     
@@ -282,11 +280,14 @@ public class Playingfield extends Figur
         System.out.println("Added Pixel in " + timeElapsed + "ms");
     }
     void spawntür(int x, int y, int länge, int höhe){
-        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, "rot");
+        symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.getGegenfarbe().toColor());
     }
     
     static ArrayList<ArrayList<Integer>> getPlayingField()
     {
         return playingfield;
     }
+
+    public static int getOffsetX() { return OFFSET_X; }
+    public static int getOffsetY() { return OFFSET_Y; }
 }

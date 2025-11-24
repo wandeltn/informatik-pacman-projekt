@@ -1,4 +1,5 @@
 package GraphTraversal;
+import Logger.*;
 
 import java.util.*;
 
@@ -11,14 +12,19 @@ public class AStar {
         }
 
         long t0 = System.nanoTime();
-        LoggerWrapper.log("A* findPath start: (" + startX + "," + startY + ") -> (" + goalX + "," + goalY + ")", "INFO");
+        Logger.log("A* findPath start: (" + startX + "," + startY + ") -> (" + goalX + "," + goalY + ")", LogLevel.INFO);
 
         Node start = GraphTraversal.getNode(startX, startY);
         Node goal = GraphTraversal.getNode(goalX, goalY);
 
         if (start == null || goal == null) {
-            LoggerWrapper.log("A* abort: start or goal invalid", "WARN");
-            return Collections.emptyList();
+            Logger.log("A* abort: start or goal invalid", LogLevel.WARN);
+            Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
+            Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
+            Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
+            List<Node> onlyDestination = new ArrayList<>();
+            onlyDestination.add(nearestEnd);
+            return onlyDestination;
         }
 
         // A* data structures
@@ -46,14 +52,14 @@ public class AStar {
                 long smoothStart = System.nanoTime();
                 List<Node> path = smoothPath(rawPath);
                 long t1 = System.nanoTime();
-                LoggerWrapper.log(
+                Logger.log(
                     "A* success: rawLength=" + rawPath.size() +
                     " smoothedLength=" + path.size() +
                     " expansions=" + expansions +
                     " searchTime=" + ((smoothStart - t0)/1_000_000.0) + "ms" +
                     " smoothingTime=" + ((t1 - smoothStart)/1_000_000.0) + "ms" +
                     " totalTime=" + ((t1 - t0)/1_000_000.0) + "ms",
-                    "SUCCESS");
+                    LogLevel.SUCCESS);
                 return path;
             }
 
@@ -76,7 +82,7 @@ public class AStar {
             expansions++;
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("A* failed: no path found after expansions=" + expansions + " time=" + ((t1 - t0)/1_000_000.0) + "ms", "ERROR");
+        Logger.log("A* failed: no path found after expansions=" + expansions + " time=" + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.ERROR);
         return Collections.emptyList(); // no path
     }
 

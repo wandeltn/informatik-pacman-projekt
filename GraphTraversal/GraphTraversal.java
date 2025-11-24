@@ -1,4 +1,5 @@
 package GraphTraversal;
+import Logger.*;
 import java.util.ArrayList;
 
 
@@ -27,7 +28,7 @@ public class GraphTraversal
         if (field == null || field.isEmpty()) return;
         if (!isValid(x, y)) return; // starting point invalid
         long t0 = System.nanoTime();
-        LoggerWrapper.log("Traverse start at (" + x + "," + y + ")", "INFO");
+        Logger.log("Traverse start at (" + x + "," + y + ")", LogLevel.INFO);
 
         java.util.ArrayDeque<int[]> queue = new java.util.ArrayDeque<>();
         java.util.HashSet<String> visited = new java.util.HashSet<>();
@@ -40,7 +41,7 @@ public class GraphTraversal
             int cy = current[1];
 
             Node currentNode = getOrCreateNode(cx, cy);
-            LoggerWrapper.log("Visiting node (" + cx + "," + cy + ")", "TRACE");
+            Logger.log("Visiting node (" + cx + "," + cy + ")", LogLevel.TRACE);
 
             // 4-directional movement (can extend to 8 if desired)
             int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
@@ -55,13 +56,13 @@ public class GraphTraversal
                     if (!visited.contains(k)) {
                         visited.add(k);
                         queue.add(new int[]{nx, ny});
-                        LoggerWrapper.log("Queued neighbor (" + nx + "," + ny + ")", "TRACE");
+                        Logger.log("Queued neighbor (" + nx + "," + ny + ")", LogLevel.TRACE);
                     }
                 }
             }
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("Traverse completed. Nodes: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", "SUCCESS");
+        Logger.log("Traverse completed. Nodes: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
     static boolean isValid(int x, int y) {
@@ -69,6 +70,43 @@ public class GraphTraversal
         if (field.get(y).get(x) != 0) return false; // must be walkable
         ensureWallDistance();
         return wallDistance[y][x] >= CLEARANCE;
+    }
+
+    // Public wrapper for external (default-package) classes
+    public static boolean isCoordinateValid(int x, int y) {
+        return isValid(x, y);
+    }
+
+    // Find nearest valid coordinate using BFS (guarantees minimal Manhattan distance).
+    // Returns int[]{x,y} or null if none found.
+    public static int[] findNearestValid(int startX, int startY) {
+        if (field == null || field.isEmpty()) return null;
+        ensureWallDistance();
+        java.util.ArrayDeque<int[]> q = new java.util.ArrayDeque<>();
+        java.util.HashSet<String> visited = new java.util.HashSet<>();
+        q.add(new int[]{startX, startY});
+        visited.add(key(startX, startY));
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int x = cur[0];
+            int y = cur[1];
+            if (isValid(x, y)) {
+                return cur;
+            }
+            int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+            for (int[] d : dirs) {
+                int nx = x + d[0];
+                int ny = y + d[1];
+                if (inBounds(nx, ny)) {
+                    String k = key(nx, ny);
+                    if (!visited.contains(k)) {
+                        visited.add(k);
+                        q.add(new int[]{nx, ny});
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // Ensure distance map computed
@@ -81,15 +119,16 @@ public class GraphTraversal
     // Two-pass Manhattan distance transform from walls (value 1)
     public static void precomputeWallDistances() {
         if (field == null || field.isEmpty()) return;
-        int rows = field.size();
+        int rows = field.size() - 1; // Last row has len 0
         int cols = field.get(0).size();
         long t0 = System.nanoTime();
-        LoggerWrapper.log("Precomputing wall distances (" + rows + "x" + cols + ")", "INFO");
+        Logger.log("Precomputing wall distances (" + rows + "x" + cols + ")", LogLevel.INFO);
         wallDistance = new int[rows][cols];
         int INF = rows + cols + 5; // upper bound
         // init
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
+                Logger.log("Getting tile at pos: x=" + x + " y=" + y, LogLevel.TRACE);
                 wallDistance[y][x] = (field.get(y).get(x) == 1) ? 0 : INF;
             }
         }
@@ -112,7 +151,7 @@ public class GraphTraversal
             }
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("Wall distance precompute finished in " + ((t1 - t0)/1_000_000.0) + "ms", "SUCCESS");
+        Logger.log("Wall distance precompute finished in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
     private static boolean inBounds(int x, int y) {
@@ -138,19 +177,41 @@ public class GraphTraversal
         return nodeMap.get(key(x, y));
     }
 
+    // Return the nearest existing Node to the given tile coordinate (x,y).
+    // If there are no nodes yet (graph not built), returns null.
+    // Distance metric: squared Euclidean to avoid sqrt cost.
+    public static Node getNearestNode(int x, int y) {
+        if (nodes == null || nodes.isEmpty()) return null;
+        Node best = null;
+        int bestDist = Integer.MAX_VALUE;
+        for (Node n : nodes) {
+            int dx = n.getX() - x;
+            int dy = n.getY() - y;
+            int dist = dx*dx + dy*dy;
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = n;
+            }
+        }
+        Logger.log("Nearest node search from (" + x + "," + y + ") -> " + (best==null?"none":"("+best.getX()+","+best.getY()+") distSquared="+bestDist), LogLevel.DEBUG);
+        return best;
+    }
+
     // Build the full graph of all valid nodes (clearance satisfied) across the entire field.
     // Safe to call multiple times; existing nodes will be reused.
     public static void buildFullGraph() {
         if (field == null || field.isEmpty()) return;
         ensureWallDistance();
-        int rows = field.size();
+        int rows = field.size() - 1; // Last Row has len 0 (FIX needed);
         int cols = field.get(0).size();
         long t0 = System.nanoTime();
-        LoggerWrapper.log("Building full graph", "INFO");
+        Logger.log("Building full graph", LogLevel.INFO);
         // First pass: create nodes for valid cells
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
+                Logger.log("Checking validity of cell: x=" + x + " y=" + y, LogLevel.TRACE);
                 if (isValid(x, y)) {
+                    Logger.log("Cell was valid", LogLevel.TRACE);
                     getOrCreateNode(x, y);
                 }
             }
@@ -170,7 +231,7 @@ public class GraphTraversal
             }
         }
         long t1 = System.nanoTime();
-        LoggerWrapper.log("Graph build complete. Node count: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", "SUCCESS");
+        Logger.log("Graph build complete. Node count: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
 }

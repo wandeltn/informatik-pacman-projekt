@@ -1,3 +1,5 @@
+package Logger;
+
 
 /**
  * Write a description of class Logger here.
@@ -16,12 +18,21 @@ public class Logger
 
     public static void log(String message, LogLevel level) {
         if (level.ordinal() >= logLevel.ordinal()) {
-            System.out.println("[" + level + "] " + message);
+            System.out.println("[" + level + "] " + "(" + getCallerMethodName() + ")"  + message);
         }
+    }
+    
+    private static String getCallerMethodName()
+    {
+       return StackWalker.
+          getInstance().
+          walk(stream -> stream.skip(2).findFirst().get()).
+          getMethodName();
     }
     
     public Logger()
     {
         
     }
+    
 }

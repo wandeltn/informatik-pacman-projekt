@@ -1,3 +1,5 @@
+package Logger;
+
 
 /**
  * Enumeration class LogLevel - write a description of the enum class here
@@ -7,5 +9,5 @@
  */
 public enum LogLevel
 {
-    TRACE, DEBUG, INFO, WARN, ERROR, SUCCESS, FATAL 
+    TRACE, DEBUG, INFO, WARN, ERROR, SUCCESS, FATAL, SILENT 
 }

@@ -1,6 +1,7 @@
 import GraphTraversal.AStar;
 import GraphTraversal.GraphTraversal;
 import GraphTraversal.Node;
+import Logger.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,9 +118,11 @@ class BaseGhost extends Hindernis
     void initPathfinding()
     {
         ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
+        Logger.log("Fetched field for pathfinding with length: "+ field.size(), LogLevel.DEBUG);
         this.graphTraversal = new GraphTraversal(field);
+        ensureValidStartPosition();
         GraphTraversal.precomputeWallDistances();
-        GraphTraversal.traverse(this.XPositionGeben() / 10, this.YPositionGeben() / 10);
+        GraphTraversal.traverse(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()));
         Logger.log("Ghost initPathfinding at (" + this.XPositionGeben()/10 + "," + this.YPositionGeben()/10 + ")", LogLevel.INFO);
     }
 
@@ -127,13 +130,14 @@ class BaseGhost extends Hindernis
     {
         ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
         this.graphTraversal = new GraphTraversal(field);
-        GraphTraversal.traverse(this.XPositionGeben() / 10, this.YPositionGeben() / 10);
+        ensureValidStartPosition();
+        GraphTraversal.traverse(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()));
         Logger.log("Ghost updatePathfinding at (" + this.XPositionGeben()/10 + "," + this.YPositionGeben()/10 + ")", LogLevel.DEBUG);
     }
 
     List<Node> getPathTo(int targetX, int targetY)
     {
-        return AStar.findPath(this.XPositionGeben() / 10, this.YPositionGeben() / 10, targetX, targetY);
+        return AStar.findPath(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()), targetX, targetY);
     }
 
     void setTarget(int tileX, int tileY) {
@@ -152,8 +156,16 @@ class BaseGhost extends Hindernis
     }
 
     void stepAlongPath() {
-        if (currentPath == null || currentPath.isEmpty()) return;
-        if (pathIndex >= currentPath.size()) return;
+        if (currentPath == null || currentPath.isEmpty())
+        {
+            Logger.log("Skipping advanceSmooth, no Path found", LogLevel.DEBUG);
+            return;
+        }
+        if (pathIndex >= currentPath.size()) 
+        {
+            Logger.log("Skipping advanceSmooth, finished current Path", LogLevel.DEBUG);
+            return;
+        }
         advanceSmooth();
     }
 
@@ -172,8 +184,8 @@ class BaseGhost extends Hindernis
     private void advanceSmooth() {
         if (pathIndex >= currentPath.size()) return;
         Node next = currentPath.get(pathIndex);
-        int targetWorldX = next.getX() * 10;
-        int targetWorldY = next.getY() * 10;
+        int targetWorldX = tileToWorldX(next.getX());
+        int targetWorldY = tileToWorldY(next.getY());
         int currentX = this.XPositionGeben();
         int currentY = this.YPositionGeben();
         int dx = targetWorldX - currentX;
@@ -222,4 +234,26 @@ class BaseGhost extends Hindernis
         CollisionTop.PositionSetzen(baseX + 70, baseY - 1);
         CollisionBottom.PositionSetzen(baseX + 70, baseY + 140);
     }
+
+    // Fallback if starting tile not valid: move to nearest valid node center.
+    private void ensureValidStartPosition() {
+        int tileX = worldToTileX(this.XPositionGeben());
+        int tileY = worldToTileY(this.YPositionGeben());
+        if (!GraphTraversal.isCoordinateValid(tileX, tileY)) {
+            int[] nearest = GraphTraversal.findNearestValid(tileX, tileY);
+            if (nearest != null) {
+                PositionSetzen(tileToWorldX(nearest[0]), tileToWorldY(nearest[1]));
+                updateCollisionBoxes(this.XPositionGeben(), this.YPositionGeben());
+                Logger.log("Ghost fallback reposition to valid node (" + nearest[0] + "," + nearest[1] + ")", LogLevel.WARN);
+            } else {
+                Logger.log("Ghost fallback failed: no valid node found", LogLevel.ERROR);
+            }
+        }
+    }
+
+    // Coordinate conversion helpers with playingfield offset
+    private int worldToTileX(int worldX) { return (worldX - Playingfield.getOffsetX()) / 10 + 30; }
+    private int worldToTileY(int worldY) { return (worldY - Playingfield.getOffsetY()) / 10 + 30; }
+    private int tileToWorldX(int tileX) { return tileX * 10 + Playingfield.getOffsetX() - 30; }
+    private int tileToWorldY(int tileY) { return tileY * 10 + Playingfield.getOffsetY() - 30; }
 }
