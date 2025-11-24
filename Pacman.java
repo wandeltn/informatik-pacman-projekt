@@ -112,6 +112,7 @@ public class Pacman extends Figur
     {
         tot = true;
         Mouth.setTot(true);
+        Entfernen();
     }
     
     public int getRichtung() 
