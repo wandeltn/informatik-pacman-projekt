@@ -10,7 +10,8 @@ public class AStar {
         if (GraphTraversal.getNodes().isEmpty()) {
             GraphTraversal.buildFullGraph();
         }
-
+        
+        int numTraversedNodes = 0;
         long t0 = System.nanoTime();
         Logger.log("A* findPath start: (" + startX + "," + startY + ") -> (" + goalX + "," + goalY + ")", LogLevel.INFO);
 
@@ -18,12 +19,12 @@ public class AStar {
         Node goal = GraphTraversal.getNode(goalX, goalY);
 
         if (start == null || goal == null) {
-            Logger.log("A* abort: start or goal invalid", LogLevel.WARN);
+            Logger.log("A* abort: start or goal invalid", LogLevel.ERROR);
             Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
             Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
             Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
             List<Node> onlyDestination = new ArrayList<>();
-            onlyDestination.add(nearestEnd);
+            //onlyDestination.add(nearestEnd);
             return onlyDestination;
         }
 

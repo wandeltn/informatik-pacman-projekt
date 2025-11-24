@@ -10,7 +10,7 @@ package Logger;
 public class Logger
 {
     
-    static LogLevel logLevel = LogLevel.SUCCESS;
+    static LogLevel logLevel = LogLevel.TRACE;
     
     public static void setLogLevel(LogLevel level) {
         logLevel = level;

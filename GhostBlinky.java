@@ -35,8 +35,8 @@ public class GhostBlinky extends BaseGhost {
         if (pacmanRef != null) {
             tickCounter++;
             if (tickCounter % retargetIntervalTicks == 0 || pathFinished()) {
-                int pacTileX = pacmanRef.getXPosition() / 10;
-                int pacTileY = pacmanRef.getYPosition() / 10;
+                int pacTileX = pacmanRef.getXPosition() / 10 - Playingfield.getOffsetX();
+                int pacTileY = pacmanRef.getYPosition() / 10 - Playingfield.getOffsetY();
                 // Update target and (re)compute path
                 setTarget(pacTileX, pacTileY);
                 Logger.log("Blinky retarget Pacman tile (" + pacTileX + "," + pacTileY + ")", LogLevel.TRACE);

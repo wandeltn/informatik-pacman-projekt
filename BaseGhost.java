@@ -137,10 +137,17 @@ class BaseGhost extends Hindernis
 
     List<Node> getPathTo(int targetX, int targetY)
     {
-        return AStar.findPath(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()), targetX, targetY);
+        List<Node> path = AStar.findPath(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()), targetX, targetY);
+        if (path.size() == 0)
+        {
+            Logger.log("No path found to target, falling back to direct movement", LogLevel.DEBUG);
+            path.add(new Node(targetX, targetY));
+        }
+        return path;
     }
 
     void setTarget(int tileX, int tileY) {
+        Logger.log("New target set for ghost: x=" + tileX + " y=" + tileY, LogLevel.TRACE);
         this.targetX = tileX;
         this.targetY = tileY;
         computePath();
@@ -158,8 +165,9 @@ class BaseGhost extends Hindernis
     void stepAlongPath() {
         if (currentPath == null || currentPath.isEmpty())
         {
-            Logger.log("Skipping advanceSmooth, no Path found", LogLevel.DEBUG);
-            return;
+            Logger.log("Skipping advanceSmooth, no Path found, defaulting to pacman direct", LogLevel.DEBUG);
+            currentPath.add(new Node(targetX, targetY));
+            //return;
         }
         if (pathIndex >= currentPath.size()) 
         {
@@ -182,7 +190,11 @@ class BaseGhost extends Hindernis
 
     // Smooth incremental movement toward next node with collision recheck
     private void advanceSmooth() {
-        if (pathIndex >= currentPath.size()) return;
+        if (pathIndex >= currentPath.size())
+        {
+            Logger.log("Last path destination reached, not moving", LogLevel.DEBUG);
+            return;
+        }
         Node next = currentPath.get(pathIndex);
         int targetWorldX = tileToWorldX(next.getX());
         int targetWorldY = tileToWorldY(next.getY());
