@@ -17,3 +17,5 @@ public class Pellet extends Figur
         }
     }
 }
+
+//zu
