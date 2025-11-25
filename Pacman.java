@@ -13,7 +13,7 @@ public class Pacman extends Figur
 //>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
 //=======
 //>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-    PacmanMouth     = new PacmanMouth();
+   PacmanMouth Mouth= new PacmanMouth();
     Rechteck rechteck = new Rechteck();
 
     Pacman()
@@ -61,7 +61,7 @@ public class Pacman extends Figur
 //=======
 //>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
         {
-            setTot(true);
+    //        setTot(true);
         }
     }
 //<<<<<<< HEAD
@@ -69,39 +69,39 @@ public class Pacman extends Figur
  //   private void tot()
 //=======
     
-    public void setTot(boolean wert);
+  //  public void setTot(boolean wert);
 //<<<<<<< HEAD
 //>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
 //=======
 //>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
     {
-        tot = wert;
-        Mouth.setTot(wert);
-        if (wert = true) {
-            Entfernen();
+ //       tot = wert;
+  //      Mouth.setTot(wert);
+  //      if (wert = true) {
+ //           Entfernen();
         }
 //<<<<<<< HEAD
 //=======
     }
     
-    public int getRichtung() 
-    {
-        return Richtung;//
-    }
+  //  public int getRichtung() 
+   // {
+   //     return Richtung;//
+  //  }
     
-    public int getXPosition()
-    {
-        return XPositionGeben();
-    }
+  //  public int getXPosition()
+  //  {
+  //      return XPositionGeben();
+  //  }
     
-    public int getYPosition()
-    {
-        return YPositionGeben();
-    }
-    
-    public int getBewegungsLaenge()
-    {
-        return BewegungsLaenge;
+  //  public int getYPosition()
+   // {
+   //     return YPositionGeben();
+   // }
+   // 
+   // public int getBewegungsLaenge()
+   // {
+    //    return BewegungsLaenge;
 //>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-    }
-}
+   // }
+
