@@ -12,6 +12,8 @@ public class Pacman extends Figur
     int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
     boolean tot = false;
     
+    public int lives = 3;
+    
     PacmanMouth Mouth = new PacmanMouth();
     Rechteck rechteck = new Rechteck();
     /**
@@ -102,17 +104,19 @@ public class Pacman extends Figur
             }
         }
         
-        if (Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot")) 
+        if ((Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot")) && !tot) 
         {
-            tot();
+            setTot(true);
         }
     }
     
-    private void tot() 
+    public void setTot(boolean wert)
     {
-        tot = true;
-        Mouth.setTot(true);
-        Entfernen();
+        tot = wert;
+        Mouth.setTot(wert);
+        if (wert = true) {
+            Entfernen();
+        }
     }
     
     public int getRichtung() 
