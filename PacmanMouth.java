@@ -14,7 +14,7 @@ public class PacmanMouth extends Figur
     private int Mundwinkel = 0;
     private boolean tot = false;
     
-    private int testwertfuerdieanimationen = 0;
+    public int testwertfuerdieanimationen = 0;
     /**
      * Legt das Aussehen der Spielfigur fest
      */
@@ -175,7 +175,9 @@ public class PacmanMouth extends Figur
     
     public void setTot(boolean wert)
     {
-        if (tot != wert) {testwertfuerdieanimationen = 0;}
+        if (tot != wert) {
+            testwertfuerdieanimationen = 0;
+        }
         tot = wert;
     }
     
