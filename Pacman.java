@@ -12,7 +12,7 @@ public class Pacman extends Figur
     int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
     boolean tot = false;
     
-    public int lives = 3;
+    public int lives = 2;
     
     PacmanMouth Mouth = new PacmanMouth();
     Rechteck rechteck = new Rechteck();
@@ -110,12 +110,24 @@ public class Pacman extends Figur
         }
     }
     
+    public void revive() 
+    {
+        if (lives > 0)
+        {
+            setTot(false);
+            SichtbarkeitSetzen(true);
+            ZumStartpunktGehen();
+            lives--;
+            Richtung = 1;
+        }
+    }
+    
     public void setTot(boolean wert)
     {
         tot = wert;
         Mouth.setTot(wert);
         if (wert = true) {
-            Entfernen();
+            SichtbarkeitSetzen(false);
         }
     }
     
