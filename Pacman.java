@@ -64,6 +64,7 @@ public class Pacman extends Figur
         }
     }
     
+    
     public void setTot(boolean wert)
 {
  
