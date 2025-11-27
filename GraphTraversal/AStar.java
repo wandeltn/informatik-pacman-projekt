@@ -17,16 +17,27 @@ public class AStar {
 
         Node start = GraphTraversal.getNode(startX, startY);
         Node goal = GraphTraversal.getNode(goalX, goalY);
-
+        
         if (start == null || goal == null) {
             Logger.log("A* abort: start or goal invalid", LogLevel.ERROR);
-            Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
-            Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
-            Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
-            List<Node> onlyDestination = new ArrayList<>();
+            start = GraphTraversal.getNearestNode(startX, startY);
+            goal = GraphTraversal.getNearestNode(goalX, goalY);
+            Logger.log("Maybe you ment to start at: " + start.toString() + " or end at: " + goal.toString(), LogLevel.WARN);
+            Logger.log("Trying pathfind again", LogLevel.WARN);
+            //List<Node> onlyDestination = new ArrayList<>();
             //onlyDestination.add(nearestEnd);
-            return onlyDestination;
+            //return onlyDestination;
         }
+
+        // if (start == null || goal == null) {
+            // Logger.log("A* abort: start or goal invalid", LogLevel.ERROR);
+            // Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
+            // Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
+            // Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
+            // List<Node> onlyDestination = new ArrayList<>();
+            // //onlyDestination.add(nearestEnd);
+            // return onlyDestination;
+        // }
 
         // A* data structures
         HashMap<Node, Integer> gCost = new HashMap<>();
