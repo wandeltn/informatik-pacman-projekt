@@ -166,7 +166,7 @@ public class GraphTraversal
     }
 
     private static boolean inBounds(int x, int y) {
-        return y >= 0 && y < field.size() && x >= 0 && x < field.get(0).size();
+        return y >= 0 && y < field.size() - 1 && x >= 0 && x < field.get(0).size();
     }
 
     private static String key(int x, int y) { return x + "," + y; }
