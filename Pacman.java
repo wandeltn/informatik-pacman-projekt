@@ -79,25 +79,25 @@ public class Pacman extends Figur
     }
     
 
-  //  public int getRichtung() 
-   // {
-   //     return Richtung;//
-  //  }
+   public int getRichtung() 
+   {
+       return Richtung;//
+   }
     
-  //  public int getXPosition()
-  //  {
-  //      return XPositionGeben();
-  //  }
+   public int getXPosition()
+   {
+       return XPositionGeben();
+   }
     
-  //  public int getYPosition()
-   // {
-   //     return YPositionGeben();
-   // }
-   // 
-   // public int getBewegungsLaenge()
-   // {
-    //    return BewegungsLaenge;
+   public int getYPosition()
+   {
+       return YPositionGeben();
+   }
+   
+   public int getBewegungsLaenge()
+   {
+       return BewegungsLaenge;
 
-   // }
+   }
 
 }
