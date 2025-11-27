@@ -1,4 +1,4 @@
-
+    
 /**
  * Verwaltet die Spielfigur
  * 
@@ -164,17 +164,24 @@ public class PacmanMouth extends Figur
         }
         
         
-        if (testwertfuerdieanimationen < 40)
+        if (testwertfuerdieanimationen < 41)
         {
             testwertfuerdieanimationen++;
         } else 
         {
-            Entfernen();
+            SichtbarkeitSetzen(false);
         }
     }
     
     public void setTot(boolean wert)
     {
+        if (!wert)
+        {
+            EigeneFigurLöschen();
+            FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+            ZumStartpunktGehen();
+            Richtung = 1;
+        }
         if (tot != wert) {
             testwertfuerdieanimationen = 0;
         }

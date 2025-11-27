@@ -3,16 +3,10 @@ public class Pacman extends Figur
     int BewegungsLaenge;
     int Richtung = 1;
     boolean tot = false;
-//<<<<<<< HEAD
+    
+    public int lives = 2;
+    
 
-//=======
-    
-    public int lives = 3;
-    
-//<<<<<<< HEAD
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-//=======
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
    PacmanMouth Mouth= new PacmanMouth();
     Rechteck rechteck = new Rechteck();
 
@@ -50,40 +44,40 @@ public class Pacman extends Figur
             if(Richtung == 1 && XPositionGeben() < Zeichenfenster.MalflächenBreiteGeben()-50)
                 PositionSetzen(XPositionGeben() + BewegungsLaenge, YPositionGeben());
         }
-//<<<<<<< HEAD
-
-        if (Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot"))
-//=======
         
         if ((Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot")) && !tot) 
-//<<<<<<< HEAD
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-//=======
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-        {
-    //        setTot(true);
-        }
-    }
-//<<<<<<< HEAD
 
- //   private void tot()
-//=======
-    
-  //  public void setTot(boolean wert);
-//<<<<<<< HEAD
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-//=======
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
-    {
- //       tot = wert;
-  //      Mouth.setTot(wert);
-  //      if (wert = true) {
- //           Entfernen();
+        {
+        setTot(true);
         }
-//<<<<<<< HEAD
-//=======
+    }
+
+    public void revive() 
+    {
+        if (lives > 0)
+        {
+            setTot(false);
+            SichtbarkeitSetzen(true);
+            ZumStartpunktGehen();
+            lives--;
+            Richtung = 1;
+        }
     }
     
+    public void setTot(boolean wert)
+{
+ 
+
+        tot = wert;
+        Mouth.setTot(wert);
+        if (wert = true) {
+            SichtbarkeitSetzen(false);
+
+        }
+        
+    }
+    
+
   //  public int getRichtung() 
    // {
    //     return Richtung;//
@@ -102,6 +96,7 @@ public class Pacman extends Figur
    // public int getBewegungsLaenge()
    // {
     //    return BewegungsLaenge;
-//>>>>>>> 461ece4898092d849a4a3a4747145aa77509374a
+
    // }
 
+}
