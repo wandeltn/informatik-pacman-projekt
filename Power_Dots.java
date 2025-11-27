@@ -1,10 +1,10 @@
-public class Pellet extends Figur
+public class Power_Dots extends Figur
 {
-    public Pellet()
+    public Power_Dots()
     {
         super();
-       
-        FigurteilFestlegenEllipse(-10, -10, 20, 20, "Gelb");
+        
+        FigurteilFestlegenEllipse(-20, -20, 40, 40, "Orange");
     }
 
     @Override
