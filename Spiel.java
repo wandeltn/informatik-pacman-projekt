@@ -14,6 +14,7 @@ class Spiel extends Ereignisbehandlung
     static Playingfield playingfield;
     static GhostBlinky blinky;
     
+    
     /**
      * Legt die Spielfigur und den Zufallsgenertor an 
      */
@@ -23,6 +24,7 @@ class Spiel extends Ereignisbehandlung
         playingfield = new Playingfield();
         pacman = new Pacman();
         blinky = new GhostBlinky(150, 150);
+        
         
         blinky.setPacmanTarget(pacman);
         

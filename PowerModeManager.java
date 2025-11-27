@@ -14,7 +14,7 @@ public class PowerModeManager
         powerAktiv = true;
         timer = POWER_DAUER;
 
-        System.out.println("POWER AKTIV!");
+        System.out.println("Friss du Sau!");
     }
 
     public static void tick()
