@@ -150,6 +150,17 @@ public class GraphTraversal
                 wallDistance[y][x] = v;
             }
         }
+
+        Logger.log("Wall distance map computed", LogLevel.DEBUG);
+        for (int y = 0; y < rows; y++) {
+            StringBuilder sb = new StringBuilder();
+            for (int x = 0; x < cols; x++) {
+                sb.append(String.format("%3d ", wallDistance[y][x]));
+            }
+            Logger.log("Row " + y + ": " + sb.toString(), LogLevel.TRACE);
+        }
+        
+
         long t1 = System.nanoTime();
         Logger.log("Wall distance precompute finished in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
