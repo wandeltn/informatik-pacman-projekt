@@ -23,7 +23,7 @@ public class Pellet_Anzeige extends Figur
 
         
         Figur gewonnenText = new Figur();
-        gewonnenText.FigurteilFestlegenRechteck(-500, -200, 1000, 400, "Schwarz");
+        gewonnenText.FigurteilFestlegenRechteck(-500, -200, 1000, 400, "Blau");
         gewonnenText.FigurteilFestlegenRechteck(-480, -180, 960, 360, "Weiß");
 
         
