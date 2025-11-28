@@ -1,11 +1,6 @@
 import java.io.*;
 import java.util.Random;
-/**
- * Legt das Spielszenario fest
- * 
- * @author Klaus Reinold 
- * @version 1.0
- */
+
 class Spiel extends Ereignisbehandlung
 {
     int zähler;
@@ -74,19 +69,19 @@ class Spiel extends Ereignisbehandlung
         
     }
     
-    // int getPacmanPosX()
-    //{
-     //   return pacman.getXPosition();
-    //}
+     int getPacmanPosX()
+    {
+        return pacman.getXPosition();
+    }
     
-    //int getPacmanPosY()
-    //{
-    //   return pacman.getYPosition();
-    //}
+    int getPacmanPosY()
+    {
+       return pacman.getYPosition();
+    }
     
-    //int getPacmanDirection()
-    //{
-     //  return pacman.getRichtung();
-    //}
+    int getPacmanDirection()
+    {
+      return pacman.getRichtung();
+    }
  
 }
