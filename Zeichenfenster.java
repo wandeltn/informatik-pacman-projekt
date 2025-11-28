@@ -52,6 +52,8 @@ class Zeichenfenster
     /** Timerobjekt für die zentrale Zeitverwaltung */
     private javax.swing.Timer timer;
 
+    //private ArrayList<Line> lines = new ArrayList<>();
+
     /**
      * Legt das Fenster und die Malfläche an
      */
@@ -373,6 +375,15 @@ class Zeichenfenster
         timer.stop();
     }
     
+    public void DrawLine(int x1, int y1, int x2, int y2, Color color, int thickness) {
+        // Implementation for drawing a line on the malfläche
+        Graphics g = malfläche.getGraphics();
+        g.setColor(color);
+        // g.setStroke(new BasicStroke(thickness));
+        g.drawLine(x1, y1, x2, y2);
+        g.dispose();
+    }
+
     /**
      * Oberklasse für alle verfügbaren Grafiksymbole.
      * Alle Grafiksymbole werden über ihr umgebendes Rechteck beschrieben.

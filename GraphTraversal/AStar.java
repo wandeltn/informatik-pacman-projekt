@@ -1,6 +1,5 @@
 package GraphTraversal;
 import Logger.*;
-
 import java.util.*;
 
 public class AStar {
@@ -17,23 +16,39 @@ public class AStar {
 
         Node start = GraphTraversal.getNode(startX, startY);
         Node goal = GraphTraversal.getNode(goalX, goalY);
-
+        
         if (start == null || goal == null) {
             Logger.log("A* abort: start or goal invalid", LogLevel.ERROR);
-            Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
-            Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
-            Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
-            List<Node> onlyDestination = new ArrayList<>();
+            start = GraphTraversal.getNearestNode(startX, startY);
+            goal = GraphTraversal.getNearestNode(goalX, goalY);
+            if (start != null && goal != null) {
+                Logger.log("Maybe you meant to start at: " + start.toString() + " or end at: " + goal.toString(), LogLevel.WARN);
+            } else {
+                Logger.log("A* abort: could not locate nearest valid start or goal", LogLevel.ERROR);
+                return Collections.emptyList();
+            }
+            Logger.log("Trying pathfind again", LogLevel.WARN);
+            //List<Node> onlyDestination = new ArrayList<>();
             //onlyDestination.add(nearestEnd);
-            return onlyDestination;
+            //return onlyDestination;
         }
+
+        // if (start == null || goal == null) {
+            // Logger.log("A* abort: start or goal invalid", LogLevel.ERROR);
+            // Node nearestStart = GraphTraversal.getNearestNode(startX, startY);
+            // Node nearestEnd = GraphTraversal.getNearestNode(goalX, goalY);
+            // Logger.log("Maybe you ment to start at: " + nearestStart.toString() + " or end at: " + nearestEnd.toString(), LogLevel.WARN);
+            // List<Node> onlyDestination = new ArrayList<>();
+            // //onlyDestination.add(nearestEnd);
+            // return onlyDestination;
+        // }
 
         // A* data structures
         HashMap<Node, Integer> gCost = new HashMap<>();
         HashMap<Node, Integer> fCost = new HashMap<>();
         HashMap<Node, Node> cameFrom = new HashMap<>();
 
-        Comparator<Node> cmp = Comparator.comparingInt(fCost::get);
+        Comparator<Node> cmp = Comparator.comparingInt(n -> fCost.getOrDefault(n, Integer.MAX_VALUE));
         PriorityQueue<Node> openSet = new PriorityQueue<>(cmp);
         HashSet<Node> openSetHash = new HashSet<>();
         HashSet<Node> closedSet = new HashSet<>();
@@ -92,7 +107,12 @@ public class AStar {
     // 1. Collinear compression: remove nodes that lie on straight horizontal/vertical segments.
     // 2. Line-of-sight skipping: attempt to jump further along segment if all intervening tiles are valid.
     private static List<Node> smoothPath(List<Node> path) {
-        if (path == null || path.size() < 3) return path;
+        if (path == null) return Collections.emptyList();
+        // Remove any accidental nulls in the supplied path
+        List<Node> cleaned = new ArrayList<>();
+        for (Node n : path) if (n != null) cleaned.add(n);
+        if (cleaned.size() < 3) return cleaned; // nothing to smooth
+        path = cleaned;
         // Step 1: collinear compression
         List<Node> collinear = new ArrayList<>();
         collinear.add(path.get(0));
@@ -100,6 +120,7 @@ public class AStar {
             Node prev = path.get(i - 1);
             Node curr = path.get(i);
             Node next = path.get(i + 1);
+            if (prev == null || curr == null || next == null) continue;
             boolean sameX = prev.getX() == curr.getX() && curr.getX() == next.getX();
             boolean sameY = prev.getY() == curr.getY() && curr.getY() == next.getY();
             if (!(sameX || sameY)) {
@@ -119,6 +140,7 @@ public class AStar {
             for (int j = anchorIndex + 2; j < collinear.size(); j++) {
                 Node a = collinear.get(anchorIndex);
                 Node b = collinear.get(j);
+                if (a == null || b == null) break;
                 if (hasLineOfSight(a, b)) {
                     furthest = j;
                 } else {
@@ -165,7 +187,9 @@ public class AStar {
         ArrayList<Node> path = new ArrayList<>();
         path.add(current);
         while (cameFrom.containsKey(current)) {
-            current = cameFrom.get(current);
+            Node next = cameFrom.get(current);
+            if (next == null) break; // defensive: avoid adding nulls which cause downstream NPEs
+            current = next;
             path.add(current);
         }
         Collections.reverse(path);

@@ -37,6 +37,7 @@ class BaseGhost extends Hindernis
 
     GraphTraversal graphTraversal;
 
+    ArrayList<Figur> pathIndicators = new ArrayList<>();
     
     BaseGhost(int x, int y, ColorRGB color)
     {
@@ -160,6 +161,7 @@ class BaseGhost extends Hindernis
         pathIndex = 0;
         lastPathComputeNs = System.nanoTime() - t0;
         Logger.log("Ghost path computed length=" + currentPath.size() + " time=" + (lastPathComputeNs/1_000_000.0) + "ms", LogLevel.SUCCESS);
+        showPathIndicators();
     }
 
     void stepAlongPath() {
@@ -193,6 +195,7 @@ class BaseGhost extends Hindernis
         if (pathIndex >= currentPath.size())
         {
             Logger.log("Last path destination reached, not moving", LogLevel.DEBUG);
+            clearPathIndicators();
             return;
         }
         Node next = currentPath.get(pathIndex);
@@ -260,6 +263,25 @@ class BaseGhost extends Hindernis
             } else {
                 Logger.log("Ghost fallback failed: no valid node found", LogLevel.ERROR);
             }
+        }
+    }
+
+    public void clearPathIndicators() {
+        for (Figur f : pathIndicators) {
+            f.EigeneFigurLöschen();
+        }
+        pathIndicators.clear();
+    }
+
+    public void showPathIndicators() {
+        clearPathIndicators();
+        for (Node n : currentPath) {
+            int worldX = tileToWorldX(n.getX());
+            int worldY = tileToWorldY(n.getY());
+            Figur indicator = new Figur();
+            indicator.FigurteilFestlegenEllipse(worldX + 5, worldY + 5, 5, 5, new ColorRGB(255, 255, 0).toColor());
+            indicator.PositionSetzen(0, 0);
+            pathIndicators.add(indicator);
         }
     }
 

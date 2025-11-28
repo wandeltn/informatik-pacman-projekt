@@ -16,7 +16,7 @@ public class GraphTraversal
     static java.util.HashMap<String, Node> nodeMap = new java.util.HashMap<>();
     static ArrayList<Node> nodes = new ArrayList<>();
     static int[][] wallDistance; // Manhattan distance to nearest wall (1)
-    static final int CLEARANCE = 31;
+    static final int CLEARANCE = 8;
 
     public GraphTraversal(ArrayList<ArrayList<Integer>> field)
     {
@@ -150,12 +150,23 @@ public class GraphTraversal
                 wallDistance[y][x] = v;
             }
         }
+
+        Logger.log("Wall distance map computed", LogLevel.DEBUG);
+        for (int y = 0; y < rows; y++) {
+            StringBuilder sb = new StringBuilder();
+            for (int x = 0; x < cols; x++) {
+                sb.append(String.format("%3d ", wallDistance[y][x]));
+            }
+            Logger.log("Row " + y + ": " + sb.toString(), LogLevel.TRACE);
+        }
+        
+
         long t1 = System.nanoTime();
         Logger.log("Wall distance precompute finished in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
     }
 
     private static boolean inBounds(int x, int y) {
-        return y >= 0 && y < field.size() && x >= 0 && x < field.get(0).size();
+        return y >= 0 && y < field.size() - 1 && x >= 0 && x < field.get(0).size();
     }
 
     private static String key(int x, int y) { return x + "," + y; }
