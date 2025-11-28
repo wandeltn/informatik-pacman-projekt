@@ -31,7 +31,8 @@ public class CollisionChecker extends Figur
     
     boolean CheckFieldCollision()
     {
-        boolean collision = Berührt(new ColorRGB("blau"));
-        return collision;
+        return false;
+        // boolean collision = Berührt(new ColorRGB("blau"));
+        // return collision;
     }
 }
