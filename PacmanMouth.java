@@ -15,6 +15,11 @@ public class PacmanMouth extends Figur
     private boolean tot = false;
     
     public int testwertfuerdieanimationen = 0;
+    
+    boolean AboveFree;
+    boolean RightFree;
+    boolean BelowFree;
+    boolean LeftFree;
     /**
      * Legt das Aussehen der Spielfigur fest
      */
@@ -40,28 +45,28 @@ public class PacmanMouth extends Figur
      */
     @Override void SonderTasteGedrückt(int taste)
     {
-        if (!tot) 
+        if (!tot)
         {
             //Hoch
-            if(taste == 38)
+            if(taste == 38 && AboveFree)
             {
                 WinkelSetzen(90);
                 Richtung = 0;
             }
             // Runter
-            if(taste == 40)
+            if(taste == 40 && BelowFree)
             {
                 WinkelSetzen(270);
                 Richtung = 2;
             }
             // Links
-            if(taste == 37)
+            if(taste == 37 && LeftFree)
             {
                 WinkelSetzen(180);
                 Richtung = 3;
             }
             // Rechts
-            if(taste == 39)
+            if(taste == 39 && RightFree)
             {
                 WinkelSetzen(0);
                 Richtung = 1;
@@ -186,6 +191,14 @@ public class PacmanMouth extends Figur
             testwertfuerdieanimationen = 0;
         }
         tot = wert;
+    }
+    
+    public void setCheckers(boolean up, boolean right, boolean down, boolean left)
+    {
+        AboveFree = up;
+        RightFree = right;
+        BelowFree = down;
+        LeftFree = left;
     }
     
     public boolean PacManAnWand()
