@@ -12,7 +12,7 @@ public class Pacman extends Figur
     int Richtung = 1; // 0 = Hoch ; 1 = Rechts ; 2 = Runter ; 3 = Links
     boolean tot = false;
     
-    public int lives = 2;
+    public int lives = 99999;
     
     PacmanMouth Mouth = new PacmanMouth();
     Rechteck rechteck = new Rechteck();
