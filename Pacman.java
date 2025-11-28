@@ -7,7 +7,7 @@ public class Pacman extends Figur
     public int lives = 99999;
     
 
-   PacmanMouth Mouth= new PacmanMouth();
+    PacmanMouth Mouth= new PacmanMouth();
     Rechteck rechteck = new Rechteck();
 
     Pacman()
@@ -46,9 +46,8 @@ public class Pacman extends Figur
         }
         
         if ((Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot")) && !tot) 
-
         {
-        setTot(true);
+            setTot(true);
         }
     }
 
@@ -66,38 +65,34 @@ public class Pacman extends Figur
     
     
     public void setTot(boolean wert)
-{
- 
-
+    {
         tot = wert;
         Mouth.setTot(wert);
         if (wert = true) {
             SichtbarkeitSetzen(false);
 
         }
-        
     }
     
 
-   public int getRichtung() 
-   {
-       return Richtung;//
-   }
+    public int getRichtung() 
+    {
+       return Richtung;
+    }
     
-   public int getXPosition()
-   {
+    public int getXPosition()
+    {
        return XPositionGeben();
-   }
+    }
     
-   public int getYPosition()
-   {
+    public int getYPosition()
+    {
        return YPositionGeben();
-   }
+    }
    
-   public int getBewegungsLaenge()
-   {
+    public int getBewegungsLaenge()
+    {
        return BewegungsLaenge;
 
-   }
-
+    }
 }
