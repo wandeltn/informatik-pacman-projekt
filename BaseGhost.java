@@ -164,7 +164,9 @@ class BaseGhost extends Hindernis
         showPathIndicators();
     }
 
-    void stepAlongPath() {
+    void stepAlongPath() 
+    {
+        computePath();
         if (currentPath == null || currentPath.isEmpty())
         {
             Logger.log("Skipping advanceSmooth, no Path found, defaulting to pacman direct", LogLevel.DEBUG);
@@ -285,9 +287,9 @@ class BaseGhost extends Hindernis
         }
     }
 
-    // Coordinate conversion helpers with playingfield offset
-    private int worldToTileX(int worldX) { return (worldX - Playingfield.getOffsetX()) / 10 + 30; }
-    private int worldToTileY(int worldY) { return (worldY - Playingfield.getOffsetY()) / 10 + 30; }
-    private int tileToWorldX(int tileX) { return tileX * 10 + Playingfield.getOffsetX() - 30; }
-    private int tileToWorldY(int tileY) { return tileY * 10 + Playingfield.getOffsetY() - 30; }
+    // Coordinate conversion helpers with playingfield offset (match Pacman mapping)
+    private int worldToTileX(int worldX) { return (worldX - Playingfield.getOffsetX()) / 10; }
+    private int worldToTileY(int worldY) { return (worldY - Playingfield.getOffsetY()) / 10; }
+    private int tileToWorldX(int tileX) { return tileX * 10 + Playingfield.getOffsetX(); }
+    private int tileToWorldY(int tileY) { return tileY * 10 + Playingfield.getOffsetY(); }
 }
