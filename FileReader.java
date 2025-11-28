@@ -1,11 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.stream.*;
-import java.util.Scanner;
 /**
  * Beschreiben Sie hier die Klasse FileReader.
  * 
@@ -14,9 +10,6 @@ import java.util.Scanner;
  */
 public class FileReader
 {
-    // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen
-    private int x;
-
     /**
      * Konstruktor für Objekte der Klasse FileReader
      */

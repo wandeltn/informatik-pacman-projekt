@@ -1,16 +1,17 @@
-class Pellet extends Figur
+public class Pellet extends Figur
 {
    private boolean eingesammelt = false;
    Pellet()
    {
        super();
        FigurteilFestlegenEllipse(-10, -10, 20, 20, "Gelb");
+       Pellet_Anzeige.pelletErzeugt();
    }
   
    @Override void AktionAusführen()
    {
                  
-            if (!eingesammelt)
+       if (!eingesammelt)
        {
            if (Berührt())
            {
@@ -22,7 +23,9 @@ class Pellet extends Figur
                        eingesammelt = true;
                        SichtbarkeitSetzen(false);
                        Entfernen();
+                       Pellet_Anzeige.pelletEntfernt();
                        break;
+                       
                    }
                }
            }

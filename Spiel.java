@@ -1,4 +1,4 @@
-
+import java.io.*;
 import java.util.Random;
 /**
  * Legt das Spielszenario fest
@@ -8,10 +8,12 @@ import java.util.Random;
  */
 class Spiel extends Ereignisbehandlung
 {
-    /** Zufallsgenerator */
-    Random zzgenerator;
-    /** Taktzähler */
     int zähler;
+    
+    static Pacman pacman;
+    static Playingfield playingfield;
+    static GhostBlinky blinky;
+    
     
     /**
      * Legt die Spielfigur und den Zufallsgenertor an 
@@ -19,10 +21,14 @@ class Spiel extends Ereignisbehandlung
     Spiel()
     {
         super();
-        new Pacman();
-        new Playingfield();
+        playingfield = new Playingfield();
+        pacman = new Pacman();
+        blinky = new GhostBlinky(150, 150);
+        
+        
+        blinky.setPacmanTarget(pacman);
+        
         zähler = 8;
-        zzgenerator = new Random();
     }
 
     /**
@@ -30,15 +36,7 @@ class Spiel extends Ereignisbehandlung
      */
     @Override void TaktImpulsAusführen ()
     {
-        if(zähler<3)
-        {
-            zähler++;
-        }
-        else
-        {
-            HindernisErzeugen();
-            zähler=0;
-        }
+        
     }
     
     /**
@@ -62,36 +60,7 @@ class Spiel extends Ereignisbehandlung
      */
     void HindernisErzeugen()
     {
-        int zufall = zzgenerator.nextInt(4);
-        if (zufall == 0)
-        {
-            HindernisErzeugen(0,zzgenerator.nextInt(600),'O');
-        }
-        else
-        {
-            if (zufall == 1)
-            {
-                HindernisErzeugen(800,zzgenerator.nextInt(600),'W');
-            }
-            else
-            {
-                if (zufall == 2)
-                {
-                    HindernisErzeugen(zzgenerator.nextInt(800),0,'S');
-                }
-                else
-                {
-                    if (zufall == 3)
-                    {
-                        HindernisErzeugen(zzgenerator.nextInt(800),600,'N');
-                    }
-                    else
-                    {
-                        System.out.println("Fehler in Spiel, HindernisErzeugen()");
-                    }
-                }
-            }
-        }
+        
     }
     
     /**
@@ -102,6 +71,22 @@ class Spiel extends Ereignisbehandlung
      */
     void HindernisErzeugen(int x, int y, char richtung)
     {
-        new BaseGhost(x, y, new ColorRGB(255, 184, 81));
+        
     }
+    
+    // int getPacmanPosX()
+    //{
+     //   return pacman.getXPosition();
+    //}
+    
+    //int getPacmanPosY()
+    //{
+    //   return pacman.getYPosition();
+    //}
+    
+    //int getPacmanDirection()
+    //{
+     //  return pacman.getRichtung();
+    //}
+ 
 }

@@ -6,6 +6,7 @@ import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import Logger.*;
 /**
  * Die Klasse stellt ein Fenster mit einer Malfläche zur Verfügung,
  * auf der Objekte der Klassen Rechteck, Kreis und Dreieck sowie Turtle dargestellt
@@ -50,6 +51,8 @@ class Zeichenfenster
     private ArrayList<AktionsEmpfaenger> aktionsEmpfänger;
     /** Timerobjekt für die zentrale Zeitverwaltung */
     private javax.swing.Timer timer;
+
+    //private ArrayList<Line> lines = new ArrayList<>();
 
     /**
      * Legt das Fenster und die Malfläche an
@@ -372,6 +375,15 @@ class Zeichenfenster
         timer.stop();
     }
     
+    public void DrawLine(int x1, int y1, int x2, int y2, Color color, int thickness) {
+        // Implementation for drawing a line on the malfläche
+        Graphics g = malfläche.getGraphics();
+        g.setColor(color);
+        // g.setStroke(new BasicStroke(thickness));
+        g.drawLine(x1, y1, x2, y2);
+        g.dispose();
+    }
+
     /**
      * Oberklasse für alle verfügbaren Grafiksymbole.
      * Alle Grafiksymbole werden über ihr umgebendes Rechteck beschrieben.
@@ -1398,6 +1410,66 @@ class Zeichenfenster
             }
             return ok;
         }
+
+
+        boolean Berührt (ColorRGB farbe)
+        {
+            Color c2 = farbe.toColor();
+            boolean ok = false;
+            for (GrafikSymbol g: zeichenfläche.alleSymbole)
+            {
+                if ((g != this) && g.IstInnerhalb(x, y) && g.sichtbar)
+                {
+                    if (g instanceof TurtleIntern)
+                    {
+                        TurtleIntern t = (TurtleIntern) g;
+                        if (t.symbolSichtbar)
+                        {
+                            for (FigurenElement e: t.standardFigur)
+                            {
+                                Path2D.Double p = new Path2D.Double();
+                                double größe = t.h > t.b ? t.b : t.h;
+                                e.ElementZuForm(p, größe, t.x, t.y);  
+                                AffineTransform a = new AffineTransform();
+                                a.rotate(DrehwinkelGeben (t.winkel), t.x, t.y);
+                                p = new Path2D.Double (p, a);
+                                if (p.contains(x, y))
+                                {
+                                    ok = c2.equals(e.c);
+                                }
+                            }
+                        }
+                    }
+                    else if (g instanceof FigurIntern)
+                    {
+                        FigurIntern t = (FigurIntern) g;
+                        LinkedList<FigurenElement> figur = ((t.eigeneFigur == null) || (t.eigeneFigur.size() == 0)) ? t.standardFigur : t.eigeneFigur;
+                        for (FigurenElement e: figur)
+                        {
+                            Path2D.Double p = new Path2D.Double();
+                            double größe = t.h > t.b ? t.b : t.h;
+                            e.ElementZuForm(p, größe, t.x, t.y);  
+                            AffineTransform a = new AffineTransform();
+                            a.rotate(DrehwinkelGeben (t.winkel), t.x, t.y);
+                            p = new Path2D.Double (p, a);
+                            if (p.contains(x, y))
+                            {
+                                ok = c2.equals(e.c);
+                            }
+                        }
+                    }
+                    else if (g instanceof TextIntern)
+                    {
+                        // Texte haben keine Fläche
+                    }
+                    else
+                    {
+                        ok = ok || c2.equals(g.c);
+                    }
+                }
+            }
+            return ok;
+        }
         
         /**
          * Testet, ob die Turtle die (sichtbare, ) angegebene Figur berührt.
@@ -1509,8 +1581,7 @@ class Zeichenfenster
         {            
             int[] x = new int [] {-50, 50, -50};
             int[] y = new int [] {-50, 0, 50};
-            standardFigur.add (new FigurenElementPolygon (x, y, Color.yellow));
-            standardFigur.add(new FigurenElementEllipse(-10, -10, 20, 20, Color.blue));
+            standardFigur.add (new FigurenElementPolygon (x, y, new ColorRGB(246, 1, 206).toColor()));
         }
                 
         /**
@@ -1518,6 +1589,7 @@ class Zeichenfenster
          */
         @Override void FormErzeugen()
         {
+            int numFigures = 0;
             Area area = new Area();
             AffineTransform a = new AffineTransform();
             a.rotate(DrehwinkelGeben (winkel), this.x, this.y);
@@ -1529,6 +1601,7 @@ class Zeichenfenster
                 {
                     for (FigurenElement e: figur)
                     {
+                        numFigures++;
                         Path2D.Double p = new Path2D.Double();
                         e.ElementZuForm(p, größe, x, y);
                         area.add(new Area(new Path2D.Double (p, a)));
@@ -1536,6 +1609,7 @@ class Zeichenfenster
                 }
                
             }
+            Logger.log("FormErzeugen added shapes: " + numFigures, LogLevel.DEBUG);
             form = area;
         }
         
@@ -1750,11 +1824,19 @@ class Zeichenfenster
                 long end = System.currentTimeMillis();
                 System.out.println("Added Figur in: " + (end - start) + " ms");
             }
-            FormErzeugen();
+            
             
             if (repaint)
-            {
+                {
+                long startform = System.currentTimeMillis();
+                FormErzeugen();
+                long endform = System.currentTimeMillis();
+                System.out.println("Created Form in: " + (endform - startform) + " ms");
+                
+                long start = System.currentTimeMillis();
                 zeichenfläche.malfläche.repaint();
+                long end = System.currentTimeMillis();
+                System.out.println("Repaint took: " + (end - start) + " ms");
             }
         }
         
