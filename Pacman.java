@@ -95,4 +95,5 @@ public class Pacman extends Figur
        return BewegungsLaenge;
 
     }
+
 }
