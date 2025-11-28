@@ -10,10 +10,12 @@ class Pellet extends Figur
    @Override void AktionAusführen()
    {
                  
+            if (!eingesammelt)
+       {
            if (Berührt())
            {
-               Figur[] Pellet = AlleFigurenFinden();
-               for (Figur f: Pellet)
+               Figur[] figuren = AlleFigurenFinden();
+               for (Figur f : figuren)
                {
                    if (f instanceof Pacman)
                    {
@@ -25,12 +27,9 @@ class Pellet extends Figur
                }
            }
        }
-   
-  
-   
+   }
    private Figur[] AlleFigurenFinden()
    {
-    
        return new Figur[0];
    }
 }

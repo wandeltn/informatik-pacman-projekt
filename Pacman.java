@@ -1,4 +1,9 @@
+//<<<<<<< HEAD
+
+
 class Pacman extends Figur
+
+//>>>>>>> 64dd82164a71c9c437d24409f4d06da682a23a88
 {
     /** Länge der Bewegung */
     int BewegungsLaenge;
@@ -92,5 +97,25 @@ class Pacman extends Figur
                 }
             }
         }
+    }
+    
+    public int getRichtung() 
+    {
+        return Richtung;
+    }
+    
+    public int getXPosition()
+    {
+        return XPositionGeben();
+    }
+    
+    public int getYPosition()
+    {
+        return YPositionGeben();
+    }
+    
+    public int getBewegungsLaenge()
+    {
+        return BewegungsLaenge;
     }
 }
