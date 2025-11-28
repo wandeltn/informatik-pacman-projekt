@@ -37,3 +37,4 @@ public class PowerModeManager
         System.out.println("Power entfernt du affe!");
     }
 }
+   

@@ -6,7 +6,7 @@ public class Pacman extends Figur
     
     public int lives = 99999;
     
-
+    
     PacmanMouth Mouth= new PacmanMouth();
     Rechteck rechteck = new Rechteck();
     PacmanDirectionchecker CheckerAbove = new PacmanDirectionchecker(0); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
@@ -89,6 +89,18 @@ public class Pacman extends Figur
         }
     }
 
+    public void setFarbe (String Farbe)
+    
+    {
+    
+    {
+        FigurteilFestlegenEllipse(-60, -60, 120, 120, "Orange");
+        
+        //muss noch getestes werden Niklas, grrrrr gakluabe aber klappt)
+    }
+    
+    }
+    
     public void revive() 
     {
         if (lives > 0)
