@@ -7,8 +7,7 @@ public class Pacman extends Figur
     public int lives = 99999;
     
     
-    PacmanMouth Mouth= new PacmanMouth();
-    Rechteck rechteck = new Rechteck();
+    PacmanMouth Mouth = new PacmanMouth();
     PacmanDirectionchecker CheckerAbove = new PacmanDirectionchecker(0); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
     PacmanDirectionchecker CheckerRight = new PacmanDirectionchecker(1); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
     PacmanDirectionchecker CheckerBelow = new PacmanDirectionchecker(2); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
@@ -24,7 +23,6 @@ public class Pacman extends Figur
         super();
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
         BewegungsLaenge = 4;
-        rechteck.FarbeSetzen("blau");
     }
 
     @Override void TasteGedrückt(char taste) {}
@@ -143,7 +141,5 @@ public class Pacman extends Figur
     public int getBewegungsLaenge()
     {
        return BewegungsLaenge;
-
     }
-
 }
