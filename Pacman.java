@@ -1,6 +1,6 @@
 public class Pacman extends Figur
 {
-    int BewegungsLaenge;
+    int BewegungsLaenge = 4;
     int Richtung = 1;
     boolean tot = false;
     
@@ -22,7 +22,6 @@ public class Pacman extends Figur
     {
         super();
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
-        BewegungsLaenge = 4;
     }
 
     @Override void TasteGedrückt(char taste) {}
@@ -94,7 +93,7 @@ public class Pacman extends Figur
     {
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Orange");
         
-        //muss noch getestes werden Niklas, grrrrr gakluabe aber klappt)
+        //muss noch getestes werden Niklas, grrrrr gakluabe aber klappt) <- fick den der das geschrieben hat
     }
     
     }
