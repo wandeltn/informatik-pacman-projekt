@@ -2,12 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import Logger.*;
-/**
- * Beschreiben Sie hier die Klasse Playingfield.
- * 
- * @author (Ihr Name) 
- * @version (eine Versionsnummer oder ein Datum)
- */
+
 public class Playingfield extends Figur
 {
     // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen

@@ -1,4 +1,4 @@
-public class PowerDot extends Figur
+/* public class PowerDot extends Figur
 {
     public PowerDot()
     {
@@ -19,5 +19,14 @@ public class PowerDot extends Figur
 
             Entfernen();
         }
+    }
+}
+*/
+public class PowerDot extends Figur {
+
+    public PowerDot(int x, int y) {
+        PositionSetzen(x, y);
+        GrößeSetzen(12);
+        FigurteilFestlegenEllipse(-6, -6, 12, 12, "orange");
     }
 }

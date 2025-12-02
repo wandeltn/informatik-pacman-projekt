@@ -1,3 +1,4 @@
+
 public class Pacman extends Figur
 {
     int BewegungsLaenge;
@@ -17,6 +18,7 @@ public class Pacman extends Figur
     boolean RightFree = true;
     boolean BelowFree = true;
     boolean LeftFree = true;
+    
 
     Pacman()
     {
@@ -90,7 +92,9 @@ public class Pacman extends Figur
     public void setFarbe (String Farbe)
     
     {
-    
+        
+    checkPelletCollision();
+
     {
         FigurteilFestlegenEllipse(-60, -60, 120, 120, "Orange");
         
@@ -122,6 +126,29 @@ public class Pacman extends Figur
         }
     }
     
+    public void checkPelletCollision() {
+
+    for (int i = 0; i < PelletManager.pelletListe.size(); i++) {
+
+        Figur f = PelletManager.pelletListe.get(i);
+
+        if (this.Berührt(f)) {
+
+            f.Entfernen();
+            PelletManager.pelletListe.remove(i);
+            PelletManager.pelletCount--;
+
+            System.out.println("Pellet eingesammelt. Übrig: " + PelletManager.pelletCount);
+
+            if (PelletManager.pelletCount == 0) {
+                System.out.println("GEWONNEN!");
+            }
+
+            break;
+        }
+    }
+}
+
 
     public int getRichtung() 
     {
@@ -142,4 +169,7 @@ public class Pacman extends Figur
     {
        return BewegungsLaenge;
     }
+    
 }
+
+    
