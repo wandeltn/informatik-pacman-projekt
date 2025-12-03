@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import Logger.*;
+import java.util.ArrayList;
 
 public class PelletManager {
 
@@ -10,7 +10,7 @@ public class PelletManager {
         spawnAllPellets();
     }
 
-    private void spawnAllPellets() {
+    private static void spawnAllPellets() {
         ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
         int offsetX = Playingfield.getOffsetX();
         int offsetY = Playingfield.getOffsetY();
@@ -23,29 +23,18 @@ public class PelletManager {
             return;
         }
 
+        // First pass: register all pellets BEFORE any field modification during rendering
         for (int row = 0; row < field.size(); row++) {
-            ArrayList<Integer> line = field.get(row);
-            if (line == null) continue;
-            for (int col = 0; col < line.size(); col++) {
-                int tile = line.get(col);
-                // tile top-left coords:
-                int tileY = col * 10 + offsetY;
-                int tileX = row * 10 + offsetX;
-                // center coords for our Figuren (figuren zeichnen relativ zum Mittelpunkt)
-                int centerY = tileX + 5;
-                int centerX = tileY + 5;
-                
-                Logger.log("Checking pos for pellets at: x=" + row + " y=" + col + " val=" + tile, LogLevel.ERROR);
-
-                if (tile == 3) { // Pellet
-                    Logger.log("Spawning new Pellet at: x=" + centerX + " y=" + centerY, LogLevel.ERROR);
-                    Pellet p = new Pellet(centerX, centerY);
-                    pelletListe.add(p);
-                    
-                } else if (tile == 4) { // PowerDot
-                    Logger.log("Spawning new PowerDot at: x=" + centerX + " y=" + centerY, LogLevel.ERROR);
-                    PowerDot pd = new PowerDot(centerX, centerY);
-                    pelletListe.add(pd);
+            ArrayList<Integer> data;
+            if (row >= field.size()) break;
+            data = field.get(row);
+            for (int col = 0; col < data.size(); col++) {
+                int tile = data.get(col);
+                if (tile == 3 || tile == 4) {
+                    int worldX = col * 10 + offsetX;
+                    int worldY = row * 10 + offsetY;
+                    pelletListe.add(new Pellet(worldX, worldY));
+                    Logger.log("Registered pellet at tile (" + col + "," + row + ") -> world (" + worldX + "," + worldY + ")", LogLevel.FATAL);
                 }
             }
         }
@@ -66,8 +55,8 @@ public class PelletManager {
         }
     }
     
-    public static void registerPellet(Figur pellet)
-    {
-        pelletListe.add(pellet);
-    }
+    // public static void registerPellet(int x, int y)
+    // {
+    //     pelletListe.add(new Pellet(x, y));
+    // }
 }
