@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import Logger.*;
 
 public class PelletManager {
 
@@ -28,11 +29,13 @@ public class PelletManager {
             for (int col = 0; col < line.size(); col++) {
                 int tile = line.get(col);
                 // tile top-left coords:
-                int tileX = col * 10 + offsetX;
-                int tileY = row * 10 + offsetY;
+                int tileY = col * 10 + offsetX;
+                int tileX = row * 10 + offsetY;
                 // center coords for our Figuren (figuren zeichnen relativ zum Mittelpunkt)
-                int centerX = tileX + 5;
-                int centerY = tileY + 5;
+                int centerY = tileX + 5;
+                int centerX = tileY + 5;
+                
+                Logger.log("Checking pos for pellets at: x=" + row + " y=" + col + " val=" + tile, LogLevel.ERROR);
 
                 if (tile == 3) { // Pellet
                     Pellet p = new Pellet(centerX, centerY);
@@ -59,5 +62,10 @@ public class PelletManager {
         if (pelletListe.remove(f)) {
             pelletCount = Math.max(0, pelletCount - 1);
         }
+    }
+    
+    public static void registerPellet(Pellet pellet)
+    {
+        pelletListe.add(pellet);
     }
 }

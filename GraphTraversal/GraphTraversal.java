@@ -63,6 +63,7 @@ public class GraphTraversal
         }
         long t1 = System.nanoTime();
         Logger.log("Traverse completed. Nodes: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
+        Logger.log("Total nodes in graph after traversal: " + nodes.size(), LogLevel.INFO);
     }
 
     static boolean isValid(int x, int y) {

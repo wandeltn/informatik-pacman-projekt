@@ -82,16 +82,17 @@ class BaseGhost extends Hindernis
     boolean CheckCollision()
     {
         boolean collision = false;
+        return false;
 
-        if (CollisionRight.CheckFieldCollision() ||
-            CollisionLeft.CheckFieldCollision() ||
-            CollisionTop.CheckFieldCollision() ||
-            CollisionBottom.CheckFieldCollision())
-        {
-            collision = true;
-            System.out.println("Kollision erkannt");
-        }
-        return collision;
+        // if (CollisionRight.CheckFieldCollision() ||
+            // CollisionLeft.CheckFieldCollision() ||
+            // CollisionTop.CheckFieldCollision() ||
+            // CollisionBottom.CheckFieldCollision())
+        // {
+            // collision = true;
+            // System.out.println("Kollision erkannt");
+        // }
+        // return collision;
     }
 
     boolean CheckCollision(Himmelsrichtung direction)
@@ -123,6 +124,7 @@ class BaseGhost extends Hindernis
         this.graphTraversal = new GraphTraversal(field);
         ensureValidStartPosition();
         GraphTraversal.precomputeWallDistances();
+        GraphTraversal.buildFullGraph();
         GraphTraversal.traverse(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()));
         Logger.log("Ghost initPathfinding at (" + this.XPositionGeben()/10 + "," + this.YPositionGeben()/10 + ")", LogLevel.INFO);
     }
@@ -132,6 +134,7 @@ class BaseGhost extends Hindernis
         ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
         this.graphTraversal = new GraphTraversal(field);
         ensureValidStartPosition();
+        GraphTraversal.buildFullGraph();
         GraphTraversal.traverse(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()));
         Logger.log("Ghost updatePathfinding at (" + this.XPositionGeben()/10 + "," + this.YPositionGeben()/10 + ")", LogLevel.DEBUG);
     }
@@ -260,7 +263,7 @@ class BaseGhost extends Hindernis
             int[] nearest = GraphTraversal.findNearestValid(tileX, tileY);
             if (nearest != null) {
                 PositionSetzen(tileToWorldX(nearest[0]), tileToWorldY(nearest[1]));
-                updateCollisionBoxes(this.XPositionGeben(), this.YPositionGeben());
+                // updateCollisionBoxes(this.XPositionGeben(), this.YPositionGeben());
                 Logger.log("Ghost fallback reposition to valid node (" + nearest[0] + "," + nearest[1] + ")", LogLevel.WARN);
             } else {
                 Logger.log("Ghost fallback failed: no valid node found", LogLevel.ERROR);
