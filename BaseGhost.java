@@ -84,15 +84,16 @@ class BaseGhost extends Hindernis
         boolean collision = false;
         return false;
 
-        // if (CollisionRight.CheckFieldCollision() ||
-            // CollisionLeft.CheckFieldCollision() ||
-            // CollisionTop.CheckFieldCollision() ||
-            // CollisionBottom.CheckFieldCollision())
-        // {
-            // collision = true;
-            // System.out.println("Kollision erkannt");
-        // }
-        // return collision;
+        /* if (CollisionRight.CheckFieldCollision() ||
+             CollisionLeft.CheckFieldCollision() ||
+             CollisionTop.CheckFieldCollision() ||
+             CollisionBottom.CheckFieldCollision())
+         {
+             collision = true;
+             System.out.println("Kollision erkannt");
+         }
+         return collision;
+         */
     }
 
     boolean CheckCollision(Himmelsrichtung direction)
