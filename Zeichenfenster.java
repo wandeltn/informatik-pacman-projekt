@@ -1822,7 +1822,7 @@ class Zeichenfenster
                 long start = System.currentTimeMillis();
                 eigeneFigur.add(new FigurenElementRechteck(x, y, breite, höhe, color));
                 long end = System.currentTimeMillis();
-                System.out.println("Added Figur in: " + (end - start) + " ms");
+                Logger.log("Added Figur in: " + (end - start) + " ms", LogLevel.DEBUG);
             }
             
             
@@ -1831,12 +1831,12 @@ class Zeichenfenster
                 long startform = System.currentTimeMillis();
                 FormErzeugen();
                 long endform = System.currentTimeMillis();
-                System.out.println("Created Form in: " + (endform - startform) + " ms");
+                Logger.log("Created Form in: " + (endform - startform) + " ms", LogLevel.DEBUG);
                 
                 long start = System.currentTimeMillis();
                 zeichenfläche.malfläche.repaint();
                 long end = System.currentTimeMillis();
-                System.out.println("Repaint took: " + (end - start) + " ms");
+                Logger.log("Repaint took: " + (end - start) + " ms", LogLevel.DEBUG);
             }
         }
         
