@@ -3,26 +3,25 @@ public class Pacman extends Figur
     int BewegungsLaenge;
     int Richtung = 1;
     boolean tot = false;
-    
+    private String normaleFarbe = "Gelb";
+
     public int lives = 99999;
-    
-    
+
     PacmanMouth Mouth = new PacmanMouth();
-    PacmanDirectionchecker CheckerAbove = new PacmanDirectionchecker(0); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
-    PacmanDirectionchecker CheckerRight = new PacmanDirectionchecker(1); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
-    PacmanDirectionchecker CheckerBelow = new PacmanDirectionchecker(2); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
-    PacmanDirectionchecker CheckerLeft = new PacmanDirectionchecker(3); //0 = Hoch; 1 = Rechts, 2 = Runter; 3 = Links
-    
+    PacmanDirectionchecker CheckerAbove = new PacmanDirectionchecker(0);
+    PacmanDirectionchecker CheckerRight = new PacmanDirectionchecker(1);
+    PacmanDirectionchecker CheckerBelow = new PacmanDirectionchecker(2);
+    PacmanDirectionchecker CheckerLeft = new PacmanDirectionchecker(3);
+
     boolean AboveFree = true;
     boolean RightFree = true;
     boolean BelowFree = true;
     boolean LeftFree = true;
-    
 
     Pacman()
     {
         super();
-        FigurteilFestlegenEllipse(-60, -60, 120, 120, "Gelb");
+        FigurteilFestlegenEllipse(-60, -60, 120, 120, normaleFarbe);
         BewegungsLaenge = 4;
     }
 
@@ -35,14 +34,16 @@ public class Pacman extends Figur
         BelowFree = !CheckerBelow.PacManAnAnWand();
         LeftFree = !CheckerLeft.PacManAnAnWand();
         Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
-        if(taste == 38 && AboveFree) Richtung = 0;  // Hoch
-        if(taste == 39 && RightFree) Richtung = 1;  // Rechts
-        if(taste == 40 && BelowFree) Richtung = 2;  // Runter
-        if(taste == 37 && LeftFree) Richtung = 3;  // Links
+
+        if(taste == 38 && AboveFree) Richtung = 0;
+        if(taste == 39 && RightFree) Richtung = 1;
+        if(taste == 40 && BelowFree) Richtung = 2;
+        if(taste == 37 && LeftFree) Richtung = 3;
     }
 
     @Override void AktionAusführen()
     {
+        PowerModeManager.tick();  
         if (!Mouth.PacManAnWand() && !tot)
         {
             if(Richtung == 0 && YPositionGeben()>0)
@@ -81,65 +82,57 @@ public class Pacman extends Figur
                 CheckerLeft.move(BewegungsLaenge, true);
             }
         }
-        
-        if ((Berührt("Magenta") || Berührt("cyan") || Berührt("orange") || Berührt("rot")) && !tot) 
-        {
-            setTot(true);
-        }
+
+        checkPelletCollision();
     }
 
-    public void setFarbe (String Farbe)
-    
+    // ------------------ FARBE ------------------
+    public void setFarbe(String farbe)
     {
-        
-    checkPelletCollision();
+        EigeneFigurLöschen();
+        FigurteilFestlegenEllipse(-60, -60, 120, 120, farbe);
+    }
 
+    public void aktivierePowerMode()
     {
-        FigurteilFestlegenEllipse(-60, -60, 120, 120, "Orange");
-        
-        //muss noch getestes werden Niklas, grrrrr gakluabe aber klappt)
+        setFarbe("Orange");
+        Mouth.setMundFarbe("Orange");
     }
-    
-    }
-    
-    public void revive() 
+
+    public void deaktivierePowerMode()
     {
-        if (lives > 0)
-        {
-            setTot(false);
-            SichtbarkeitSetzen(true);
-            ZumStartpunktGehen();
-            lives--;
-            Richtung = 1;
-        }
+        setFarbe(normaleFarbe);
+        Mouth.setMundFarbe("Gelb");
     }
-    
-    
-    public void setTot(boolean wert)
+
+    // ------------------ COLLISIONS ------------------
+    public void checkPelletCollision() 
+{
+    for (int i = 0; i < PelletManager.pelletListe.size(); i++)
     {
-        tot = wert;
-        Mouth.setTot(wert);
-        if (wert = true) {
-            SichtbarkeitSetzen(false);
-
-        }
-    }
-    
-    public void checkPelletCollision() {
-
-    for (int i = 0; i < PelletManager.pelletListe.size(); i++) {
-
         Figur f = PelletManager.pelletListe.get(i);
 
-        if (this.Berührt(f)) {
+        if (this.Berührt(f))
+        {
+            System.out.println("DEBUG: Pacman berührt ein Objekt: " + f.getClass().getSimpleName());
 
+            if (f instanceof PowerDot)
+            {
+                System.out.println("DEBUG: Es ist ein PowerDot -> aktiviere PowerMode");
+                PowerModeManager.aktivierePowerMode(this);
+            }
+
+            // entferne die Figur vom Feld (Figur.Entfernen existiert in deiner Figur-Klasse)
             f.Entfernen();
+
+            // entferne aus Liste und decrement count
             PelletManager.pelletListe.remove(i);
-            PelletManager.pelletCount--;
+            PelletManager.pelletCount = Math.max(0, PelletManager.pelletCount - 1);
 
             System.out.println("Pellet eingesammelt. Übrig: " + PelletManager.pelletCount);
 
-            if (PelletManager.pelletCount == 0) {
+            if (PelletManager.pelletCount == 0)
+            {
                 System.out.println("GEWONNEN!");
             }
 
@@ -149,24 +142,20 @@ public class Pacman extends Figur
 }
 
 
-    public int getRichtung() 
-    {
-       return Richtung;
-    }
-    
+    // ------------------ FEHLENDE GETTER (Pflicht für Spiel.java) ------------------
+
     public int getXPosition()
     {
-       return XPositionGeben();
+        return XPositionGeben();
     }
-    
+
     public int getYPosition()
     {
-       return YPositionGeben();
+        return YPositionGeben();
     }
-   
-    public int getBewegungsLaenge()
+
+    public int getRichtung()
     {
-       return BewegungsLaenge;
+        return Richtung;
     }
-    
 }

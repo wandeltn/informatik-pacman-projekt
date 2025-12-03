@@ -1,6 +1,5 @@
-    
 /**
- * Verwaltet die Spielfigur
+ * Verwaltet die Spielfigur (Mund-Teil)
  * 
  * @author Klaus Reinold 
  * @version 1.0
@@ -20,13 +19,18 @@ public class PacmanMouth extends Figur
     boolean RightFree;
     boolean BelowFree;
     boolean LeftFree;
+
+    // neu: speichert die aktuelle Farbe des Mundes
+    private String mundFarbe = "Schwarz";
+    
     /**
      * Legt das Aussehen der Spielfigur fest
      */
     public PacmanMouth()
     {
         super();
-        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, "Schwarz");
+        // Zeichne das Anfangs-Dreieck mit der aktuellen Mundfarbe
+        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, mundFarbe);
         BewegungsLaenge = 4;
         SichtbarkeitSetzen(false);
     }
@@ -204,5 +208,16 @@ public class PacmanMouth extends Figur
     public boolean PacManAnWand()
     {
         return Berührt("blau");
+    }
+
+    /**
+     * Setzt die Mundfarbe neu. Wird von Pacman aufgerufen, wenn PowerMode an/aus geht.
+     * Die Methode löscht vorher die eigene Figurteile und zeichnet das Dreieck neu in der gewünschten Farbe.
+     */
+    public void setMundFarbe(String farbe)
+    {
+        mundFarbe = farbe;
+        EigeneFigurLöschen();
+        FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, mundFarbe);
     }
 }

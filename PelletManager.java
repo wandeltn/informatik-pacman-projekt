@@ -1,84 +1,62 @@
-/* public class Pellet_Anzeige extends Figur
-{
-    private static int pelletCount = 0;
-    private static boolean gewonnenAngezeigt = false;
-
-    public static void pelletErzeugt()
-    {
-        pelletCount++;
-    }
-
-    public static void pelletEntfernt()
-    {
-        pelletCount--;
-        if (pelletCount <= 0 && !gewonnenAngezeigt)
-        {
-            gewonnenAnzeigen();
-        }
-    }
-
-    private static void gewonnenAnzeigen()
-    {
-        gewonnenAngezeigt = true;
-
-        
-        Figur gewonnenText = new Figur();
-        gewonnenText.FigurteilFestlegenRechteck(-500, -200, 1000, 400, "Blau");
-        gewonnenText.FigurteilFestlegenRechteck(-480, -180, 960, 360, "Weiß");
-
-        
-        gewonnenText.FigurteilFestlegenRechteck(-450, -50, 900, 100, "Gelb");
-        gewonnenText.PositionSetzen(
-            Zeichenfenster.MalflächenBreiteGeben()/2 ,
-            Zeichenfenster.MalflächenHöheGeben()/2
-        );
-
-        
-    }
-}
-*/
 import java.util.ArrayList;
 
 public class PelletManager {
 
-    public static int pelletCount = 0;
     public static ArrayList<Figur> pelletListe = new ArrayList<>();
+    public static int pelletCount = 0;
 
     public PelletManager() {
         spawnAllPellets();
     }
 
     private void spawnAllPellets() {
-
         ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
-
         int offsetX = Playingfield.getOffsetX();
         int offsetY = Playingfield.getOffsetY();
 
+        pelletListe.clear();
+        pelletCount = 0;
+
+        if (field == null) {
+            System.out.println("PelletManager: playingfield == null");
+            return;
+        }
+
         for (int row = 0; row < field.size(); row++) {
             ArrayList<Integer> line = field.get(row);
-
+            if (line == null) continue;
             for (int col = 0; col < line.size(); col++) {
                 int tile = line.get(col);
+                // tile top-left coords:
+                int tileX = col * 10 + offsetX;
+                int tileY = row * 10 + offsetY;
+                // center coords for our Figuren (figuren zeichnen relativ zum Mittelpunkt)
+                int centerX = tileX + 5;
+                int centerY = tileY + 5;
 
-                int x = col * 10 + offsetX;
-                int y = row * 10 + offsetY;
-
-                Figur f = null;
-
-                if (tile == 3) {
-                    f = new Pellet(x, y);
-                } else if (tile == 4) {
-                    f = new PowerDot(x, y);
-                }
-
-                if (f != null) {
-                    pelletListe.add(f);
+                if (tile == 3) { // Pellet
+                    Pellet p = new Pellet(centerX, centerY);
+                    pelletListe.add(p);
+                    pelletCount++;
+                } else if (tile == 4) { // PowerDot
+                    PowerDot pd = new PowerDot(centerX, centerY);
+                    pelletListe.add(pd);
                     pelletCount++;
                 }
             }
         }
 
-        System.out.println("Pellets + PowerDots gespawnt: " + pelletCount);
+        System.out.println("PelletManager: Pellets + PowerDots gespawnt = " + pelletCount);
+        // bring all to front (nochmal, sicher)
+        for (Figur f : pelletListe) {
+            f.NachVornBringen();
+        }
+    }
+
+    public static void removePellet(Figur f) {
+        // helper falls du extern entfernen willst
+        if (pelletListe.remove(f)) {
+            pelletCount = Math.max(0, pelletCount - 1);
+        }
     }
 }

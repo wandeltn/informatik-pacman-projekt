@@ -1,40 +1,42 @@
 public class PowerModeManager
 {
-    private static boolean powerAktiv = false;
+    private static boolean aktiv = false;
     private static int timer = 0;
-    private static final int POWER_DAUER = 500; 
+    private static final int DAUER = 500;
+
+    private static Pacman pacmanRef;
 
     public static boolean istPowerMode()
     {
-        return powerAktiv;
+        return aktiv;
     }
 
-    public static void aktivierePowerMode()
+    public static void aktivierePowerMode(Pacman p)
     {
-        powerAktiv = true;
-        timer = POWER_DAUER;
+        aktiv = true;
+        timer = DAUER;
+        pacmanRef = p;
 
-        System.out.println("Friss du Sau!");
+        p.aktivierePowerMode();
+
+        System.out.println("POWER MODE AKTIV!");
     }
 
     public static void tick()
     {
-        if (powerAktiv)
-        {
-            timer--;
+        if (!aktiv) return;
 
-            if (timer <= 0)
+        timer--;
+
+        if (timer <= 0)
+        {
+            aktiv = false;
+            if (pacmanRef != null)
             {
-                deaktivierePowerMode();
+                pacmanRef.deaktivierePowerMode();
             }
+
+            System.out.println("POWER MODE AUS!");
         }
     }
-
-    private static void deaktivierePowerMode()
-    {
-        powerAktiv = false;
-
-        System.out.println("Power entfernt du affe!");
-    }
 }
-   
