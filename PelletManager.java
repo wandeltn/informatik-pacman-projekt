@@ -34,7 +34,7 @@ public class PelletManager {
                     int worldX = col * 10 + offsetX;
                     int worldY = row * 10 + offsetY;
                     pelletListe.add(new Pellet(worldX, worldY));
-                    Logger.log("Registered pellet at tile (" + col + "," + row + ") -> world (" + worldX + "," + worldY + ")", LogLevel.FATAL);
+                    Logger.log("Registered pellet at tile (" + col + "," + row + ") -> world (" + worldX + "," + worldY + ")", LogLevel.TRACE);
                 }
             }
         }
