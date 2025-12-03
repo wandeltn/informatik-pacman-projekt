@@ -29,8 +29,8 @@ public class PelletManager {
             for (int col = 0; col < line.size(); col++) {
                 int tile = line.get(col);
                 // tile top-left coords:
-                int tileY = col * 10 + offsetX;
-                int tileX = row * 10 + offsetY;
+                int tileY = col * 10 + offsetY;
+                int tileX = row * 10 + offsetX;
                 // center coords for our Figuren (figuren zeichnen relativ zum Mittelpunkt)
                 int centerY = tileX + 5;
                 int centerX = tileY + 5;
@@ -38,23 +38,30 @@ public class PelletManager {
                 Logger.log("Checking pos for pellets at: x=" + row + " y=" + col + " val=" + tile, LogLevel.ERROR);
 
                 if (tile == 3) { // Pellet
+                    Logger.log("Spawning new Pellet at: x=" + centerX + " y=" + centerY, LogLevel.ERROR);
                     Pellet p = new Pellet(centerX, centerY);
                     pelletListe.add(p);
-                    pelletCount++;
+                    
                 } else if (tile == 4) { // PowerDot
+                    Logger.log("Spawning new PowerDot at: x=" + centerX + " y=" + centerY, LogLevel.ERROR);
                     PowerDot pd = new PowerDot(centerX, centerY);
                     pelletListe.add(pd);
+<<<<<<< HEAD
                     pelletCount++;
                     
+=======
+>>>>>>> 5b1acb714cbdac289aceb9d77bd9fea5c2b3f228
                 }
             }
         }
 
-        System.out.println("PelletManager: Pellets + PowerDots gespawnt = " + pelletCount);
         // bring all to front (nochmal, sicher)
         for (Figur f : pelletListe) {
             f.NachVornBringen();
+            pelletCount++;
         }
+        
+        System.out.println("PelletManager: Pellets + PowerDots gespawnt = " + pelletCount);
     }
 
     public static void removePellet(Figur f) {
@@ -64,7 +71,7 @@ public class PelletManager {
         }
     }
     
-    public static void registerPellet(Pellet pellet)
+    public static void registerPellet(Figur pellet)
     {
         pelletListe.add(pellet);
     }

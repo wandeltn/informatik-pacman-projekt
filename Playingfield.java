@@ -30,7 +30,22 @@ public class Playingfield extends Figur
         PositionSetzen(0,0);
         playingfield = LoadPlayingFieldFromFile();
         
+        // First pass: register all pellets BEFORE any field modification during rendering
+        for (int row = 0; row < playingfield.size(); row++) {
+            if (row >= playingfield.size()) break;
+            data = playingfield.get(row);
+            for (int col = 0; col < data.size(); col++) {
+                int tile = data.get(col);
+                if (tile == 3 || tile == 4) {
+                    int worldX = col * 10 + OFFSET_X;
+                    int worldY = row * 10 + OFFSET_Y;
+                    PelletManager.registerPellet(new Pellet(worldX, worldY));
+                    Logger.log("Registered pellet at tile (" + col + "," + row + ") -> world (" + worldX + "," + worldY + ")", LogLevel.FATAL);
+                }
+            }
+        }
         
+        // Second pass: render walls and doors
         y = 0;
         while (y <= playingfield.size() - 1) {
             data = playingfield.get(y);
@@ -55,9 +70,9 @@ public class Playingfield extends Figur
                 Zahl = currentChar;
                 
                 
-                if (Zahl == 0)
+                if (Zahl == 0 || Zahl == 3 || Zahl == 4)
                 {
-                    Logger.log("Skipping tile checks, no valid tile found", LogLevel.DEBUG);
+                    Logger.log("Skipping tile render (not a wall or door)", LogLevel.TRACE);
                     continue;
                 } else if (Zahl < 0)
                 {
@@ -75,17 +90,11 @@ public class Playingfield extends Figur
                 {
                     Logger.log("Taking opportunity for vertical optimize", LogLevel.SUCCESS);
                     switch (Zahl){
-                    case 0:
-                        break;
                     case 1:
                         Pixel(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
                         break;
                     case 2:
                         spawntür(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
-                        break;
-                    case 4:
-                        PelletManager.registerPellet(new Pellet(x, y * 10 + OFFSET_Y));
-                        Logger.log("Registered new Pellet", LogLevel.FATAL);
                         break;
                 }
                 }
@@ -95,7 +104,6 @@ public class Playingfield extends Figur
                     länge++;
                     Spalte++;
                     Logger.log("Checking field data forward to index: " + (Spalte + 1), LogLevel.TRACE);
-                    // currentChar = data.get(Spalte);
                     nextCharcord = Spalte + 1;
                     if (nextCharcord >= data.size()){
                         break;
@@ -105,9 +113,6 @@ public class Playingfield extends Figur
                 }
                 länge = (länge) * 10;
                 switch (Zahl){
-                    case 0:
-                        Logger.log("Invalid Tile found during render switch", LogLevel.WARN);
-                        break;
                     case 1:
                         Pixel(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
@@ -115,7 +120,6 @@ public class Playingfield extends Figur
                         spawntür(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
                 }
-                // }
             }
             y++;
         }
@@ -226,8 +230,7 @@ public class Playingfield extends Figur
                         }
                         else if (currentZeroIndex < 0)
                         {
-                            // Disabled temporarily for debugging and error mitigation
-                            //field.get(Zeile).set(firstZeroIndex, currentZeroIndex);
+                            field.get(Zeile).set(firstZeroIndex, currentZeroIndex);
                             
                             currentZeroIndex = 0;
                             firstZeroIndex = 0;
