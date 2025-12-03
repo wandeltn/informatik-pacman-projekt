@@ -30,22 +30,7 @@ public class Playingfield extends Figur
         PositionSetzen(0,0);
         playingfield = LoadPlayingFieldFromFile();
         
-        // First pass: register all pellets BEFORE any field modification during rendering
-        for (int row = 0; row < playingfield.size(); row++) {
-            if (row >= playingfield.size()) break;
-            data = playingfield.get(row);
-            for (int col = 0; col < data.size(); col++) {
-                int tile = data.get(col);
-                if (tile == 3 || tile == 4) {
-                    int worldX = col * 10 + OFFSET_X;
-                    int worldY = row * 10 + OFFSET_Y;
-                    PelletManager.registerPellet(new Pellet(worldX, worldY));
-                    Logger.log("Registered pellet at tile (" + col + "," + row + ") -> world (" + worldX + "," + worldY + ")", LogLevel.FATAL);
-                }
-            }
-        }
-        
-        // Second pass: render walls and doors
+        // Render walls and doors
         y = 0;
         while (y <= playingfield.size() - 1) {
             data = playingfield.get(y);
