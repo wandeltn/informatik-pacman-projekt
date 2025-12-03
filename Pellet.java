@@ -7,6 +7,7 @@ public class Pellet extends Figur {
         // kleines Quadrat 6x6 zentriert (linke obere Ecke rel. zum Mittelpunkt: -3,-3)
 
 
+
         FigurteilFestlegenEllipse(-10, -10, 20, 20, "gelb");
 
         FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
@@ -15,6 +16,9 @@ public class Pellet extends Figur {
 
 
         FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
+
+        FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
+
 
         FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
 
