@@ -224,7 +224,7 @@ class Zeichenfenster
             }
         }
         );
-        timer.setDelay(16);
+        timer.setDelay(33);
     }
     
     /**
