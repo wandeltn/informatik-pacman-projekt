@@ -42,6 +42,7 @@ public class PelletManager {
                     PowerDot pd = new PowerDot(centerX, centerY);
                     pelletListe.add(pd);
                     pelletCount++;
+                    
                 }
             }
         }
