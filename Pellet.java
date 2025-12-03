@@ -6,21 +6,7 @@ public class Pellet extends Figur {
         PositionSetzen(0, 0);
         // kleines Quadrat 6x6 zentriert (linke obere Ecke rel. zum Mittelpunkt: -3,-3)
 
-
-
-        FigurteilFestlegenEllipse(-10, -10, 20, 20, "gelb");
-
-        FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
-
-        FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
-
-
-        FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
-
-        FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
-
-
-        FigurteilFestlegenRechteck(tileCenterX, tileCenterY, 6, 6, "gelb");
+        FigurteilFestlegenEllipse(tileCenterX, tileCenterY, 20, 20, "gelb");
 
         NachVornBringen(); // sicherstellen, dass Pellets sichtbar vor Wänden liegen
     }
