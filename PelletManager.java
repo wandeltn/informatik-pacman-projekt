@@ -82,4 +82,3 @@ public class PelletManager {
         System.out.println("Pellets + PowerDots gespawnt: " + pelletCount);
     }
 }
-
