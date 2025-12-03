@@ -30,10 +30,10 @@ class BaseGhost extends Hindernis
      */
     ColorRGB color = new ColorRGB(255, 255, 255);
     
-    CollisionChecker CollisionRight = new CollisionChecker();
-    CollisionChecker CollisionLeft = new CollisionChecker();
-    CollisionChecker CollisionTop = new CollisionChecker();
-    CollisionChecker CollisionBottom = new CollisionChecker();
+    // CollisionChecker CollisionRight = new CollisionChecker();
+    // CollisionChecker CollisionLeft = new CollisionChecker();
+    // CollisionChecker CollisionTop = new CollisionChecker();
+    // CollisionChecker CollisionBottom = new CollisionChecker();
 
     GraphTraversal graphTraversal;
 
@@ -46,10 +46,10 @@ class BaseGhost extends Hindernis
         System.out.println(color);
         System.out.println(this.color);
         
-        CollisionRight.PositionSetzen(x + 140, y + 35);
-        CollisionLeft.PositionSetzen(x - 1, y + 35);
-        CollisionTop.PositionSetzen(x + 70, y - 1);
-        CollisionBottom.PositionSetzen(x + 70, y + 140);
+        // CollisionRight.PositionSetzen(x + 140, y + 35);
+        // CollisionLeft.PositionSetzen(x - 1, y + 35);
+        // CollisionTop.PositionSetzen(x + 70, y - 1);
+        // CollisionBottom.PositionSetzen(x + 70, y + 140);
         
         
         Zeichnen();
@@ -99,23 +99,24 @@ class BaseGhost extends Hindernis
     boolean CheckCollision(Himmelsrichtung direction)
     {
         boolean collision = false;
+        return false;
 
-        switch (direction)
-        {
-            case Himmelsrichtung.NORTH:
-                collision = CollisionTop.CheckFieldCollision();
-                break;
-            case Himmelsrichtung.SOUTH:
-                collision = CollisionBottom.CheckFieldCollision();
-                break;
-            case Himmelsrichtung.WEST:
-                collision = CollisionLeft.CheckFieldCollision();
-                break;
-            case Himmelsrichtung.EAST:
-                collision = CollisionRight.CheckFieldCollision();
-                break;
-        }
-        return collision;
+        // switch (direction)
+        // {
+            // case Himmelsrichtung.NORTH:
+                // collision = CollisionTop.CheckFieldCollision();
+                // break;
+            // case Himmelsrichtung.SOUTH:
+                // collision = CollisionBottom.CheckFieldCollision();
+                // break;
+            // case Himmelsrichtung.WEST:
+                // collision = CollisionLeft.CheckFieldCollision();
+                // break;
+            // case Himmelsrichtung.EAST:
+                // collision = CollisionRight.CheckFieldCollision();
+                // break;
+        // }
+        // return collision;
     }
     
     void initPathfinding()
@@ -250,10 +251,10 @@ class BaseGhost extends Hindernis
 
     private void updateCollisionBoxes(int baseX, int baseY) {
         // Offsets preserved from constructor logic
-        CollisionRight.PositionSetzen(baseX + 140, baseY + 35);
-        CollisionLeft.PositionSetzen(baseX - 1, baseY + 35);
-        CollisionTop.PositionSetzen(baseX + 70, baseY - 1);
-        CollisionBottom.PositionSetzen(baseX + 70, baseY + 140);
+        // CollisionRight.PositionSetzen(baseX + 140, baseY + 35);
+        // CollisionLeft.PositionSetzen(baseX - 1, baseY + 35);
+        // CollisionTop.PositionSetzen(baseX + 70, baseY - 1);
+        // CollisionBottom.PositionSetzen(baseX + 70, baseY + 140);
     }
 
     // Fallback if starting tile not valid: move to nearest valid node center.
@@ -264,7 +265,6 @@ class BaseGhost extends Hindernis
             int[] nearest = GraphTraversal.findNearestValid(tileX, tileY);
             if (nearest != null) {
                 PositionSetzen(tileToWorldX(nearest[0]), tileToWorldY(nearest[1]));
-                // updateCollisionBoxes(this.XPositionGeben(), this.YPositionGeben());
                 Logger.log("Ghost fallback reposition to valid node (" + nearest[0] + "," + nearest[1] + ")", LogLevel.WARN);
             } else {
                 Logger.log("Ghost fallback failed: no valid node found", LogLevel.ERROR);
