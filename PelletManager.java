@@ -46,13 +46,11 @@ public class PelletManager {
                     Logger.log("Spawning new PowerDot at: x=" + centerX + " y=" + centerY, LogLevel.ERROR);
                     PowerDot pd = new PowerDot(centerX, centerY);
                     pelletListe.add(pd);
-<<<<<<< HEAD
 
 
                     pelletCount++;
                     
-=======
->>>>>>> 5b1acb714cbdac289aceb9d77bd9fea5c2b3f228
+
                 }
             }
         }
