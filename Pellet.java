@@ -10,5 +10,36 @@ public class Pellet extends Figur {
 
         NachVornBringen(); // sicherstellen, dass Pellets sichtbar vor Wänden liegen
     }
-    // keine Aktion/Entfernen überschreiben -> Figur.Entfernen() wird benutzt
+    
 }
+    // k }
+  /* @Override void AktionAusführen()
+   {
+       if (!eingesammelt)
+       {
+          
+           if (Berührt())
+           {
+              
+               Figur[] figuren = AlleFigurenFinden();
+               for (Figur f : figuren)
+               {
+                   if (f instanceof Pacman)
+                   {
+                       eingesammelt = true;
+                       SichtbarkeitSetzen(false);
+                       Entfernen();
+                       break;
+                   }
+               }
+           }
+       }
+   }
+   private Figur[] AlleFigurenFinden()
+   {
+    
+       return new Figur[0];
+   }
+// eine Aktion/Entfernen überschreiben -> Figur.Entfernen() wird benutzt
+}
+*/

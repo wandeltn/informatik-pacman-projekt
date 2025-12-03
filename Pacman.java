@@ -96,13 +96,13 @@ public class Pacman extends Figur
     public void aktivierePowerMode()
     {
         setFarbe("Orange");
-        Mouth.setMundFarbe("Orange");
+        Mouth.setMundFarbe("Schwarz");
     }
 
     public void deaktivierePowerMode()
     {
         setFarbe(normaleFarbe);
-        Mouth.setMundFarbe("Gelb");
+        Mouth.setMundFarbe("Schwarz");
     }
 
     // ------------------ COLLISIONS ------------------
