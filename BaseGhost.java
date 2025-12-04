@@ -261,7 +261,18 @@ class BaseGhost extends Hindernis
     private void ensureValidStartPosition() {
         int tileX = worldToTileX(this.XPositionGeben());
         int tileY = worldToTileY(this.YPositionGeben());
-        if (!GraphTraversal.isCoordinateValid(tileX, tileY)) {
+        ArrayList<ArrayList<Integer>> field = Playingfield.getPlayingField();
+        int fieldVal = -1;
+        if (tileY >= 0 && tileY < field.size()) {
+            ArrayList<Integer> row = field.get(tileY);
+            if (tileX >= 0 && tileX < row.size()) {
+                fieldVal = row.get(tileX);
+            }
+        }
+        boolean isWalkable = (fieldVal == 0 || fieldVal == 3 || fieldVal == 4);
+        
+        // For spawning, we only require walkability, not full clearance
+        if (!isWalkable) {
             int[] nearest = GraphTraversal.findNearestValid(tileX, tileY);
             if (nearest != null) {
                 PositionSetzen(tileToWorldX(nearest[0]), tileToWorldY(nearest[1]));

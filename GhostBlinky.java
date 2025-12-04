@@ -13,6 +13,7 @@ public class GhostBlinky extends BaseGhost {
 
     public GhostBlinky(int x, int y) {
         super(x, y, new ColorRGB(255, 0, 0));
+        PositionSetzen(x, y);
         Zeichnen();
         initPathfinding();
         Logger.log("Blinky spawned at (" + XPositionGeben()/10 + "," + YPositionGeben()/10 + ")", LogLevel.INFO);

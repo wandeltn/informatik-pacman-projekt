@@ -27,37 +27,54 @@ class Spiel extends Ereignisbehandlung
         int fieldHeight = field.size();
         int fieldWidth = fieldHeight > 0 ? field.get(0).size() : 0;
         
-        // Find a good spawn location near center with sufficient clearance
+        // Find a good spawn location near center
         int centerTileX = fieldWidth / 2;
         int centerTileY = fieldHeight / 2;
         
-        // Try to find a valid spawn location near the center by searching nearby tiles
+        // Try exact center first, then fall back to clearance-aware search
         int spawnTileX = centerTileX;
         int spawnTileY = centerTileY;
-        boolean foundValid = false;
-        int foundAtRadius = -1;
         
-        // Search in expanding circles around center
-        for (int radius = 0; radius <= 20 && !foundValid; radius++) {
-            for (int dx = -radius; dx <= radius && !foundValid; dx++) {
-                for (int dy = -radius; dy <= radius && !foundValid; dy++) {
-                    int testX = centerTileX + dx;
-                    int testY = centerTileY + dy;
-                    if (GraphTraversal.isCoordinateValid(testX, testY)) {
-                        spawnTileX = testX;
-                        spawnTileY = testY;
-                        foundValid = true;
-                        foundAtRadius = radius;
-                    }
-                }
+        // Check if center is at least walkable (ignore clearance for spawn)
+        boolean centerIsWalkable = false;
+        if (centerTileY >= 0 && centerTileY < field.size()) {
+            ArrayList<Integer> row = field.get(centerTileY);
+            if (centerTileX >= 0 && centerTileX < row.size()) {
+                int val = row.get(centerTileX);
+                centerIsWalkable = (val == 0 || val == 3 || val == 4); // walkable, pellet, or power dot
             }
         }
         
-        System.out.println("[INFO] Field dimensions: " + fieldWidth + " x " + fieldHeight + ", center: (" + centerTileX + "," + centerTileY + ")");
-        System.out.println("[INFO] Ghost spawn at tile (" + spawnTileX + "," + spawnTileY + ") - radius " + foundAtRadius + " from center");
+        if (!centerIsWalkable) {
+            // Fall back to clearance-aware search
+            boolean foundValid = false;
+            int foundAtRadius = -1;
+            
+            // Search in expanding circles around center
+            for (int radius = 0; radius <= 20 && !foundValid; radius++) {
+                for (int dx = -radius; dx <= radius && !foundValid; dx++) {
+                    for (int dy = -radius; dy <= radius && !foundValid; dy++) {
+                        int testX = centerTileX + dx;
+                        int testY = centerTileY + dy;
+                        if (GraphTraversal.isCoordinateValid(testX, testY)) {
+                            spawnTileX = testX;
+                            spawnTileY = testY;
+                            foundValid = true;
+                            foundAtRadius = radius;
+                        }
+                    }
+                }
+            }
+            
+            System.out.println("[INFO] Center tile not walkable, using clearance-aware spawn at radius " + foundAtRadius);
+        } else {
+            System.out.println("[INFO] Using exact center for spawn");
+        }
         
         int ghostWorldX = spawnTileX * 10 + Playingfield.getOffsetX();
         int ghostWorldY = spawnTileY * 10 + Playingfield.getOffsetY();
+        System.out.println("[DEBUG] Final spawn tile: (" + spawnTileX + "," + spawnTileY + ")");
+        System.out.println("[DEBUG] Ghost world pos: (" + ghostWorldX + "," + ghostWorldY + ")");
         
         blinky = new GhostBlinky(ghostWorldX, ghostWorldY);
         
