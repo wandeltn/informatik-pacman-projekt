@@ -144,8 +144,8 @@ class Spiel extends Ereignisbehandlung
       return pacman.getRichtung();
     }
     
-    public static void main(String[] args) {
-        new Spiel();
-    }
+    // public static void main(String[] args) {
+        // new Spiel();
+    // }
  
 }

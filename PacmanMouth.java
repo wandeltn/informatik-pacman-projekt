@@ -88,38 +88,26 @@ public class PacmanMouth extends Figur
             //Hoch
             if(Richtung == 0)
             {
-                if(YPositionGeben()>0)
-                {
-                    Animieren();
-                    PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
-                }
+                Animieren();
+                PositionSetzen(XPositionGeben(),YPositionGeben()-BewegungsLaenge);
             }
             // Runter
             if(Richtung == 2)
             {
-                if(YPositionGeben()<Zeichenfenster.MalflächenHöheGeben()-50)
-                {
-                    Animieren();
-                    PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
-                }
+                Animieren();
+                PositionSetzen(XPositionGeben(),YPositionGeben()+BewegungsLaenge);
             }
             // Links
             if(Richtung == 3)
             {
-                if(XPositionGeben()>0)
-                {
-                    Animieren();
-                    PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
-                }
+                Animieren();
+                PositionSetzen(XPositionGeben()-BewegungsLaenge,YPositionGeben());
             }
             // Rechts
             if(Richtung == 1)
             {
-                if(XPositionGeben()<Zeichenfenster.MalflächenBreiteGeben()-50)
-                {
-                    Animieren();
-                    PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
-                }
+                Animieren();
+                PositionSetzen(XPositionGeben()+BewegungsLaenge,YPositionGeben());
             }
         }
         
