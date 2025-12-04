@@ -135,9 +135,9 @@ public class Pacman extends Figur
                     System.out.println("GEWONNEN!");
                 }
                 if (PelletManager.pelletCount == 0)
-{
-    checkWinCondition();   
-}
+                {
+                    checkWinCondition();   
+                }
 
     
                 break;
@@ -181,8 +181,8 @@ public class Pacman extends Figur
         return Richtung;
     }
   
-private void checkWinCondition() {
-    PelletManager.checkWin();
-}
+    private void checkWinCondition() {
+        PelletManager.checkWin();
+    }
 
 }
