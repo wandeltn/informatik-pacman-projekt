@@ -1,254 +1,284 @@
-@startuml PacMan UML Class Diagram
-
-class Zeichenfenster {
-    +AktionsEmpfaengerEintragen()
-    +FigurIntern
-    +PositionSetzen(x, y)
-    +XPositionGeben(): int
-    +YPositionGeben(): int
+@startuml
+class BaseGhost {
+  -currentPath: List
+  -pathIndex: int
+  -targetX: int
+  -targetY: int
+  -lastPathComputeNs: long
+  -movementSpeed: int
+  -pathBlocked: boolean
+  #color: ColorRGB
+  #graphTraversal: GraphTraversal
+  #pathIndicators: ArrayList
+  +Bewegen()
+  +Zeichnen()
+  +CheckCollision()
+  +CheckCollision()
+  +initPathfinding()
 }
-
+BaseGhost --|> Hindernis
+class CollisionChecker {
+  +SetPositionX()
+  +SetPositionY()
+  +CheckFieldCollision()
+}
+CollisionChecker --|> Figur
+class Dreieck {
+  -x: int
+  -y: int
+  -breite: int
+  -höhe: int
+  -farbe: String
+  -sichtbar: boolean
+  -winkel: int
+  #symbol: Zeichenfenster
+  +PositionSetzen()
+  +Verschieben()
+  +Drehen()
+  +GrößeSetzen()
+  +FarbeSetzen()
+}
 class Ereignisbehandlung {
-    +TaktImpulsAusführen()
-    +TasteGedrückt(taste: char)
-    +SonderTasteGedrückt(taste: int)
+  +TaktImpulsAusführen()
+  +Starten()
+  +Anhalten()
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
 }
-
 class Figur {
-    -x: int
-    -y: int
-    -größe: int
-    -farbe: String
-    -sichtbar: boolean
-    -winkel: int
-    +Figur()
-    +PositionSetzen(x, y)
-    +XPositionGeben(): int
-    +YPositionGeben(): int
-    +FigurteilFestlegenEllipse(...)
-    +Zeichnen()
-    +Berührt(farbe: String): boolean
+  -x: int
+  -y: int
+  -größe: int
+  -farbe: String
+  -sichtbar: boolean
+  -winkel: int
+  #symbol: Zeichenfenster
+  #aktionsEmpfänger: Zeichenfenster
+  +AktionAusführen()
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
+  +MausGeklickt()
+  +PositionSetzen()
 }
-
-class Hindernis extends Figur {
-    +Hindernis(x, y, richtung)
-    +Hindernis(x, y, richtung, color)
+class FileReader {
+  +ReadFile()
+  +HasNextLine()
 }
-
-class BaseGhost extends Hindernis {
-    -currentPath: List<Node>
-    -pathIndex: int
-    -targetX: int
-    -targetY: int
-    -movementSpeed: int
-    -color: ColorRGB
-    -graphTraversal: GraphTraversal
-    -pathIndicators: ArrayList<Figur>
-    +BaseGhost(x, y, color)
-    +initPathfinding()
-    +Bewegen()
-    +setTarget(x, y)
-    +ensureValidStartPosition(x, y): boolean
+class GhostBlinky {
+  -pacmanRef: Pacman
+  -retargetIntervalTicks: int
+  -tickCounter: int
+  +setPacmanTarget()
+  +Bewegen()
+  +toString()
 }
-
-class GhostBlinky extends BaseGhost {
-    -pacmanRef: Pacman
-    -retargetIntervalTicks: int
-    -tickCounter: int
-    +GhostBlinky(x, y)
-    +setPacmanTarget(pacman)
-    +Bewegen()  // override
+GhostBlinky --|> BaseGhost
+class Hindernis {
+  +AktionAusführen()
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
+  +Bewegen()
+  +RichtungSetzen()
 }
-
-class Pacman extends Figur {
-    -BewegungsLaenge: int
-    -Richtung: int
-    -tot: boolean
-    -normaleFarbe: String
-    -lives: int
-    -Mouth: PacmanMouth
-    -CheckerAbove: PacmanDirectionchecker
-    -CheckerRight: PacmanDirectionchecker
-    -CheckerBelow: PacmanDirectionchecker
-    -CheckerLeft: PacmanDirectionchecker
-    -AboveFree: boolean
-    -RightFree: boolean
-    -BelowFree: boolean
-    -LeftFree: boolean
-    +Pacman()
-    +TasteGedrückt(taste: char)  // override
-    +SonderTasteGedrückt(taste: int)  // override
-    +Bewegen()
+Hindernis --|> Figur
+class Kreis {
+  -x: int
+  -y: int
+  -radius: int
+  -farbe: String
+  -sichtbar: boolean
+  -winkel: int
+  #symbol: Zeichenfenster
+  +PositionSetzen()
+  +Verschieben()
+  +Drehen()
+  +RadiusSetzen()
+  +FarbeSetzen()
 }
-
-class Playingfield extends Figur {
-    {static} -playingfield: ArrayList<ArrayList<Integer>>
-    {static} -OFFSET_X: int
-    {static} -OFFSET_Y: int
-    -WandFarbe: ColorRGB
-    -HintergrundFarbe: ColorRGB
-    +Playingfield()
-    {static} +getPlayingField(): ArrayList<ArrayList<Integer>>
-    {static} +getOffsetX(): int
-    {static} +getOffsetY(): int
+class Pacman {
+  #BewegungsLaenge: int
+  #Richtung: int
+  #tot: boolean
+  -normaleFarbe: String
+  +lives: int
+  #Mouth: PacmanMouth
+  #CheckerAbove: PacmanDirectionchecker
+  #CheckerRight: PacmanDirectionchecker
+  #CheckerBelow: PacmanDirectionchecker
+  #CheckerLeft: PacmanDirectionchecker
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
+  +AktionAusführen()
+  +setFarbe()
+  +aktivierePowerMode()
 }
-
-class Spiel extends Ereignisbehandlung {
-    {static} -pacman: Pacman
-    {static} -playingfield: Playingfield
-    {static} -blinky: GhostBlinky
-    {static} -graphTraversal: GraphTraversal
-    +Spiel()
-    +TaktImpulsAusführen()  // override
-    +TasteGedrückt(taste: char)  // override
-    +main(args: String[])
+Pacman --|> Figur
+class PacmanDirectionchecker {
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
+  +AktionAusführen()
+  +move()
+  +PacManAnAnWand()
 }
-
-class GraphTraversal {
-    {static} -field: ArrayList<ArrayList<Integer>>
-    {static} -nodeMap: HashMap<String, Node>
-    {static} -nodes: ArrayList<Node>
-    {static} -wallDistance: int[][]
-    {static} -CLEARANCE: int
-    +GraphTraversal(field)
-    {static} +buildFullGraph()
-    {static} +traverse(x, y)
-    {static} +isValid(x, y): boolean
-    {static} +isCoordinateValid(x, y): boolean
-    {static} +getNode(x, y): Node
-    {static} +getNearestNode(x, y): Node
-    {static} +getWallDistance(x, y): int
+PacmanDirectionchecker --|> Figur
+class PacmanMouth {
+  -BewegungsLaenge: int
+  -Richtung: int
+  -Mundoeffnen: boolean
+  -Mundwinkel: int
+  -tot: boolean
+  +testwertfuerdieanimationen: int
+  #AboveFree: boolean
+  #RightFree: boolean
+  #BelowFree: boolean
+  #LeftFree: boolean
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
+  +AktionAusführen()
+  +Animieren()
+  +totAnimieren()
 }
-
-class AStar {
-    +{static} findPath(startX, startY, goalX, goalY): List<Node>
+PacmanMouth --|> Figur
+class Pellet {
 }
-
-class Node {
-    -x: int
-    -y: int
-    -neighbors: List<Node>
-    +Node(x, y)
-    +getX(): int
-    +getY(): int
-    +getNeighbors(): List<Node>
-    +addNeighbor(n: Node)
-    +toString(): String
-}
-
+Pellet --|> Figur
 class PelletManager {
-    {static} -pelletListe: ArrayList<Figur>
-    {static} -pelletCount: int
-    +PelletManager()
-    -spawnAllPellets()
-    {static} +removePelletAt(x, y)
+  +pelletListe: ArrayList
+  +pelletCount: int
+  +spawnAllPellets()
+  +removePellet()
 }
-
-class PacmanMouth extends Figur {
-    +PacmanMouth()
+class Playingfield {
+  -x: int
+  -y: int
+  #Zahl: int
+  #ycord: int
+  #playingfield: ArrayList
+  -OFFSET_X: int
+  -OFFSET_Y: int
+  #WandFarbe: ColorRGB
+  #HintergrundFarbe: ColorRGB
+  +getVerticalWallHeight()
+  +LoadPlayingFieldFromFile()
+  +Pixel()
+  +spawntür()
+  +getPlayingField()
 }
-
-class PacmanDirectionchecker extends Figur {
-    +PacmanDirectionchecker(direction)
-}
-
-class ColorRGB {
-    -r: int
-    -g: int
-    -b: int
-    +ColorRGB(name: String)
-    +ColorRGB(r, g, b)
-    +toColor(): Color
-    +toString(): String
-}
-
-class Logger {
-    {static} +log(message: String, level: LogLevel)
-}
-
-class LogLevel {
-    TRACE, DEBUG, INFO, WARN, ERROR, SUCCESS, FATAL
-}
-
-class CollisionChecker extends Figur {
-    +SetPositionX()
-    +SetPositionY()
-    +CheckFieldCollision()
-}
-
-class Pellet extends Figur {
-}
-
-class PowerDot extends Figur {
-}
-
-class PowerModeManager {
-    +istPowerMode(): boolean
-    +aktivierePowerMode()
-    +tick()
-}
-
+Playingfield --|> Figur
 class Point {
 }
-
-class FileReader {
-    +ReadFile()
-    +HasNextLine()
+class PowerDot {
 }
-
-class Dreieck extends Figur {
+PowerDot --|> Figur
+class PowerModeManager {
+  -aktiv: boolean
+  -timer: int
+  -DAUER: int
+  -pacmanRef: Pacman
+  +istPowerMode()
+  +aktivierePowerMode()
+  +tick()
 }
-
-class Rechteck extends Figur {
+class Rechteck {
+  -x: int
+  -y: int
+  -breite: int
+  -höhe: int
+  -farbe: String
+  -sichtbar: boolean
+  -winkel: int
+  #symbol: Zeichenfenster
+  +PositionSetzen()
+  +Verschieben()
+  +Drehen()
+  +GrößeSetzen()
+  +FarbeSetzen()
 }
-
-class Kreis extends Figur {
+class Spiel {
+  #pacman: Pacman
+  #playingfield: Playingfield
+  #blinky: GhostBlinky
+  #graphTraversal: GraphTraversal
+  +TaktImpulsAusführen()
+  +TasteGedrückt()
+  +SonderTasteGedrückt()
+  +HindernisErzeugen()
+  +HindernisErzeugen()
 }
-
-class Text extends Figur {
+Spiel --|> Ereignisbehandlung
+class Text {
+  -x: int
+  -y: int
+  -farbe: String
+  -sichtbar: boolean
+  -winkel: int
+  -textgröße: int
+  -symbol: Zeichenfenster
+  +PositionSetzen()
+  +TextSetzen()
+  +TextGrößeSetzen()
+  +TextVergrößern()
+  +TextVerkleinern()
 }
-
-class Himmelsrichtung {
+class Zeichenfenster {
+  -zeichenfläche: Zeichenfenster
+  -fenster: JFrame
+  -malfläche: JComponent
+  -stop: JButton
+  -start: JButton
+  -slider: JSlider
+  -alleSymbole: ArrayList
+  -aktionsEmpfänger: ArrayList
+  -timer: javax
+  +MalflächenBreiteGeben()
+  +MalflächenHöheGeben()
+  +AktionsEmpfängerEintragen()
+  +AktionsEmpfängerEntfernen()
+  +SymbolErzeugen()
 }
-
-Spiel --> Pacman : manages
-Spiel --> Playingfield : manages
-Spiel --> GhostBlinky : manages
-Spiel --> GraphTraversal : uses
-
-BaseGhost --> GraphTraversal : uses
-BaseGhost --> AStar : uses
-BaseGhost --> Node : uses
-BaseGhost --> Figur : has pathIndicators
-BaseGhost --> ColorRGB : has
-
-Pacman --> PacmanMouth : has
-Pacman --> PacmanDirectionchecker : has (4 instances)
-
-GraphTraversal --> Node : contains
-GraphTraversal --> AStar : uses
-
-PelletManager --> Playingfield : uses
-PelletManager --> Figur : creates
-PelletManager --> Pellet : creates
-PelletManager --> PowerDot : creates
-
-Figur --> Zeichenfenster : wraps
-
-Playingfield --> ColorRGB : uses
-BaseGhost --> ColorRGB : uses
-GhostBlinky --> ColorRGB : uses
-
-BaseGhost --> Logger : uses
-GraphTraversal --> Logger : uses
-AStar --> Logger : uses
-PelletManager --> Logger : uses
-
-GhostBlinky --> Pacman : targets
-
-@enduml
+class AStar {
+  +findPath()
+  +smoothPath()
+  +hasLineOfSight()
+  +inBounds()
+  +heuristic()
+}
+class GraphTraversal {
+  #field: ArrayList
+  #nodeMap: java
+  #nodes: ArrayList
+  #wallDistance: int
+  #CLEARANCE: int
+  +traverse()
+  +isValid()
+  +isCoordinateValid()
+  +findNearestValid()
+  +ensureWallDistance()
+}
+class Node {
+  -x: int
+  -y: int
+  -neighbors: List
+  +getX()
+  +getY()
+  +getNeighbors()
+  +addNeighbor()
+  +toString()
+}
+class Logger {
+  #logLevel: LogLevel
   +setLogLevel()
   +log()
   +getCallerMethodName()
 }
+Spiel --> Pacman : manages
+Spiel --> Playingfield : manages
+Spiel --> GhostBlinky : manages
+PowerModeManager --> Pacman : has
+BaseGhost ..> Logger : uses
+GraphTraversal ..> Logger : uses
+AStar ..> Logger : uses
+PelletManager ..> Logger : uses
+GhostBlinky ..> Pacman : targets
+Figur ..> Zeichenfenster : wraps
 @enduml
