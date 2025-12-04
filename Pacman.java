@@ -85,18 +85,6 @@ public class Pacman extends Figur
             setTot(true);
         }
     }
-
-    public void setFarbe (String Farbe)
-    
-    {
-    
-    {
-        FigurteilFestlegenEllipse(-60, -60, 120, 120, "Orange");
-        
-        //muss noch getestes werden Niklas, grrrrr gakluabe aber klappt) <- fick den der das geschrieben hat
-    }
-    
-    }
     
     public void revive() 
     {
