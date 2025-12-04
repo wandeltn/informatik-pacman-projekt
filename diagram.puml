@@ -1,0 +1,254 @@
+@startuml PacMan UML Class Diagram
+
+class Zeichenfenster {
+    +AktionsEmpfaengerEintragen()
+    +FigurIntern
+    +PositionSetzen(x, y)
+    +XPositionGeben(): int
+    +YPositionGeben(): int
+}
+
+class Ereignisbehandlung {
+    +TaktImpulsAusführen()
+    +TasteGedrückt(taste: char)
+    +SonderTasteGedrückt(taste: int)
+}
+
+class Figur {
+    -x: int
+    -y: int
+    -größe: int
+    -farbe: String
+    -sichtbar: boolean
+    -winkel: int
+    +Figur()
+    +PositionSetzen(x, y)
+    +XPositionGeben(): int
+    +YPositionGeben(): int
+    +FigurteilFestlegenEllipse(...)
+    +Zeichnen()
+    +Berührt(farbe: String): boolean
+}
+
+class Hindernis extends Figur {
+    +Hindernis(x, y, richtung)
+    +Hindernis(x, y, richtung, color)
+}
+
+class BaseGhost extends Hindernis {
+    -currentPath: List<Node>
+    -pathIndex: int
+    -targetX: int
+    -targetY: int
+    -movementSpeed: int
+    -color: ColorRGB
+    -graphTraversal: GraphTraversal
+    -pathIndicators: ArrayList<Figur>
+    +BaseGhost(x, y, color)
+    +initPathfinding()
+    +Bewegen()
+    +setTarget(x, y)
+    +ensureValidStartPosition(x, y): boolean
+}
+
+class GhostBlinky extends BaseGhost {
+    -pacmanRef: Pacman
+    -retargetIntervalTicks: int
+    -tickCounter: int
+    +GhostBlinky(x, y)
+    +setPacmanTarget(pacman)
+    +Bewegen()  // override
+}
+
+class Pacman extends Figur {
+    -BewegungsLaenge: int
+    -Richtung: int
+    -tot: boolean
+    -normaleFarbe: String
+    -lives: int
+    -Mouth: PacmanMouth
+    -CheckerAbove: PacmanDirectionchecker
+    -CheckerRight: PacmanDirectionchecker
+    -CheckerBelow: PacmanDirectionchecker
+    -CheckerLeft: PacmanDirectionchecker
+    -AboveFree: boolean
+    -RightFree: boolean
+    -BelowFree: boolean
+    -LeftFree: boolean
+    +Pacman()
+    +TasteGedrückt(taste: char)  // override
+    +SonderTasteGedrückt(taste: int)  // override
+    +Bewegen()
+}
+
+class Playingfield extends Figur {
+    {static} -playingfield: ArrayList<ArrayList<Integer>>
+    {static} -OFFSET_X: int
+    {static} -OFFSET_Y: int
+    -WandFarbe: ColorRGB
+    -HintergrundFarbe: ColorRGB
+    +Playingfield()
+    {static} +getPlayingField(): ArrayList<ArrayList<Integer>>
+    {static} +getOffsetX(): int
+    {static} +getOffsetY(): int
+}
+
+class Spiel extends Ereignisbehandlung {
+    {static} -pacman: Pacman
+    {static} -playingfield: Playingfield
+    {static} -blinky: GhostBlinky
+    {static} -graphTraversal: GraphTraversal
+    +Spiel()
+    +TaktImpulsAusführen()  // override
+    +TasteGedrückt(taste: char)  // override
+    +main(args: String[])
+}
+
+class GraphTraversal {
+    {static} -field: ArrayList<ArrayList<Integer>>
+    {static} -nodeMap: HashMap<String, Node>
+    {static} -nodes: ArrayList<Node>
+    {static} -wallDistance: int[][]
+    {static} -CLEARANCE: int
+    +GraphTraversal(field)
+    {static} +buildFullGraph()
+    {static} +traverse(x, y)
+    {static} +isValid(x, y): boolean
+    {static} +isCoordinateValid(x, y): boolean
+    {static} +getNode(x, y): Node
+    {static} +getNearestNode(x, y): Node
+    {static} +getWallDistance(x, y): int
+}
+
+class AStar {
+    +{static} findPath(startX, startY, goalX, goalY): List<Node>
+}
+
+class Node {
+    -x: int
+    -y: int
+    -neighbors: List<Node>
+    +Node(x, y)
+    +getX(): int
+    +getY(): int
+    +getNeighbors(): List<Node>
+    +addNeighbor(n: Node)
+    +toString(): String
+}
+
+class PelletManager {
+    {static} -pelletListe: ArrayList<Figur>
+    {static} -pelletCount: int
+    +PelletManager()
+    -spawnAllPellets()
+    {static} +removePelletAt(x, y)
+}
+
+class PacmanMouth extends Figur {
+    +PacmanMouth()
+}
+
+class PacmanDirectionchecker extends Figur {
+    +PacmanDirectionchecker(direction)
+}
+
+class ColorRGB {
+    -r: int
+    -g: int
+    -b: int
+    +ColorRGB(name: String)
+    +ColorRGB(r, g, b)
+    +toColor(): Color
+    +toString(): String
+}
+
+class Logger {
+    {static} +log(message: String, level: LogLevel)
+}
+
+class LogLevel {
+    TRACE, DEBUG, INFO, WARN, ERROR, SUCCESS, FATAL
+}
+
+class CollisionChecker extends Figur {
+    +SetPositionX()
+    +SetPositionY()
+    +CheckFieldCollision()
+}
+
+class Pellet extends Figur {
+}
+
+class PowerDot extends Figur {
+}
+
+class PowerModeManager {
+    +istPowerMode(): boolean
+    +aktivierePowerMode()
+    +tick()
+}
+
+class Point {
+}
+
+class FileReader {
+    +ReadFile()
+    +HasNextLine()
+}
+
+class Dreieck extends Figur {
+}
+
+class Rechteck extends Figur {
+}
+
+class Kreis extends Figur {
+}
+
+class Text extends Figur {
+}
+
+class Himmelsrichtung {
+}
+
+Spiel --> Pacman : manages
+Spiel --> Playingfield : manages
+Spiel --> GhostBlinky : manages
+Spiel --> GraphTraversal : uses
+
+BaseGhost --> GraphTraversal : uses
+BaseGhost --> AStar : uses
+BaseGhost --> Node : uses
+BaseGhost --> Figur : has pathIndicators
+BaseGhost --> ColorRGB : has
+
+Pacman --> PacmanMouth : has
+Pacman --> PacmanDirectionchecker : has (4 instances)
+
+GraphTraversal --> Node : contains
+GraphTraversal --> AStar : uses
+
+PelletManager --> Playingfield : uses
+PelletManager --> Figur : creates
+PelletManager --> Pellet : creates
+PelletManager --> PowerDot : creates
+
+Figur --> Zeichenfenster : wraps
+
+Playingfield --> ColorRGB : uses
+BaseGhost --> ColorRGB : uses
+GhostBlinky --> ColorRGB : uses
+
+BaseGhost --> Logger : uses
+GraphTraversal --> Logger : uses
+AStar --> Logger : uses
+PelletManager --> Logger : uses
+
+GhostBlinky --> Pacman : targets
+
+@enduml
+  +setLogLevel()
+  +log()
+  +getCallerMethodName()
+}
+@enduml
