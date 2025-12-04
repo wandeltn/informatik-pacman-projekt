@@ -10,7 +10,7 @@ package Logger;
 public class Logger
 {
     
-    static LogLevel logLevel = LogLevel.WARN;
+    static LogLevel logLevel = LogLevel.INFO;
     
     public static void setLogLevel(LogLevel level) {
         logLevel = level;

@@ -1,20 +1,24 @@
-public class Pellet extends Figur
-{
-   private boolean eingesammelt = false;
-   Pellet()
+public class Pellet extends Figur {
+
+    public Pellet(int tileCenterX, int tileCenterY) {
+        
+        PositionSetzen(0, 0);
+
+        FigurteilFestlegenEllipse(tileCenterX, tileCenterY, 20, 20, "gelb");
+
+        NachVornBringen(); 
+    }
+    
+}
+    // k }
+  /* @Override void AktionAusführen()
    {
-       super();
-       FigurteilFestlegenEllipse(-10, -10, 20, 20, "Gelb");
-       Pellet_Anzeige.pelletErzeugt();
-   }
-  
-   @Override void AktionAusführen()
-   {
-                 
        if (!eingesammelt)
        {
+          
            if (Berührt())
            {
+              
                Figur[] figuren = AlleFigurenFinden();
                for (Figur f : figuren)
                {
@@ -23,9 +27,7 @@ public class Pellet extends Figur
                        eingesammelt = true;
                        SichtbarkeitSetzen(false);
                        Entfernen();
-                       Pellet_Anzeige.pelletEntfernt();
                        break;
-                       
                    }
                }
            }
@@ -33,6 +35,9 @@ public class Pellet extends Figur
    }
    private Figur[] AlleFigurenFinden()
    {
+    
        return new Figur[0];
    }
+// eine Aktion/Entfernen überschreiben -> Figur.Entfernen() wird benutzt
 }
+*/

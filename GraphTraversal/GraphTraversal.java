@@ -63,6 +63,7 @@ public class GraphTraversal
         }
         long t1 = System.nanoTime();
         Logger.log("Traverse completed. Nodes: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
+        Logger.log("Total nodes in graph after traversal: " + nodes.size(), LogLevel.INFO);
     }
 
     static boolean isValid(int x, int y) {
@@ -141,12 +142,22 @@ public class GraphTraversal
                 wallDistance[y][x] = v;
             }
         }
-        // backward pass
+        // backward pass (right-to-left, bottom-to-top)
         for (int y = rows - 1; y >= 0; y--) {
             for (int x = cols - 1; x >= 0; x--) {
                 int v = wallDistance[y][x];
                 if (x + 1 < cols) v = Math.min(v, wallDistance[y][x+1] + 1);
                 if (y + 1 < rows) v = Math.min(v, wallDistance[y+1][x] + 1);
+                wallDistance[y][x] = v;
+            }
+        }
+        
+        // Additional pass: ensure vertical distances are propagated (top-to-bottom again)
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                int v = wallDistance[y][x];
+                if (x > 0) v = Math.min(v, wallDistance[y][x-1] + 1);
+                if (y > 0) v = Math.min(v, wallDistance[y-1][x] + 1);
                 wallDistance[y][x] = v;
             }
         }
@@ -186,6 +197,15 @@ public class GraphTraversal
 
     public static Node getNode(int x, int y) {
         return nodeMap.get(key(x, y));
+    }
+    
+    // Get wall distance for a given tile
+    public static int getWallDistance(int x, int y) {
+        ensureWallDistance();
+        if (wallDistance == null || y < 0 || y >= wallDistance.length || x < 0 || x >= wallDistance[y].length) {
+            return -1;
+        }
+        return wallDistance[y][x];
     }
 
     // Return the nearest existing Node to the given tile coordinate (x,y).
@@ -243,6 +263,89 @@ public class GraphTraversal
         }
         long t1 = System.nanoTime();
         Logger.log("Graph build complete. Node count: " + nodes.size() + " in " + ((t1 - t0)/1_000_000.0) + "ms", LogLevel.SUCCESS);
+        printGraphVisualization();
+    }
+
+    // Print a text-based visualization of the graph structure
+    public static void printGraphVisualization() {
+        if (nodes == null || nodes.isEmpty()) {
+            Logger.log("No nodes in graph to visualize", LogLevel.WARN);
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n========== GRAPH VISUALIZATION ==========\n");
+        sb.append("Total Nodes: ").append(nodes.size()).append("\n\n");
+        
+        // Print each node and its neighbors
+        for (Node n : nodes) {
+            sb.append("Node (").append(n.getX()).append(",").append(n.getY()).append(")");
+            java.util.List<Node> neighbors = n.getNeighbors();
+            if (neighbors.isEmpty()) {
+                sb.append(" -> [isolated]\n");
+            } else {
+                sb.append(" -> Neighbors: ");
+                for (int i = 0; i < neighbors.size(); i++) {
+                    Node neighbor = neighbors.get(i);
+                    sb.append("(").append(neighbor.getX()).append(",").append(neighbor.getY()).append(")");
+                    if (i < neighbors.size() - 1) sb.append(", ");
+                }
+                sb.append("\n");
+            }
+        }
+        
+        // Print degree distribution
+        sb.append("\n--- Degree Distribution ---\n");
+        int[] degreeCounts = new int[5];
+        for (Node n : nodes) {
+            int degree = n.getNeighbors().size();
+            if (degree < degreeCounts.length) {
+                degreeCounts[degree]++;
+            }
+        }
+        for (int d = 0; d < degreeCounts.length; d++) {
+            if (degreeCounts[d] > 0) {
+                sb.append("Nodes with ").append(d).append(" neighbors: ").append(degreeCounts[d]).append("\n");
+            }
+        }
+        /*
+            * = valid node
+            # = wall
+            . = empty walkable (but no node if clearance failed)
+        */
+        // Print grid visualization if field is small enough
+        if (field != null && field.size() <= 3000000 && field.get(0).size() <= 400000000) {
+            sb.append("\n--- Grid Map (. = empty, # = wall, * = node) ---\n");
+            int rows = Math.min(field.size() - 1, 3000000);
+            int cols = Math.min(field.get(0).size(), 400000000);
+            Logger.log("Grid visualization: rows=" + rows + " cols=" + cols + " field.size()=" + field.size() + " field.get(0).size()=" + field.get(0).size(), LogLevel.DEBUG);
+            for (int y = 0; y < rows; y++) {
+                for (int x = 0; x < cols; x++) {
+                    if (y >= field.size() || x >= field.get(y).size()) {
+                        sb.append("?");
+                        continue;
+                    }
+                    Node nodeAtPos = getNode(x, y);
+                    if (nodeAtPos != null) {
+                        sb.append("*");
+                    } else if (field.get(y).get(x) == 1) {
+                        sb.append("#");
+                    } else {
+                        sb.append(".");
+                    }
+                }
+                sb.append("\n");
+            }
+        } else {
+            if (field != null) {
+                sb.append("\n--- Field too large for grid visualization (").append(field.size()).append("x").append(field.get(0).size()).append(") ---\n");
+            } else {
+                sb.append("\n--- Field is null, cannot display grid ---\n");
+            }
+        }
+        
+        sb.append("========================================\n");
+        Logger.log(sb.toString(), LogLevel.INFO);
     }
 
 }

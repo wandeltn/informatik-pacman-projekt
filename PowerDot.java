@@ -1,23 +1,10 @@
-public class PowerDot extends Figur
-{
-    public PowerDot()
-    {
-        super();
-       
-        FigurteilFestlegenEllipse(-20, -20, 40, 40, "Orange");
-       
-    }
+public class PowerDot extends Figur {
 
-    @Override
-    void AktionAusführen()
-    {
+    public PowerDot(int tileCenterX, int tileCenterY) {
+        PositionSetzen(tileCenterX, tileCenterY);
         
-        if (Berührt("Gelb"))
-        {
-           
-            PowerModeManager.aktivierePowerMode();
-
-            Entfernen();
-        }
+        FigurteilFestlegenEllipse(-20, -20, 40, 40, "orange");
+        NachVornBringen();
     }
+    
 }

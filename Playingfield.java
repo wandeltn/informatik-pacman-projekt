@@ -1,13 +1,8 @@
+import Logger.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import Logger.*;
-/**
- * Beschreiben Sie hier die Klasse Playingfield.
- * 
- * @author (Ihr Name) 
- * @version (eine Versionsnummer oder ein Datum)
- */
+
 public class Playingfield extends Figur
 {
     // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen
@@ -35,11 +30,11 @@ public class Playingfield extends Figur
         PositionSetzen(0,0);
         playingfield = LoadPlayingFieldFromFile();
         
-        
+        // Render walls and doors
         y = 0;
         while (y <= playingfield.size() - 1) {
             data = playingfield.get(y);
-            System.out.println("Data.length" + data.size());
+            Logger.log("Data.length" + data.size(), LogLevel.TRACE);
             if (data.size() <= 0)
             {
                 Logger.log("Skipping Row, no values to process: " + y, LogLevel.DEBUG);
@@ -60,9 +55,9 @@ public class Playingfield extends Figur
                 Zahl = currentChar;
                 
                 
-                if (Zahl == 0)
+                if (Zahl == 0 || Zahl == 3 || Zahl == 4)
                 {
-                    Logger.log("Skipping tile checks, no valid tile found", LogLevel.DEBUG);
+                    Logger.log("Skipping tile render (not a wall or door)", LogLevel.TRACE);
                     continue;
                 } else if (Zahl < 0)
                 {
@@ -80,8 +75,6 @@ public class Playingfield extends Figur
                 {
                     Logger.log("Taking opportunity for vertical optimize", LogLevel.SUCCESS);
                     switch (Zahl){
-                    case 0:
-                        break;
                     case 1:
                         Pixel(x,y * 10 + OFFSET_Y,10, numRowsBelow * 10);
                         break;
@@ -96,7 +89,6 @@ public class Playingfield extends Figur
                     länge++;
                     Spalte++;
                     Logger.log("Checking field data forward to index: " + (Spalte + 1), LogLevel.TRACE);
-                    // currentChar = data.get(Spalte);
                     nextCharcord = Spalte + 1;
                     if (nextCharcord >= data.size()){
                         break;
@@ -106,9 +98,6 @@ public class Playingfield extends Figur
                 }
                 länge = (länge) * 10;
                 switch (Zahl){
-                    case 0:
-                        Logger.log("Invalid Tile found during render switch", LogLevel.WARN);
-                        break;
                     case 1:
                         Pixel(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
@@ -116,7 +105,6 @@ public class Playingfield extends Figur
                         spawntür(x,y * 10 + OFFSET_Y,länge, 10);
                         break;
                 }
-                // }
             }
             y++;
         }
@@ -130,8 +118,8 @@ public class Playingfield extends Figur
         
         Logger.log("Added Rendered whole Playingfield in " + timeElapsed + "ms", LogLevel.SUCCESS);
     }
-    
-    int getVerticalWallHeight(int x, int y)
+
+    final int getVerticalWallHeight(int x, int y)
     {
         Logger.log("getVerticalWallHeight(int, int) called with x: " + x + " y: " + y, LogLevel.TRACE);
         
@@ -181,12 +169,12 @@ public class Playingfield extends Figur
     }
     
     
-    ArrayList<ArrayList<Integer>> LoadPlayingFieldFromFile()
+    final ArrayList<ArrayList<Integer>> LoadPlayingFieldFromFile()
     {
         String data;
         
         ArrayList<ArrayList<Integer>> field = new ArrayList<ArrayList<Integer>>();
-        field.add(new ArrayList<Integer>());          
+        field.add(new ArrayList<>());          
         
         File myObj = new File("./Level 1.txt");
         int Zeile = 0;
@@ -237,7 +225,7 @@ public class Playingfield extends Figur
                 if (!skip || Spalte >= data.length() - 1)
                 {
                     ++Zeile;
-                    field.add(new ArrayList<Integer>());  
+                    field.add(new ArrayList<>());  
                 } else 
                 {
                     skip = false;
@@ -251,7 +239,7 @@ public class Playingfield extends Figur
             System.out.println("IndexOutOfBounds");
             e.printStackTrace();
         }
-        System.out.println("Field loaded with " + field.size() + " rows.");
+        Logger.log("Field loaded with " + field.size() + " rows.", LogLevel.SUCCESS);
         
         // Fill incomplete rows for consitent lenth
         for (int i = 0; i < field.size(); i++)
@@ -270,24 +258,24 @@ public class Playingfield extends Figur
    
    
    
-    void Pixel(int x, int y, int länge, int höhe){
+    final void Pixel(int x, int y, int länge, int höhe){
         long start = System.currentTimeMillis();
         symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.toColor(), false);
         long end = System.currentTimeMillis();
         
         long timeElapsed = end - start;
         
-        System.out.println("Added Pixel in " + timeElapsed + "ms");
+        Logger.log("Added Pixel in " + timeElapsed + "ms", LogLevel.DEBUG);
     }
-    void spawntür(int x, int y, int länge, int höhe){
+    final void spawntür(int x, int y, int länge, int höhe){
         symbol.FigurteilFestlegenRechteck(x,y,länge, höhe, WandFarbe.getGegenfarbe().toColor());
     }
     
-    static ArrayList<ArrayList<Integer>> getPlayingField()
+    final static ArrayList<ArrayList<Integer>> getPlayingField()
     {
         return playingfield;
     }
 
-    public static int getOffsetX() { return OFFSET_X; }
-    public static int getOffsetY() { return OFFSET_Y; }
+    final public static int getOffsetX() { return OFFSET_X; }
+    final public static int getOffsetY() { return OFFSET_Y; }
 }
