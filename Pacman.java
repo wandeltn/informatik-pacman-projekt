@@ -46,7 +46,7 @@ public class Pacman extends Figur
         PowerModeManager.tick();  
         if (!Mouth.PacManAnWand() && !tot)
         {
-            if(Richtung == 0 && YPositionGeben()>0)
+            if(Richtung == 0)
             {
                 PositionSetzen(XPositionGeben(), YPositionGeben() - BewegungsLaenge);
                 CheckerAbove.move(-BewegungsLaenge, false);
@@ -55,7 +55,7 @@ public class Pacman extends Figur
                 CheckerLeft.move(-BewegungsLaenge, false);
             }
 
-            if(Richtung == 2 && YPositionGeben() < Zeichenfenster.MalflächenHöheGeben()-50)
+            if(Richtung == 2)
             {
                 PositionSetzen(XPositionGeben(), YPositionGeben() + BewegungsLaenge);
                 CheckerAbove.move(BewegungsLaenge, false);
@@ -64,7 +64,7 @@ public class Pacman extends Figur
                 CheckerLeft.move(BewegungsLaenge, false);
             }
 
-            if(Richtung == 3 && XPositionGeben()>0)
+            if(Richtung == 3)
             {
                 PositionSetzen(XPositionGeben() - BewegungsLaenge, YPositionGeben());
                 CheckerAbove.move(-BewegungsLaenge, true);
@@ -73,7 +73,7 @@ public class Pacman extends Figur
                 CheckerLeft.move(-BewegungsLaenge, true);
             }
 
-            if(Richtung == 1 && XPositionGeben() < Zeichenfenster.MalflächenBreiteGeben()-50)
+            if(Richtung == 1)
             {
                 PositionSetzen(XPositionGeben() + BewegungsLaenge, YPositionGeben());
                 CheckerAbove.move(BewegungsLaenge, true);
