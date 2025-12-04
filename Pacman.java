@@ -85,6 +85,59 @@ public class Pacman extends Figur
 
         checkPelletCollision();
     }
+    public void setFarbe(String farbe)
+    {
+        EigeneFigurLöschen();
+        FigurteilFestlegenEllipse(-60, -60, 120, 120, farbe);
+    }
+
+    public void aktivierePowerMode()
+    {
+        setFarbe("Orange");
+        Mouth.setMundFarbe("Schwarz");
+    }
+
+    public void deaktivierePowerMode()
+    {
+        setFarbe(normaleFarbe);
+        Mouth.setMundFarbe("Schwarz");
+    }
+
+
+    public void checkPelletCollision() 
+    {
+        for (int i = 0; i < PelletManager.pelletListe.size(); i++)
+        {
+            Figur f = PelletManager.pelletListe.get(i);
+    
+            if (this.Berührt(f))
+            {
+                System.out.println("DEBUG: Pacman berührt ein Objekt: " + f.getClass().getSimpleName());
+    
+                if (f instanceof PowerDot)
+                {
+                    System.out.println("DEBUG: Es ist ein PowerDot -> aktiviere PowerMode");
+                    PowerModeManager.aktivierePowerMode(this);
+                }
+    
+                // entferne die Figur vom Feld (Figur.Entfernen existiert in deiner Figur-Klasse)
+                f.Entfernen();
+    
+                // entferne aus Liste und decrement count
+                PelletManager.pelletListe.remove(i);
+                PelletManager.pelletCount = Math.max(0, PelletManager.pelletCount - 1);
+    
+                System.out.println("Pellet eingesammelt. Übrig: " + PelletManager.pelletCount);
+    
+                if (PelletManager.pelletCount == 0)
+                {
+                    System.out.println("GEWONNEN!");
+                }
+    
+                break;
+            }
+        }
+    }
 
     // ------------------ FARBE ------------------
     public void setFarbe(String farbe)
@@ -151,7 +204,6 @@ public class Pacman extends Figur
             Richtung = 1;
         }
     }
-    
     
     public void setTot(boolean wert)
     {
