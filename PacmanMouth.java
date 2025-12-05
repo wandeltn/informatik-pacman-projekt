@@ -33,7 +33,7 @@ public class PacmanMouth extends Figur
         FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, mundFarbe);
         BewegungsLaenge = 4;
         SichtbarkeitSetzen(false);
-        PositionSetzen(1000,500);
+        PositionSetzen(850,450);
     }
     
     /**

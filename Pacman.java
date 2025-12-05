@@ -26,7 +26,7 @@ public class Pacman extends Figur
         CheckDirection = wert;
         FigurteilFestlegenEllipse(-60, -60, 120, 120, normaleFarbe);
         BewegungsLaenge = 4;
-        PositionSetzen(1000,500);
+        PositionSetzen(850,450);
     }
 
     @Override void TasteGedrückt(char taste) {}
