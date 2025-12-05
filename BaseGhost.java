@@ -175,12 +175,14 @@ class BaseGhost extends Hindernis
 
     void stepAlongPath() 
     {
-        computePath();
-        if (currentPath == null || currentPath.isEmpty())
-        {
-            Logger.log("Skipping advanceSmooth, no Path found, defaulting to pacman direct", LogLevel.DEBUG);
-            currentPath.add(new Node(worldToTileX(pacmanRef.getXPosition()), worldToTileY(pacmanRef.getYPosition())));
-            //return;
+        if (currentPath == null || currentPath.isEmpty() || pathIndex >= currentPath.size()) {
+            computePath();
+            if (currentPath == null || currentPath.isEmpty()) {
+                Logger.log("Skipping advanceSmooth, no Path found, defaulting to pacman direct", LogLevel.DEBUG);
+                currentPath = new ArrayList<>();
+                currentPath.add(new Node(worldToTileX(pacmanRef.getXPosition()), worldToTileY(pacmanRef.getYPosition())));
+                pathIndex = 0;
+            }
         }
         if (pathIndex >= currentPath.size()) 
         {

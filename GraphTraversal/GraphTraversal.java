@@ -16,7 +16,7 @@ public class GraphTraversal
     static java.util.HashMap<String, Node> nodeMap = new java.util.HashMap<>();
     static ArrayList<Node> nodes = new ArrayList<>();
     static int[][] wallDistance; // Manhattan distance to nearest wall (1)
-    static final int CLEARANCE = 8;
+    static final int CLEARANCE = 4;
 
     public GraphTraversal(ArrayList<ArrayList<Integer>> field)
     {
@@ -345,7 +345,7 @@ public class GraphTraversal
         }
         
         sb.append("========================================\n");
-        Logger.log(sb.toString(), LogLevel.INFO);
+        Logger.log(sb.toString(), LogLevel.DEBUG);  
     }
 
 }
