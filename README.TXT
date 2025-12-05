@@ -5,7 +5,7 @@ Ziel:
 Das Spiel Pacman nachbauen.
 
 Start des Projekts:
-Neues Spiel-Objekt erzeugen
+Projekt einfach in BlueJ öffnen und dann ein Neues Spiel-Objekt erzeugen. So wird ein neues Fenster geöffnet und Pacman startet. Um das Spiel abzuspielen einfach auf Start klicken.
 
 Version:
 1.0
