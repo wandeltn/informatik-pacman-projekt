@@ -3,6 +3,7 @@ public class Pacman extends Figur
     int BewegungsLaenge;
     int Richtung = 1;
     boolean tot = false;
+    boolean CheckDirection;
     private String normaleFarbe = "Gelb";
 
     public int lives = 99999;
@@ -18,9 +19,10 @@ public class Pacman extends Figur
     boolean BelowFree = true;
     boolean LeftFree = true;
 
-    Pacman()
+    Pacman(boolean wert)
     {
         super();
+        CheckDirection = wert;
         FigurteilFestlegenEllipse(-60, -60, 120, 120, normaleFarbe);
         BewegungsLaenge = 4;
     }
@@ -29,11 +31,14 @@ public class Pacman extends Figur
 
     @Override void SonderTasteGedrückt(int taste)
     {
-        // AboveFree = !CheckerAbove.PacManAnAnWand();
-        // RightFree = !CheckerRight.PacManAnAnWand();
-        // BelowFree = !CheckerBelow.PacManAnAnWand();
-        // LeftFree = !CheckerLeft.PacManAnAnWand();
-        // Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
+        if (CheckDirection)
+        {
+            AboveFree = !CheckerAbove.PacManAnAnWand();
+            RightFree = !CheckerRight.PacManAnAnWand();
+            BelowFree = !CheckerBelow.PacManAnAnWand();
+            LeftFree = !CheckerLeft.PacManAnAnWand();
+            Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
+        }
 
         if(taste == 38 && AboveFree) Richtung = 0;
         if(taste == 39 && RightFree) Richtung = 1;

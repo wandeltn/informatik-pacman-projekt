@@ -12,11 +12,15 @@ class Spiel extends Ereignisbehandlung
     static GhostInky inky;
     static GhostClyde clyde;
     
-    Spiel()
+    static boolean PacmanCheckDirection;
+    
+    Spiel(boolean CheckDirection)
     {
         super();
         playingfield = new Playingfield();
-        pacman = new Pacman();
+        pacman = new Pacman(CheckDirection);
+        
+        PacmanCheckDirection = CheckDirection;
         
         new GraphTraversal(Playingfield.getPlayingField());
         GraphTraversal.buildFullGraph();
@@ -99,6 +103,6 @@ class Spiel extends Ereignisbehandlung
     }
 
     public static void main(String[] args) {
-        new Spiel();
+        new Spiel(PacmanCheckDirection);
     }
 }
