@@ -195,6 +195,7 @@ public class PacmanMouth extends Figur
     
     public boolean PacManAnWand()
     {
+        boolean a = Berührt("blau");
         return Berührt("blau");
     }
 
