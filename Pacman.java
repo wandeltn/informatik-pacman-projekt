@@ -50,8 +50,7 @@ public class Pacman extends Figur
 
     @Override void AktionAusführen()
     {
-        PowerModeManager.tick();  
-                new Rechteck();
+        PowerModeManager.tick(); 
         if (!Mouth.PacManAnWand() && !tot)
         {
             if(Richtung == 0)

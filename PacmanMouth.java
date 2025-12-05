@@ -15,10 +15,10 @@ public class PacmanMouth extends Figur
     
     public int testwertfuerdieanimationen = 0;
     
-    boolean AboveFree;
-    boolean RightFree;
-    boolean BelowFree;
-    boolean LeftFree;
+    boolean AboveFree = true;
+    boolean RightFree = true;
+    boolean BelowFree = true;
+    boolean LeftFree = true     ;
 
     // neu: speichert die aktuelle Farbe des Mundes
     private String mundFarbe = "Schwarz";
@@ -33,6 +33,7 @@ public class PacmanMouth extends Figur
         FigurteilFestlegenDreieck(40-60, 60-60, 40+80-60, 60+60-70, 40+80-60, 60-60-50, mundFarbe);
         BewegungsLaenge = 4;
         SichtbarkeitSetzen(false);
+        PositionSetzen(1000,500);
     }
     
     /**
