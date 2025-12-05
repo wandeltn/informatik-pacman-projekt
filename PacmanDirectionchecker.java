@@ -13,7 +13,7 @@ public class PacmanDirectionchecker extends Figur
     public PacmanDirectionchecker(int wert)
     {
         super();
-        FigurteilFestlegenRechteck(70, -50, 20, 100, "Weiß");
+        FigurteilFestlegenRechteck(50, -50, 50, 100, "Weiß");
         Drehen(90*(1-wert));
         SichtbarkeitSetzen(false);
     }
