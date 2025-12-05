@@ -29,11 +29,11 @@ public class Pacman extends Figur
 
     @Override void SonderTasteGedrückt(int taste)
     {
-        AboveFree = !CheckerAbove.PacManAnAnWand();
-        RightFree = !CheckerRight.PacManAnAnWand();
-        BelowFree = !CheckerBelow.PacManAnAnWand();
-        LeftFree = !CheckerLeft.PacManAnAnWand();
-        Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
+        // AboveFree = !CheckerAbove.PacManAnAnWand();
+        // RightFree = !CheckerRight.PacManAnAnWand();
+        // BelowFree = !CheckerBelow.PacManAnAnWand();
+        // LeftFree = !CheckerLeft.PacManAnAnWand();
+        // Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
 
         if(taste == 38 && AboveFree) Richtung = 0;
         if(taste == 39 && RightFree) Richtung = 1;
