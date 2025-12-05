@@ -3,6 +3,7 @@ public class Pacman extends Figur
     int BewegungsLaenge;
     int Richtung = 1;
     boolean tot = false;
+    boolean CheckDirection;
     private String normaleFarbe = "Gelb";
 
     public int lives = 99999;
@@ -17,11 +18,11 @@ public class Pacman extends Figur
     boolean RightFree = true;
     boolean BelowFree = true;
     boolean LeftFree = true;
-    
-    Pacman()
+
+    Pacman(boolean wert)
     {
         super();
-        this.PositionSetzen(1500, 50);
+        CheckDirection = wert;
         FigurteilFestlegenEllipse(-60, -60, 120, 120, normaleFarbe);
         BewegungsLaenge = 4;
     }
@@ -30,11 +31,14 @@ public class Pacman extends Figur
 
     @Override void SonderTasteGedrückt(int taste)
     {
-        // AboveFree = !CheckerAbove.PacManAnAnWand();
-        // RightFree = !CheckerRight.PacManAnAnWand();
-        // BelowFree = !CheckerBelow.PacManAnAnWand();
-        // LeftFree = !CheckerLeft.PacManAnAnWand();
-        // Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
+        if (CheckDirection)
+        {
+            AboveFree = !CheckerAbove.PacManAnAnWand();
+            RightFree = !CheckerRight.PacManAnAnWand();
+            BelowFree = !CheckerBelow.PacManAnAnWand();
+            LeftFree = !CheckerLeft.PacManAnAnWand();
+            Mouth.setCheckers(AboveFree, RightFree, BelowFree, LeftFree);
+        }
 
         if(taste == 38 && AboveFree) Richtung = 0;
         if(taste == 39 && RightFree) Richtung = 1;
@@ -114,16 +118,18 @@ public class Pacman extends Figur
     
             if (this.Berührt(f))
             {
-                System.out.println("Pacman berührt ein Objekt: " + f.getClass().getSimpleName());
+                System.out.println("DEBUG: Pacman berührt ein Objekt: " + f.getClass().getSimpleName());
     
                 if (f instanceof PowerDot)
                 {
-                    System.out.println("aktiviere PowerMode");
+                    System.out.println("DEBUG: Es ist ein PowerDot -> aktiviere PowerMode");
                     PowerModeManager.aktivierePowerMode(this);
                 }
     
+                // entferne die Figur vom Feld (Figur.Entfernen existiert in deiner Figur-Klasse)
                 f.Entfernen();
     
+                // entferne aus Liste und decrement count
                 PelletManager.pelletListe.remove(i);
                 PelletManager.pelletCount = Math.max(0, PelletManager.pelletCount - 1);
     
