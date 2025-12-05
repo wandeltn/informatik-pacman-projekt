@@ -17,10 +17,11 @@ public class Pacman extends Figur
     boolean RightFree = true;
     boolean BelowFree = true;
     boolean LeftFree = true;
-
+    
     Pacman()
     {
         super();
+        this.PositionSetzen(1500, 50);
         FigurteilFestlegenEllipse(-60, -60, 120, 120, normaleFarbe);
         BewegungsLaenge = 4;
     }
@@ -113,18 +114,16 @@ public class Pacman extends Figur
     
             if (this.Berührt(f))
             {
-                System.out.println("DEBUG: Pacman berührt ein Objekt: " + f.getClass().getSimpleName());
+                System.out.println("Pacman berührt ein Objekt: " + f.getClass().getSimpleName());
     
                 if (f instanceof PowerDot)
                 {
-                    System.out.println("DEBUG: Es ist ein PowerDot -> aktiviere PowerMode");
+                    System.out.println("aktiviere PowerMode");
                     PowerModeManager.aktivierePowerMode(this);
                 }
     
-                // entferne die Figur vom Feld (Figur.Entfernen existiert in deiner Figur-Klasse)
                 f.Entfernen();
     
-                // entferne aus Liste und decrement count
                 PelletManager.pelletListe.remove(i);
                 PelletManager.pelletCount = Math.max(0, PelletManager.pelletCount - 1);
     
