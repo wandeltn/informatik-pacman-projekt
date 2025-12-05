@@ -22,6 +22,7 @@ public class Pacman extends Figur
     Pacman(boolean wert)
     {
         super();
+        this.PositionSetzen(700,700);
         CheckDirection = wert;
         FigurteilFestlegenEllipse(-60, -60, 120, 120, normaleFarbe);
         BewegungsLaenge = 4;
