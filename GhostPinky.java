@@ -5,22 +5,23 @@ import Logger.*;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class GhostBlinky extends BaseGhost {
+public class GhostPinky extends BaseGhost {
 
     private int retargetIntervalTicks = 10; // how often to recompute target
     private int tickCounter = 0;
 
-    public GhostBlinky(int x, int y) {
-        super(x, y, new ColorRGB(255, 0, 0));
+    public GhostPinky(int x, int y) {
+        super(x, y, new ColorRGB(255, 0, 200));
         PositionSetzen(x, y);
         Zeichnen();
         initPathfinding();
-        Logger.log("Blinky spawned at (" + XPositionGeben()/10 + "," + YPositionGeben()/10 + ")", LogLevel.INFO);
+        setSpeed(1);
+        Logger.log("Pinky spawned at (" + XPositionGeben()/10 + "," + YPositionGeben()/10 + ")", LogLevel.INFO);
     }
 
     public void setPacmanTarget(Pacman pacman) {
         this.pacmanRef = pacman;
-        Logger.log("Blinky target set to Pacman", LogLevel.DEBUG);
+        Logger.log("Pinky target set to Pacman", LogLevel.DEBUG);
     }
 
     @Override void AktionAusführen() {
@@ -46,6 +47,6 @@ public class GhostBlinky extends BaseGhost {
 
     @Override
     public String toString() {
-        return "GhostBlinky";
+        return "Pinky";
     }
 }

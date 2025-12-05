@@ -20,17 +20,17 @@ public class AStar {
         if (start == null || goal == null) {
             Logger.log("A* abort: start or goal invalid", LogLevel.ERROR);
             start = GraphTraversal.getNearestNode(startX, startY);
-            goal = GraphTraversal.getNearestNode(goalX, goalY);
+            goal = GraphTraversal.getNearestNode(goalX, goalY); // -1000 adjust for offset (temporary)
             if (start != null && goal != null) {
                 Logger.log("Maybe you meant to start at: " + start.toString() + " or end at: " + goal.toString(), LogLevel.WARN);
             } else {
                 Logger.log("A* abort: could not locate nearest valid start or goal", LogLevel.ERROR);
                 return Collections.emptyList();
             }
-            Logger.log("Trying pathfind again", LogLevel.WARN);
-            //List<Node> onlyDestination = new ArrayList<>();
-            //onlyDestination.add(nearestEnd);
-            //return onlyDestination;
+            // Logger.log("Trying pathfind again, assuming nearest nodes", LogLevel.WARN);
+            List<Node> onlyDestination = new ArrayList<>();
+            onlyDestination.add(goal);
+            return onlyDestination;
         }
 
         // if (start == null || goal == null) {

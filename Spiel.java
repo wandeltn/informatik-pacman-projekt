@@ -8,6 +8,9 @@ class Spiel extends Ereignisbehandlung
     static Pacman pacman;
     static Playingfield playingfield;
     static GhostBlinky blinky;
+    static GhostPinky pinky;
+    static GhostInky inky;
+    static GhostClyde clyde;
     
     Spiel()
     {
@@ -57,7 +60,14 @@ class Spiel extends Ereignisbehandlung
         int ghostWorldX = spawnTileX * 10 + Playingfield.getOffsetX();
         int ghostWorldY = spawnTileY * 10 + Playingfield.getOffsetY();
         
-        blinky = new GhostBlinky(ghostWorldX, ghostWorldY);
+        blinky = new GhostBlinky(100, 100);
+        pinky = new GhostPinky(1000, 100);
+        inky = new GhostInky(100, 1000);
+        clyde = new GhostClyde(1000, 1000);
+        blinky.setPacmanTarget(pacman);
+        pinky.setPacmanTarget(pacman);
+        inky.setPacmanTarget(pacman);
+        clyde.setPacmanTarget(pacman);
         
         new PelletManager();
         
@@ -86,5 +96,9 @@ class Spiel extends Ereignisbehandlung
     // NEU
     int getPacmanDirection() {
         return pacman.getRichtung();
+    }
+
+    public static void main(String[] args) {
+        new Spiel();
     }
 }

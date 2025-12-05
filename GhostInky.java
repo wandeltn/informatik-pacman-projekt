@@ -5,22 +5,23 @@ import Logger.*;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class GhostBlinky extends BaseGhost {
+public class GhostInky extends BaseGhost {
 
     private int retargetIntervalTicks = 10; // how often to recompute target
     private int tickCounter = 0;
 
-    public GhostBlinky(int x, int y) {
-        super(x, y, new ColorRGB(255, 0, 0));
+    public GhostInky(int x, int y) {
+        super(x, y, new ColorRGB(0, 200, 255));
         PositionSetzen(x, y);
         Zeichnen();
         initPathfinding();
-        Logger.log("Blinky spawned at (" + XPositionGeben()/10 + "," + YPositionGeben()/10 + ")", LogLevel.INFO);
+        setSpeed(3);
+        Logger.log("Inky spawned at (" + XPositionGeben()/10 + "," + YPositionGeben()/10 + ")", LogLevel.INFO);
     }
 
     public void setPacmanTarget(Pacman pacman) {
         this.pacmanRef = pacman;
-        Logger.log("Blinky target set to Pacman", LogLevel.DEBUG);
+        Logger.log("Inky target set to Pacman", LogLevel.DEBUG);
     }
 
     @Override void AktionAusführen() {
@@ -37,7 +38,7 @@ public class GhostBlinky extends BaseGhost {
                // int pacTileX = pacmanRef.getXPosition() / 10 - Playingfield.getOffsetX();
                // int pacTileY = pacmanRef.getYPosition() / 10 - Playingfield.getOffsetY();
                // Update target and (re)compute path
-                // Logger.log("Blinky retarget Pacman tile (" + pacTileX + "," + pacTileY + ")", LogLevel.TRACE);
+                // Logger.log("Inky retarget Pacman tile (" + pacTileX + "," + pacTileY + ")", LogLevel.TRACE);
             }
             // Smooth movement toward current path
             stepAlongPath();
@@ -46,6 +47,6 @@ public class GhostBlinky extends BaseGhost {
 
     @Override
     public String toString() {
-        return "GhostBlinky";
+        return "GhostInky";
     }
 }

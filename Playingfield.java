@@ -13,7 +13,7 @@ public class Playingfield extends Figur
     
     static ArrayList<ArrayList<Integer>> playingfield;
     // Rendering offset applied when drawing each tile (x = col*10 + 1000, y = row*10 + 70)
-    private static final int OFFSET_X = 1000;
+    private static final int OFFSET_X = 000;
     private static final int OFFSET_Y = 0;
     
     ColorRGB WandFarbe;

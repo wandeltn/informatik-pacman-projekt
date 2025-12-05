@@ -16,11 +16,11 @@ class BaseGhost extends Hindernis
     // Pathfinding state
     private List<Node> currentPath = new ArrayList<>();
     private int pathIndex = 0;
-    private int targetX = -1;
-    private int targetY = -1;
     private long lastPathComputeNs = 0L;
     private int movementSpeed = 2; // pixels per update toward next waypoint
     private boolean pathBlocked = false;
+    protected Pacman pacmanRef; // target reference
+
 
     /**
      * Legt das Aussehen und die Startposition fest
@@ -75,8 +75,13 @@ class BaseGhost extends Hindernis
     {
         super.EigeneFigurLöschen();
 
-        FigurteilFestlegenEllipse(0, 0, 140, 140, this.color.toColor());
-        FigurteilFestlegenRechteck(0, 70, 140, 70, this.color.toColor());
+        FigurteilFestlegenEllipse(0, 0, 70, 70, this.color.toColor());
+        FigurteilFestlegenRechteck(0, 35, 70, 35, this.color.toColor());
+    }
+
+    final protected void setSpeed(int speed)
+    {
+        this.movementSpeed = speed;
     }
 
     boolean CheckCollision()
@@ -143,26 +148,25 @@ class BaseGhost extends Hindernis
 
     List<Node> getPathTo(int targetX, int targetY)
     {
-        List<Node> path = AStar.findPath(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()), targetX, targetY);
-        if (path.size() == 0)
+        List<Node> path = new ArrayList<>(AStar.findPath(worldToTileX(this.XPositionGeben()), worldToTileY(this.YPositionGeben()), targetX, targetY));
+        if (path.isEmpty())
         {
-            Logger.log("No path found to target, falling back to direct movement", LogLevel.DEBUG);
+            Logger.log("No path found to target, falling back to direct movement", LogLevel.WARN);
             path.add(new Node(targetX, targetY));
         }
         return path;
     }
 
-    void setTarget(int tileX, int tileY) {
-        Logger.log("New target set for ghost: x=" + tileX + " y=" + tileY, LogLevel.TRACE);
-        this.targetX = tileX;
-        this.targetY = tileY;
-        computePath();
-    }
-
     private void computePath() {
-        if (targetX < 0 || targetY < 0) return;
+        Logger.log("Checking for pacman on field: x=" + pacmanRef.getXPosition() + " y=" + pacmanRef.getYPosition(), LogLevel.ERROR);
+        Logger.log("Converted to tile coordinates: x=" + worldToTileX(pacmanRef.getXPosition()) + " y=" + worldToTileY(pacmanRef.getYPosition()), LogLevel.ERROR);
+        if (
+            worldToTileX(pacmanRef.getXPosition()) < 0 ||
+            worldToTileY(pacmanRef.getYPosition()) < 0
+        )
+            Logger.log("Pacman position out of bounds: x=" + worldToTileX(pacmanRef.getXPosition()) + " y=" + worldToTileY(pacmanRef.getYPosition()), LogLevel.WARN);
         long t0 = System.nanoTime();
-        currentPath = getPathTo(targetX, targetY);
+        currentPath = getPathTo(worldToTileX(pacmanRef.getXPosition()), worldToTileY(pacmanRef.getYPosition()));
         pathIndex = 0;
         lastPathComputeNs = System.nanoTime() - t0;
         Logger.log("Ghost path computed length=" + currentPath.size() + " time=" + (lastPathComputeNs/1_000_000.0) + "ms", LogLevel.SUCCESS);
@@ -175,7 +179,7 @@ class BaseGhost extends Hindernis
         if (currentPath == null || currentPath.isEmpty())
         {
             Logger.log("Skipping advanceSmooth, no Path found, defaulting to pacman direct", LogLevel.DEBUG);
-            currentPath.add(new Node(targetX, targetY));
+            currentPath.add(new Node(worldToTileX(pacmanRef.getXPosition()), worldToTileY(pacmanRef.getYPosition())));
             //return;
         }
         if (pathIndex >= currentPath.size()) 
@@ -190,13 +194,6 @@ class BaseGhost extends Hindernis
         return pathIndex >= currentPath.size();
     }
 
-    void maybeRecomputePath(int tileX, int tileY) {
-        // Recompute only if target changed
-        if (tileX != targetX || tileY != targetY) {
-            setTarget(tileX, tileY);
-        }
-    }
-
     // Smooth incremental movement toward next node with collision recheck
     private void advanceSmooth() {
         if (pathIndex >= currentPath.size())
@@ -206,8 +203,10 @@ class BaseGhost extends Hindernis
             return;
         }
         Node next = currentPath.get(pathIndex);
-        int targetWorldX = tileToWorldX(next.getX());
-        int targetWorldY = tileToWorldY(next.getY());
+        int nextX = next.getX();
+        int nextY = next.getY();
+        int targetWorldX = tileToWorldX(nextX);
+        int targetWorldY = tileToWorldY(nextY);
         int currentX = this.XPositionGeben();
         int currentY = this.YPositionGeben();
         int dx = targetWorldX - currentX;
@@ -285,6 +284,7 @@ class BaseGhost extends Hindernis
 
     public void clearPathIndicators() {
         for (Figur f : pathIndicators) {
+            f.SichtbarkeitSetzen(false);
             f.EigeneFigurLöschen();
         }
         pathIndicators.clear();
@@ -296,8 +296,8 @@ class BaseGhost extends Hindernis
             int worldX = tileToWorldX(n.getX());
             int worldY = tileToWorldY(n.getY());
             Figur indicator = new Figur();
-            indicator.FigurteilFestlegenEllipse(worldX + 5, worldY + 5, 5, 5, new ColorRGB(255, 255, 0).toColor());
-            indicator.PositionSetzen(0, 0);
+            indicator.PositionSetzen(worldX, worldY);
+            indicator.FigurteilFestlegenEllipse(0, 0, 10, 10, new ColorRGB(255, 255, 0).toColor());
             pathIndicators.add(indicator);
         }
     }
